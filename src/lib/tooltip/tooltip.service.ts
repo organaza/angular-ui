@@ -23,7 +23,7 @@ export class TooltipService {
   registerContainer(container: TooltipContainerComponent) {
     this.container = container;
   }
-  add(text: string = '', width: string = 'auto', maxWidth: string = ''): Tooltip {
+  add(text: string = '', width: string = 'auto', maxWidth: string = '', hideBack: boolean = false): Tooltip {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(TooltipComponent);
     const componentRef: ComponentRef<{}> = this.container.target.createComponent(componentFactory);
 
@@ -32,6 +32,7 @@ export class TooltipService {
     this.tooltips.push(tooltip);
 
     componentRef.instance['text'] = text;
+    componentRef.instance['hideBack'] = hideBack;
     if (width === 'auto') {
       componentRef.instance['whitespace'] = 'nowrap';
       componentRef.instance['width'] = 'auto';
@@ -46,13 +47,13 @@ export class TooltipService {
 
     return tooltip;
   }
-  addWithType(contentType: Type<{}>, data: any): Tooltip {
-    const tooltip = this.add();
+  addWithType(contentType: Type<{}>, data: any, dataField: string, width: string = 'auto', maxWidth: string = '', hideBack: boolean): Tooltip {
+    const tooltip = this.add('', width, maxWidth, hideBack);
 
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(contentType);
     const componentRef: ComponentRef<{}> = (<TooltipComponent>tooltip.componentRef.instance).target.createComponent(componentFactory);
 
-    componentRef.instance['data'] = data;
+    componentRef.instance[dataField] = data;
 
     return tooltip;
   }
@@ -63,4 +64,5 @@ export class TooltipService {
     }
     tooltip.componentRef.destroy();
   }
+}
 }

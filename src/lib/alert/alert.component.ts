@@ -61,6 +61,7 @@ export class AlertComponent implements OnInit, OnDestroy {
         const button = this.alert.buttons[i];
         if (!button.affirmative) {
           this.alertService.result.next(button);
+          this.alertService.result.complete();
           break;
         }
       }
@@ -72,6 +73,7 @@ export class AlertComponent implements OnInit, OnDestroy {
         const button = this.alert.buttons[i];
         if (button.affirmative) {
           this.alertService.result.next(button);
+          this.alertService.result.complete();
           this.alertService.close();
           return;
         }
@@ -90,6 +92,7 @@ export class AlertComponent implements OnInit, OnDestroy {
       button.value = this.alert.defaultValue;
     }
     this.alertService.result.next(button);
+    this.alertService.result.complete();
     this.alertService.close();
   }
   closeAlertByClick() {
@@ -99,6 +102,7 @@ export class AlertComponent implements OnInit, OnDestroy {
           const button = this.alert.buttons[i];
           if (!button.affirmative) {
             this.alertService.result.next(button);
+            this.alertService.result.complete();
             break;
           }
         }

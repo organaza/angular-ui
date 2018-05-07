@@ -16,7 +16,6 @@ export class ModalWindow {
   }
 }
 
-
 @Injectable()
 export class ModalService {
   container: ModalContainerDirective;
@@ -34,7 +33,7 @@ export class ModalService {
   }
   registerModal(modal: any) {
     const lastModal = this.modals[this.modals.length - 1];
-    if (!lastModal) {
+    if (!lastModal || lastModal.modal) {
       return;
     }
     lastModal.modal = modal;
@@ -72,8 +71,13 @@ export class ModalService {
     }
     lastModal.modal.state = 'show';
   }
-  close() {
-    const lastModal = this.modals.pop();
+  close(modal?: any) {
+    let lastModal: ModalWindow;
+    if (modal) {
+      lastModal = this.modals.find(m => m.modal === modal);
+    } else {
+      lastModal = this.modals[this.modals.length - 1];
+    }
     if (!lastModal) {
       return;
     }
@@ -81,13 +85,14 @@ export class ModalService {
       if (lastModal.contentRef) {
         lastModal.contentRef.destroy();
       }
+      this.modals.splice(this.modals.indexOf(lastModal), 1);
 
       this.container.active = this.modals.length > 0;
     }, 200);
   }
   closeAll() {
     while (this.modals.length > 0) {
-      this.close();
+      this.close(this.modals[this.modals.length - 1].modal);
     }
   }
 }

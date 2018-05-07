@@ -20,8 +20,6 @@ import jQuery from 'jquery';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
-  private _text: string;
-
   @Input()
   @HostBinding()
   tabindex = 0;
@@ -30,14 +28,7 @@ export class ButtonComponent {
   clicked: EventEmitter<{}> = new EventEmitter();
 
   @Input()
-  get text(): string {
-    return this._text;
-  }
-
-  set text(s: string) {
-    this._text = s;
-    this.cd.markForCheck();
-  }
+  text: string;
 
   @Input()
   disabled: boolean;
@@ -86,8 +77,7 @@ export class ButtonComponent {
     }
   }
 
-  constructor(private element: ElementRef,
-    private cd: ChangeDetectorRef) { }
+  constructor(private element: ElementRef) { }
 
   onClickButton() {
     if (!this.disabled && !this.inProgress) {

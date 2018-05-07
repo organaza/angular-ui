@@ -24,6 +24,7 @@ export class AlertService {
         class: 'common-button'
       }
     ];
+    this.result = new Subject();
     return this.result;
   }
   prompt(title: string, text: string, defaultValue = ''): Observable<any> {
@@ -44,6 +45,7 @@ export class AlertService {
         affirmative: true
       }
     ];
+    this.result = new Subject();
     return this.result;
   }
   confirm(
@@ -77,6 +79,7 @@ export class AlertService {
         affirmative: false
       }
     ];
+    this.result = new Subject();
     return this.result;
   }
   close() {

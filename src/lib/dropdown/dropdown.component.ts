@@ -216,9 +216,11 @@ export class DropDownComponent implements AfterViewInit, OnDestroy {
   }
 
   openDropdown() {
+    if (!this.dropDownNgIf) {
     this.dropDownNgIf = true;
     this.calculateBounds();
     this.cd.markForCheck();
+  }
   }
 
   closeDropdown() {
@@ -296,12 +298,13 @@ export class DropDownComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  setState(newState: string) {
-    this.state = newState;
+  setState(state: string) {
+    this.state = state;
     this.cd.markForCheck();
   }
 
   ngOnDestroy() {
+    this.parent.appendChild(this.el.nativeElement);
     clearTimeout(this.calculateTimeout);
     clearTimeout(this.appendTimeout);
     this.state = 'void';

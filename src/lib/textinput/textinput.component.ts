@@ -261,7 +261,6 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
       if (keepFocus) {
         this.opened = true;
       } else if (!keepFocus) {
-        // Check do we need this blur?
         if (this.documentClickListener) {
           this.documentClickListener();
         }

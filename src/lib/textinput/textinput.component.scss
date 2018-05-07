@@ -54,7 +54,6 @@
     font-family: inherit;
     line-height: inherit;
     z-index: 1;
-    text-align: inherit;
 
     &-nopadding {
       padding-top: 0;
@@ -65,12 +64,13 @@
   &-prompt {
     font-style: $oz-control-prompt-font-style;
     padding: $oz-control-default-padding 0;
-    color: $oz-control-prompt-color;
-    font-weight: $oz-control-prompt-font-weight;
+    font-weight: inherit;
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
+    color: inherit;
+    opacity: 0.5;
   }
 
   &-prompt-nopadding {

@@ -1,14 +1,4 @@
-import {
-  Input,
-  Component,
-  ViewChild,
-  ViewContainerRef,
-  OnInit,
-  ElementRef,
-  ChangeDetectionStrategy,
-  HostListener,
-  ChangeDetectorRef
-} from '@angular/core';
+import { Input, Component, ViewChild, ViewContainerRef, OnInit, ElementRef, ChangeDetectionStrategy, HostListener, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'oz-text-with-tooltip',

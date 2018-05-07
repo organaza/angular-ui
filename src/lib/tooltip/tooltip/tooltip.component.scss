@@ -16,3 +16,10 @@
   will-change: transform;
   word-wrap: break-word;
 }
+
+:host.hide-back {
+  background-color: transparent;
+  padding: 0;
+  text-align: initial;
+  color: initial;
+}

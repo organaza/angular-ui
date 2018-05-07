@@ -47,6 +47,9 @@ export class TooltipDirective implements OnDestroy {
   tooltipType: Type<{}>;
 
   @Input()
+  tooltipHideBack = false;
+
+  @Input()
   tooltipData: any;
 
   @Input()
@@ -65,6 +68,10 @@ export class TooltipDirective implements OnDestroy {
 
   @Input()
   tooltipPadding = 7;
+
+  @Input()
+  tooltipDataField = 'data';
+
 
   constructor(
     private tooltipService: TooltipService,
@@ -86,7 +93,7 @@ export class TooltipDirective implements OnDestroy {
       if (!this.tooltipType) {
         this.tooltip = this.tooltipService.add(this.ozTooltip, this.tooltipWidth, this.tooltipMaxWidth);
       } else {
-        this.tooltip = this.tooltipService.addWithType(this.tooltipType, this.tooltipData);
+        this.tooltip = this.tooltipService.addWithType(this.tooltipType, this.tooltipData, this.tooltipDataField, this.tooltipWidth, this.tooltipMaxWidth, this.tooltipHideBack);
       }
       window.setTimeout(() => {
         this.place();
@@ -95,6 +102,12 @@ export class TooltipDirective implements OnDestroy {
   }
 
   @HostListener('mouseleave') onMouseLeave() {
+    window.clearTimeout(this.showTimeout);
+    if (this.tooltip) {
+      this.tooltipService.remove(this.tooltip);
+    }
+  }
+  @HostListener('mousedown') onMouseDown() {
     window.clearTimeout(this.showTimeout);
     if (this.tooltip) {
       this.tooltipService.remove(this.tooltip);

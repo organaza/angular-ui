@@ -36,6 +36,10 @@ export class TooltipComponent implements OnInit {
   @Input()
   text: string;
 
+  @Input()
+  @HostBinding('class.hide-back')
+  hideBack: boolean;
+
   @HostBinding('@state')
   state: String = 'show';
 
