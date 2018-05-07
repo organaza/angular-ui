@@ -93,7 +93,14 @@ export class TooltipDirective implements OnDestroy {
       if (!this.tooltipType) {
         this.tooltip = this.tooltipService.add(this.ozTooltip, this.tooltipWidth, this.tooltipMaxWidth);
       } else {
-        this.tooltip = this.tooltipService.addWithType(this.tooltipType, this.tooltipData, this.tooltipDataField, this.tooltipWidth, this.tooltipMaxWidth, this.tooltipHideBack);
+        this.tooltip = this.tooltipService.addWithType(
+          this.tooltipType,
+          this.tooltipData,
+          this.tooltipDataField,
+          this.tooltipWidth,
+          this.tooltipMaxWidth,
+          this.tooltipHideBack
+        );
       }
       window.setTimeout(() => {
         this.place();

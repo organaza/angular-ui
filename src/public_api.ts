@@ -30,7 +30,15 @@ export { DropDownComponent } from './lib/dropdown/dropdown.component';
 // export { IconComponent as ɵbx } from './lib/icon/icon.component';
 // export { ModalContainerDirective as ɵbh } from './lib/modal/modal-container.directive';
 
-// export { ModalBodyDirective as ɵbf, ModalCloseDirective as ɵbe, ModalComponent as ɵba, ModalFooterDirective as ɵbg, ModalHeaderButtonsDirective as ɵbd, ModalHeaderDirective as ɵbb, ModalSubHeaderDirective as ɵbc } from './lib/modal/modal/modal.component';
+// export {
+//   ModalBodyDirective as ɵbf,
+//   ModalCloseDirective as ɵbe,
+//   ModalComponent as ɵba,
+//   ModalFooterDirective as ɵbg,
+//   ModalHeaderButtonsDirective as ɵbd,
+//   ModalHeaderDirective as ɵbb,
+//   ModalSubHeaderDirective as ɵbc
+// } from './lib/modal/modal/modal.component';
 // export { PagerComponent as ɵby } from './lib/pager/pager.component';
 // export { FormatArrayStringPipe as ɵbq } from './lib/pipes/array-string.pipe';
 // export { DurationToStringPipe as ɵbr } from './lib/pipes/duration-to-string.pipe';

@@ -47,7 +47,14 @@ export class TooltipService {
 
     return tooltip;
   }
-  addWithType(contentType: Type<{}>, data: any, dataField: string, width: string = 'auto', maxWidth: string = '', hideBack: boolean): Tooltip {
+  addWithType(
+    contentType: Type<{}>,
+    data: any,
+    dataField: string,
+    width: string = 'auto',
+    maxWidth: string = '',
+    hideBack: boolean
+  ): Tooltip {
     const tooltip = this.add('', width, maxWidth, hideBack);
 
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(contentType);
