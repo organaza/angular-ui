@@ -297,8 +297,8 @@ export class DropDownComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  setState(state: string) {
-    this.state = state;
+  setState(newState: string) {
+    this.state = newState;
     this.cd.markForCheck();
   }
 
