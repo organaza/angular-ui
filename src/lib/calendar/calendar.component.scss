@@ -1,0 +1,318 @@
+@import '../../styles/_variables.scss';
+
+:host {
+  @include component;
+  width: 16em;
+  height: 18em;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+
+.oz-datepicker {
+  &-clear-button {
+    margin: 0.5em 0;
+    text-align: center;
+    display: block;
+  }
+
+  &-value {
+    cursor: pointer;
+    padding: $oz-control-default-padding 0;
+    color: $oz-control-text-interactive-color;
+    display: flex;
+
+    &-empty {
+      color: $oz-control-prompt-color;
+      font-weight: $oz-control-prompt-font-weight;
+    }
+  }
+
+  &-popup-calendar {
+    flex: 1 1 100%;
+    padding: 0.5em 0;
+  }
+
+  &-month-year {
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    margin-bottom: 1em;
+
+    &-current {
+      padding: 7px;
+      flex: 1 1 100%;
+      &:hover {
+        background-color: $oz-control-hover-color;
+      }
+    }
+
+    &-prev,
+    &-next {
+      padding: 7px 15px;
+      display: flex;
+      flex: 0 0 auto;
+      &:hover {
+        background-color: $oz-control-hover-color;
+      }
+    }
+  }
+
+  &-months {
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 20;
+    height: 100%;
+    width: 100%;
+  }
+
+  &-month {
+    border: 1px solid transparent;
+    position: relative;
+    background-color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 33%;
+
+    &-0,
+    &-1,
+    &-2 {
+      border-top-style: transparent;
+    }
+
+    &-0,
+    &-3,
+    &-6,
+    &-9 {
+      border-left-color: transparent;
+    }
+
+    &-11,
+    &-2,
+    &-5,
+    &-8 {
+      border-right-color: transparent;
+    }
+
+    &-number {
+      font-size: 140%;
+    }
+
+    &-name {
+      font-size: 80%;
+    }
+
+    &:hover {
+      border: 1px solid $oz-button-primary-background;
+      outline: 1px solid $oz-button-primary-background;
+      z-index: 100;
+      cursor: pointer;
+    }
+
+    &-selected {
+      background-color: $oz-button-tab-selected-background-color;
+      border: 1px solid $oz-button-primary-background;
+      font-weight: $global-weight-bolder;
+    }
+  }
+
+  &-years {
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 20;
+    height: 100%;
+    width: 100%;
+  }
+
+  &-year {
+    border: 1px solid transparent;
+    position: relative;
+    background-color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 20%;
+    padding: 0.7em 0;
+
+    &-0,
+    &-1,
+    &-2 {
+      border-top-style: solid;
+    }
+
+    &-0,
+    &-3,
+    &-6,
+    &-9 {
+      border-left-color: transparent;
+    }
+
+    &-11,
+    &-2,
+    &-5,
+    &-8 {
+      border-right-color: transparent;
+    }
+
+    &:hover {
+      border: 1px solid $oz-button-primary-background;
+      outline: 1px solid $oz-button-primary-background;
+      z-index: 100;
+      cursor: pointer;
+    }
+
+    &-selected {
+      background-color: $oz-button-tab-selected-background-color;
+      border: 1px solid $oz-button-primary-background;
+      font-weight: $global-weight-bold;
+    }
+  }
+}
+
+.oz-calendar {
+  &-days {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+  }
+
+  &-day {
+    flex: 1 1 100%;
+    display: flex;
+    text-align: center;
+    padding: 0 0 6px;
+    font-size: 80%;
+    justify-content: center;
+
+    &-5,
+    &-6 {
+      color: $accent-primary-color;
+    }
+  }
+
+  &-weeks {
+    font-size: $font-size-calendar;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  &-week {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+  }
+
+  &-date {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    flex: 1 1 100%;
+
+    &-label {}
+
+    &-6,
+    &-7 {
+      color: $accent-primary-color;
+    }
+
+    &:hover {
+      border: 1px solid $accent-primary-color;
+      outline: 1px solid $accent-primary-color;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    &-overflow {
+      color: #bbb;
+    }
+
+    &-today {
+      color: $accent-primary-color;
+      font-weight: $global-weight-bolder;
+      text-decoration: underline;
+      z-index: 2;
+    }
+
+    &-selected {
+      font-weight: $global-weight-bolder;
+      background-color: $accent-lighter-color;
+      border: 1px solid $accent-primary-color;
+      // border-radius: 2px;
+    }
+
+    &-holiday {
+      background-color: $accent-primary-color;
+      font-weight: $global-weight-bold;
+      color: $white;
+      // border-radius: 2px;
+      border: 1px solid $accent-primary-color;
+    }
+
+    &-period {
+      background-color: $accent-lighter-color;
+    }
+
+    &-selected-end::after {
+      content: '';
+      position: absolute;
+      right: -0.5em;
+      top: -1px;
+      border-right: 8px solid transparent;
+      border-top: 6px solid $accent-primary-color;
+      z-index: 2;
+    }
+
+    &-selected-start::after {
+      content: '';
+      position: absolute;
+      left: -0.5em;
+      top: -1px;
+      border-left: 8px solid transparent;
+      border-top: 6px solid $accent-primary-color;
+      z-index: 2;
+    }
+
+    &-selected-end:hover:after,
+    &-selected-start:hover:after {
+      border: 0;
+    }
+
+    &-selected-start {
+      border-radius: 0 $oz-control-border-radius $oz-control-border-radius 0;
+    }
+
+    &-selected-end {
+      border-radius: $oz-control-border-radius 0 0 $oz-control-border-radius;
+    }
+
+    &-selected-end,
+    &-selected-start {
+      background-color: $accent-primary-color;
+      color: $white;
+    }
+
+    &-hide-overflow {
+      border: 1px solid transparent;
+      background-color: transparent;
+      outline: none;
+      cursor: default;
+
+      &:hover {
+        border: 1px solid transparent;
+        outline: 1px solid transparent;
+        cursor: default;
+      }
+    }
+  }
+}

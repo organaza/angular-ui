@@ -1,0 +1,13 @@
+<div class="background"
+  [@state]="state"
+  *ngIf="dropDownNgIf && displayBackground"
+  (click)="closeDropdown()"></div>
+<div
+  #dropdownContainer
+  class="container"
+  *ngIf="dropDownNgIf"
+  [@state]="state">
+  <ng-container
+    *ngTemplateOutlet="dropdownContent">
+  </ng-container>
+</div>

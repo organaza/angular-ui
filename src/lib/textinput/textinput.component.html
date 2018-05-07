@@ -1,0 +1,46 @@
+<div class="oz-textinput"
+  [class.showClear]="showClear"
+  [style.opacity]="opacity">
+  <div class="oz-textinput-container resize-text"
+    [class.container-nopadding]="nopadding"
+    *ngIf="multiline"
+    (click)="switchPopup(true)">{{getDisplayValue()}}<span *ngIf="percentage">%</span>&nbsp;</div>
+  <input *ngIf="!multiline"
+    tabindex="-1"
+    class="oz-textinput-container"
+    [class.oz-textinput-container-nopadding]="nopadding"
+    [class.oz-textinput-container-active]="opened"
+    [class.uppercase]="uppercase"
+    [type]="inputType"
+    [(ngModel)]="value"
+    [maxlength]="maxlength"
+    [disabled]="disabled"
+    (keydown)="onKeyDown($event)"
+    (focusin)="onFocusIn()"
+    (focus)="focus.next()"
+    (blur)="blur.next()"
+    (paste)="onPaste($event)"
+    #container>
+  <textarea *ngIf="multiline"
+    tabindex="-1"
+    class="oz-textinput-container multiline-textarea"
+    [class.oz-textinput-container-nopadding]="nopadding"
+    [class.oz-textinput-container-active]="opened"
+    [class.uppercase]="uppercase"
+    [(ngModel)]="value"
+    [maxlength]="maxlength"
+    [disabled]="disabled"
+    (keydown)="onKeyDown($event)"
+    (focusin)="onFocusIn()"
+    (focus)="focus.next()"
+    (blur)="blur.next()"
+    (paste)="onPaste($event)"
+    #container></textarea>
+  <div *ngIf="value===undefined || value===null || value===''"
+    class="oz-textinput-prompt"
+    [class.oz-textinput-prompt-nopadding]="nopadding"
+    [class.oz-textinput-prompt-active]="opened">
+    {{prompt}}
+  </div>
+  <i class="icon-close oz-textinput-clear" (mousedown)="clear($event)" *ngIf="showClear && value"></i>
+</div>

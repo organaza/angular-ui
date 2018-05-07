@@ -1,0 +1,18 @@
+@import '../../../styles/_variables.scss';
+
+:host {
+  position: absolute;
+  padding: 0.4em 0.7em;
+  width: auto;
+  max-width: 80%;
+
+  background-color: rgba(0,0,0,0.7);
+  color: $white;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  border-radius: $oz-control-border-radius;
+  font-weight: $global-weight-bolder;
+
+  font-size: 90%;
+  will-change: transform;
+  word-wrap: break-word;
+}

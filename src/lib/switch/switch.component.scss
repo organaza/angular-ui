@@ -1,0 +1,56 @@
+@import '../../styles/_variables.scss';
+
+.wrapper {
+  position: relative;
+  margin: 0.1em;
+  border-radius: $oz-control-border-radius+1;
+  transition: background-color 0.3s $switch-transition;
+  border: 2px solid $switch-color;
+  background-color: $switch-color;
+  display: flex;
+  color: rgba(white, 0.4);
+  font-weight: $global-weight-bold;
+
+  input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  label {
+    display: flex;
+  }
+}
+
+.wrapper.checked {
+  background-color: $switch-color;
+  border-color: $switch-color;
+}
+
+.switch {
+  position: absolute;
+  height: 100%;
+  transition: 0.3s;
+  left: 0;
+  background-color: $white;
+  color: $switch-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $oz-control-border-radius;
+}
+
+.switch.checked {
+  color: $switch-color;
+  left: 50%;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2em 0.4em;
+}
+
+.item.active {
+  opacity: 0;
+}

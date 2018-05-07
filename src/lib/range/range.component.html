@@ -1,0 +1,12 @@
+<div class="wrapper-progress" [class.disabled]="disabled" (click)="onClickProgress($event)">
+  <div class="progress" [class.filled]="filled">
+    <div class="progress-val" [style.width.%]="(!filled)?100:value"></div>
+    <div
+      class="slider"
+      [class.filled]="filled"
+      [class.disabled]="disabled"
+      #elementSlider
+      (mousedown)="onMouseDown($event)">
+    </div>
+  </div>
+</div>

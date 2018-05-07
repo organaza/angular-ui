@@ -1,0 +1,30 @@
+<oz-button
+  class="margin"
+  [disabled]="currentPage==1 || rowsCount==-1"
+  (click)="onClickFirst()"
+  text="&lt;&lt;"></oz-button>
+<oz-button
+  class="margin"
+  [disabled]="currentPage==1 || rowsCount==-1"
+  (click)="onClickPrev()"
+  text="&lt;"></oz-button>
+<ng-container *ngIf="rowsCount>=0">
+  <oz-textinput
+    [(ngModel)]="currentPage"
+    class="margin"
+    placeholder="Current page"></oz-textinput>
+  <div class="margin" i18n>from</div>
+  <div class="margin">{{ pageCount }}</div>
+</ng-container>
+<ng-container *ngIf="rowsCount==-1">
+  <div class="margin" i18n>Loading ...</div>
+</ng-container>
+<oz-button
+  class="margin"
+  [disabled]="currentPage==pageCount || rowsCount==-1"
+  (click)="onClickNext()"
+  text="&gt;"></oz-button>
+<oz-button
+  [disabled]="currentPage==pageCount || rowsCount==-1"
+  (click)="onClickLast()"
+  text="&gt;&gt;"></oz-button>

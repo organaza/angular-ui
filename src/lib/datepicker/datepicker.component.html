@@ -1,0 +1,48 @@
+<div class="oz-datepicker-value" #valueElement
+  [class.disabled]="disabled"
+  (click)="openDateSelector()"
+  [class.oz-datepicker-value-empty]="!valueMoment"
+  [class.oz-datepicker-value-active]="opened">
+  <span>{{getLabel()}}</span>&nbsp;<oz-icon
+    class="icon"
+    icon="keyboard_arrow_down"
+    size="small">
+  </oz-icon>
+</div>
+
+<oz-dropdown
+  #dropdown
+  class="oz-datepicker-popup"
+  [bindElement]="valueElement"
+  (closed)="onClose()"
+  [closeByClickElement]="false"
+  [displayBackground]="true">
+  <ng-template #dropdownContent>
+    <div class="dropdown-wrapper" [class.range]="range">
+      <oz-calendar class="oz-datepicker-popup-calendar"
+        [(selectionStart)]="selectionStart"
+        [(selectionEnd)]="selectionEnd"
+        [currentYear]="selectionStartMoment?.year()"
+        [currentMonth]="selectionStartMoment?.month()"
+        [hideOverflow]="false"
+        (change)="onCalendarChange($event);onCalendarChangeStart($event)"></oz-calendar>
+      <div class="separator" *ngIf="range"></div>
+      <oz-calendar class="oz-datepicker-popup-calendar"
+        *ngIf="range"
+        [(selectionStart)]="selectionStart"
+        [(selectionEnd)]="selectionEnd"
+        [currentYear]="selectionEndMoment?.year()"
+        [currentMonth]="selectionEndMoment?.month()"
+        [hideOverflow]="false"
+        (change)="onCalendarChangeEnd($event)"></oz-calendar>
+      <div class="separator" *ngIf="range"></div>
+      <div class="helpers" *ngIf="range">
+        <oz-button i18n-text text="Last day" (clicked)="setRange(1, 'd')"></oz-button>
+        <oz-button i18n-text text="Last week" (clicked)="setRange(1, 'w')"></oz-button>
+        <oz-button i18n-text text="Last 2 weeks" (clicked)="setRange(2, 'w')"></oz-button>
+        <oz-button i18n-text text="Last month" (clicked)="setRange(1, 'month')"></oz-button>
+      </div>
+      <oz-button *ngIf="!range" class="oz-datepicker-clear-button" i18n-text text="Clear date" (clicked)="clearDate()"></oz-button>
+    </div>
+  </ng-template>
+</oz-dropdown>

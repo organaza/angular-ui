@@ -1,0 +1,68 @@
+@import '../../styles/_variables.scss';
+
+:host {
+  @include component;
+  @include component-focus;
+  cursor: pointer;
+}
+
+.wrapper-textinput {
+  display: flex;
+
+  span {
+    display: flex;
+    align-items: center;
+    padding: 0.4em 0 0.5em;
+  }
+}
+
+.wrapper-progress {
+  padding: 0.425em 0;
+  margin: 0 0.4em;
+  width: 100%;
+
+  &:hover .slider.filled {
+    opacity: 1;
+  }
+
+  .progress {
+    width: 100%;
+    content: '';
+    background-color: $oz-button-primary-background;
+    height: 1px;
+    border: 0;
+    position: relative;
+
+    .progress-val {
+      height: 100%;
+      background-color: $oz-button-primary-background;
+    }
+  }
+
+  .progress.filled {
+    height: 0.5em;
+    background-color: transparent;
+    border-radius: 15px;
+    border: 1px solid $oz-button-primary-background;
+  }
+
+  .slider {
+    display: block;
+    height: 0.8em;
+    width: 0.8em;
+    border: 1px solid $oz-button-primary-hover-background;
+    border-radius: 0.5em;
+    position: absolute;
+    background-color: $white;
+    top: -0.40em;
+  }
+
+  .slider.filled {
+    opacity: 0;
+    top: -0.25em;
+  }
+
+  .slider.disabled {
+    opacity: 0 !important;
+  }
+}

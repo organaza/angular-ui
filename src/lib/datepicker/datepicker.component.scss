@@ -1,0 +1,67 @@
+@import '../../styles/_variables.scss';
+
+:host {
+  @include component;
+  @include component-focus;
+  @include component-invalid;
+}
+
+:host.disabled {
+  border-bottom: $oz-control-default-border solid transparent;
+}
+
+.dropdown-wrapper {
+  display: flex;
+  flex: 1 1 100%;
+  width: 100%;
+  flex-direction: column;
+  padding: $oz-control-default-padding;
+}
+.dropdown-wrapper.range {
+  flex-direction: row;
+}
+.oz-datepicker {
+  &-clear-button {
+    margin: 0.5em 0;
+    text-align: center;
+    display: block;
+  }
+
+  &-value {
+    cursor: pointer;
+    padding: $oz-control-default-padding 0;
+    color: $oz-control-text-interactive-color;
+    display: flex;
+
+    &-empty {
+      color: $oz-control-prompt-color;
+      font-weight: $oz-control-prompt-font-weight;
+    }
+  }
+
+  &-popup-calendar {
+    flex: 1 1 100%;
+    padding: 0.5em 0;
+  }
+}
+.separator {
+  display: flex;
+  margin: 1em;
+  background-color: $oz-control-border-color;
+  flex: 0 0 1px;
+}
+.helpers {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  padding: 1em;
+  oz-button {
+    margin-bottom: 1em;
+  }
+}
+
+.disabled {
+  .icon {
+    display: none;
+  }
+}

@@ -1,0 +1,125 @@
+@import '../../styles/_variables.scss';
+
+:host {
+  @include component;
+  @include component-focus;
+  @include component-invalid;
+  border-bottom: $oz-control-default-border solid $oz-control-border;
+}
+:host.disabled,
+:host.borderless {
+  border-bottom: $oz-control-default-border solid transparent;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.oz-textinput {
+  width: 100%;
+  position: relative;
+  display: flex;
+  border-radius: $oz-control-border-radius;
+
+  &-borderless {
+    border: 0;
+  }
+
+  &-disabled {
+    border: 0;
+    // opacity: 0.5;
+    cursor: default;
+  }
+
+  &-background {
+    @include component-popup-background;
+  }
+
+  &-background-active {
+    display: block;
+  }
+
+  &-container {
+    resize: none;
+    min-height: 0;
+    display: block;
+    outline: none;
+    border: none;
+    position: relative;
+    width: 100%;
+    background-color: transparent;
+    margin: 0;
+    padding: $oz-control-default-padding 0;
+    color: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    z-index: 1;
+    text-align: inherit;
+
+    &-nopadding {
+      padding-top: 0;
+      padding-bottom: 5px;
+    }
+  }
+
+  &-prompt {
+    font-style: $oz-control-prompt-font-style;
+    padding: $oz-control-default-padding 0;
+    color: $oz-control-prompt-color;
+    font-weight: $oz-control-prompt-font-weight;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  &-prompt-nopadding {
+    padding: 0 0;
+    padding-bottom: 5px;
+  }
+
+  &-prompt-active {
+    z-index: 0;
+  }
+
+  &.showClear {
+    padding-right: 2em;
+  }
+
+  &-clear {
+    position: absolute;
+    top: 50%;
+    right: 0em;
+    margin-top: -0.7em;
+    border-radius: 100%;
+    cursor: pointer;
+    padding: 0.35em;
+    font-size: 60%;
+  }
+}
+.multiline-textarea {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+.oz-textinput-container.resize-text {
+  opacity: 0;
+  min-height: initial;
+  position: initial;
+  white-space: pre-wrap;
+}
+
+:host.ng-dirty.ng-invalid .oz-textinput,
+:host.not-unique .oz-textinput {
+  border-color: $oz-control-border-hover-color-invalid;
+}
+
+:host.ng-dirty.ng-invalid:hover .oz-textinput {
+  border-color: $oz-control-border-hover-color-invalid;
+}
+
+// oz-textinput.oz-textinput-inline {
+//   width: initial;
+//   display: inline-block;
+//   min-width: 200px;
+// }

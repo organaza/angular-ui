@@ -1,0 +1,55 @@
+<div class="value" #valueElement
+  (click)="switchPopup(true)"
+  [class.value-active]="opened">
+  <div class="value-color"
+   [style.background-color]="color.getHex()"
+   [style.border-color]="color.getHex()">
+    &nbsp;
+  </div>
+  &nbsp;
+  <oz-icon
+    class="icon"
+    icon="keyboard_arrow_down"
+    size="small">
+  </oz-icon>
+</div>
+<oz-dropdown
+  #dropdown
+  class="dropdown"
+  [bindElement]="valueElement"
+  [closeByClickElement]="false"
+  [displayBackground]="true">
+  <ng-template #dropdownContent>
+    <div class="color-items">
+      <div class="color-items-line">
+        <div
+          class="color-item"
+          *ngFor="let color of baseColors"
+          [style.background-color]="color.getHex()"
+          (click)="selectColor(color)">
+        </div>
+      </div>
+      <div class="color-horizontal-line"></div>
+      <div class="color-items-line" *ngFor="let colorLine of colors">
+        <div
+          class="color-item"
+          *ngFor="let color of colorLine"
+          [style.background-color]="color.getHex()"
+          (click)="selectColor(color)">
+        </div>
+      </div>
+      <div class="color-horizontal-line"></div>
+      <oz-textinput
+        [ngModel]="textValue"
+        (ngModelChange)="parseColor($event)"
+        [live]="true"
+        [borderless]="true">
+      </oz-textinput>
+    </div>
+    <!-- <div class="recent-colors-title">Recent colors:</div>
+    <div class="color-items-line">
+      <div class="color-item" *ngFor="let color of recentLine" [style.background-color]="color.getHex()">
+      </div>
+    </div> -->
+  </ng-template>
+</oz-dropdown>

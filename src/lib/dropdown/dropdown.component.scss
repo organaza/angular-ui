@@ -1,0 +1,33 @@
+@import '../../styles/_variables.scss';
+
+:host {
+  position: absolute;
+  z-index: $oz-control-popup-z-index;
+  display: flex;
+  flex-direction: column;
+}
+
+:host.scroll {
+  overflow: auto;
+}
+
+.container {
+  z-index: $oz-control-popup-z-index+1;
+  background-color: $white;
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.05);
+  border-radius: 0 $oz-control-border-radius $oz-control-border-radius $oz-control-border-radius;
+  border: 1px solid $oz-control-border-color;
+  display: flex;
+  flex-direction: inherit;
+  height: 100%;
+}
+
+.background {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: $component-popup-background;
+  left: 0;
+  top: 0;
+}

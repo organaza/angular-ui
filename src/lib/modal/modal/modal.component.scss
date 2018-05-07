@@ -1,0 +1,109 @@
+@import '../../../styles/_variables.scss';
+:host {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-background {
+  content: '';
+  position: absolute;
+  background-color: $oz-modal-background;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.modal-wrapper {
+  margin-left: 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #c5c5c5;
+  border-radius: 5px;
+  box-shadow: $modal-wrapper-box-shadow;
+  max-width: 90%;
+  max-height: 90%;
+  width: auto;
+  height: auto;
+
+}
+
+.title {
+  font-size: $oz-modal-header-font-size;
+  font-weight: $global-weight-light;
+}
+
+.title-bar {
+  display: flex;
+  flex: 0 0 auto;
+  max-width: 100%;
+  flex-direction: row;
+  align-items: baseline;
+  padding: $oz-modal-padding-v $oz-modal-padding-h 0;
+  background-color: $white;
+}
+
+.title {
+  display: flex;
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.title-buttons {
+  display: flex;
+  flex: 0 0 auto;
+  margin: 0 1em 0 0;
+}
+
+.sub-title {
+  display: flex;
+  flex: 0 0 auto;
+  margin: 0 0 0 0.5em;
+  font-size: $oz-modal-header-font-size;
+  font-weight: $global-weight-light;
+}
+
+.spacer {
+  flex: 1 1 100%;
+}
+
+/deep/ oz-modal-close {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+/deep/ oz-modal-footer {
+  flex: 0 0 auto;
+  padding: 0.5em;
+  border-top: 1px solid #ddd;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/deep/ oz-modal-sub-header {
+  flex: 0 0 auto;
+  display: flex;
+}
+
+/deep/ oz-modal-footer > * {
+  margin-left: 0.5em;
+}
+
+/deep/ oz-modal-footer.hidden {
+  display: none;
+}
+
+/deep/ oz-modal-body {
+  padding: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0px 0px $oz-control-border-radius $oz-control-border-radius;
+  background-color: $white;
+}

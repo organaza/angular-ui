@@ -1,0 +1,89 @@
+import {
+  Directive,
+  Component,
+  Input,
+  Output,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  forwardRef,
+  ViewChild,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { AnimationEvent, trigger, state, style, animate, transition } from '@angular/animations';
+
+import jQuery from 'jquery';
+
+import { Subscription } from 'rxjs';
+
+const noop = () => {
+};
+
+@Component({
+  selector: 'oz-switch',
+  templateUrl: './switch.component.html',
+  styleUrls: ['./switch.component.scss'],
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => SwitchComponent),
+    multi: true
+  }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+
+export class SwitchComponent implements OnInit, ControlValueAccessor {
+  @Input()
+  labelChecked = 'Good';
+
+  @Input()
+  labelUnchecked = 'Bad';
+
+  value: boolean;
+  width: number;
+
+  set valueInside(value: boolean) {
+    this.value = value;
+    this.onChangeCallback(this.value);
+  }
+  get valueInside(): boolean {
+    return this.value;
+  }
+
+  @ViewChild('idChecked') idChecked: ElementRef;
+  @ViewChild('idUnchecked') idUnchecked: ElementRef;
+
+  private onTouchedCallback: () => void = noop;
+  private onChangeCallback: (_: any) => void = noop;
+
+  constructor(
+    private el: ElementRef,
+    private cd: ChangeDetectorRef,
+  ) {
+  }
+
+  ngOnInit() {
+    setTimeout(() => {
+      const checkedWidth = jQuery(this.idChecked.nativeElement)[0].getBoundingClientRect().width;
+      const uncheckedWidth = jQuery(this.idUnchecked.nativeElement)[0].getBoundingClientRect().width;
+      this.width = Math.max(checkedWidth, uncheckedWidth);
+      this.cd.detectChanges();
+    });
+  }
+
+  writeValue(value: any) {
+    this.value = value;
+    this.cd.detectChanges();
+  }
+
+  registerOnChange(fn: any) {
+    this.onChangeCallback = fn;
+  }
+
+  registerOnTouched(fn: any) {
+    this.onTouchedCallback = fn;
+  }
+}

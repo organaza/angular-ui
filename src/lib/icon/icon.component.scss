@@ -1,0 +1,26 @@
+@import '../../styles/_variables.scss';
+
+:host {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  transition: all 0.1s ease-out;
+}
+.large {
+  font-size: $icons-fontsize-large;
+}
+.x-large {
+  font-size: $icons-fontsize-x-large;
+}
+.xx-large {
+  font-size: $icons-fontsize-xx-large;
+}
+.small {
+  font-size: $icons-fontsize-small;
+}
+.normal {
+  font-size: $icons-fontsize-normal;
+}
+.inherit {
+  font-size: inherit;
+}

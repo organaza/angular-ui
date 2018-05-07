@@ -1,0 +1,11 @@
+@import '../../styles/_variables.scss';
+
+:host {
+  flex: 1 1 100%;
+  overflow: hidden;
+}
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

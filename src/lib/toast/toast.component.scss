@@ -1,0 +1,71 @@
+@import '../../styles/_variables.scss';
+
+.list {
+  width: 80%;
+  position: fixed;
+  bottom: 0;
+  left: 10%;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  z-index: $toasts-z-index;
+}
+
+.pointer {
+  cursor: pointer;
+}
+.item {
+  background-color: $white;
+  border-radius: $oz-control-border-radius;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-out;
+  transform: translate3d(0, 0, 0);
+  line-height: 1;
+  padding: 0.7em;
+
+  &-hide {
+    padding: 0 10px;
+    //opacity: 0;
+    line-height: 0;
+  }
+
+  &-text {
+    margin-right: 3em;
+    transition: all 0.2s ease-out;
+  }
+
+  &-close {
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    padding: 0 15px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    font-size: 175%;
+  }
+
+  &-error {
+    color: $toast-error-color;
+    background-color: $toast-error-background-color;
+  }
+
+  &-warn {
+    color: $toast-warn-color;
+    background-color: $toast-warn-background-color;
+  }
+
+  &-info {
+    color: $toast-info-color;
+    background-color: $toast-info-background-color;
+  }
+
+  &-success {
+    color: $toast-success-color;
+    background-color: $toast-success-background-color;
+  }
+}
+
+.item-hide .item-text {
+  opacity: 0;
+}
