@@ -65,4 +65,3 @@ export class TooltipService {
     tooltip.componentRef.destroy();
   }
 }
-}
