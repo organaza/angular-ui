@@ -16,7 +16,6 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 import { Color } from '../color/color';
 
-import jQuery from 'jquery';
 import { DropDownComponent } from '../dropdown/dropdown.component';
 import { JSONUtils } from '../json/json';
 
@@ -50,6 +49,11 @@ export class ColorPickerComponent implements OnInit, ControlValueAccessor {
 
   private onTouchedCallback: () => void = noop;
   private onChangeCallback: (_: any) => void = noop;
+
+  @HostListener('keydown')
+  onKeyDown() {
+    this.switchPopup(false);
+  }
 
   constructor(
     private el: ElementRef,
@@ -136,9 +140,7 @@ export class ColorPickerComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit() {
-    jQuery(this.el.nativeElement).on('keydown', (event: any) => {
-      this.switchPopup(false);
-    });
+
   }
   switchPopup(value: boolean) {
     if (!value) {

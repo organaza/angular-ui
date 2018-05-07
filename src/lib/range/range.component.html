@@ -5,6 +5,8 @@
       class="slider"
       [class.filled]="filled"
       [class.disabled]="disabled"
+      [style.left.%]="sliderLeft"
+      [style.opacity]="sliderOpacity"
       #elementSlider
       (mousedown)="onMouseDown($event)">
     </div>

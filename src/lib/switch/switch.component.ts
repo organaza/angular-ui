@@ -16,8 +16,6 @@ import {
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { AnimationEvent, trigger, state, style, animate, transition } from '@angular/animations';
 
-import jQuery from 'jquery';
-
 import { Subscription } from 'rxjs';
 
 const noop = () => {
@@ -67,8 +65,8 @@ export class SwitchComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit() {
     setTimeout(() => {
-      const checkedWidth = jQuery(this.idChecked.nativeElement)[0].getBoundingClientRect().width;
-      const uncheckedWidth = jQuery(this.idUnchecked.nativeElement)[0].getBoundingClientRect().width;
+      const checkedWidth = this.idChecked.nativeElement.getBoundingClientRect().width;
+      const uncheckedWidth = this.idUnchecked.nativeElement.getBoundingClientRect().width;
       this.width = Math.max(checkedWidth, uncheckedWidth);
       this.cd.detectChanges();
     });

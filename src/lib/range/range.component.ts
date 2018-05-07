@@ -14,8 +14,6 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { Subject } from 'rxjs';
-
-import jQuery from 'jquery';
 import { JSONUtils } from '../json/json';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -76,6 +74,8 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
   upGlobal: any;
   newValue: number;
   deltaX: number;
+  sliderLeft: number;
+  sliderOpacity: number;
 
   widthSliderProcent: number;
   widthParentElement: number;
@@ -161,7 +161,8 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
     }
     const percent: number = event.offsetX * 100 / this.el.nativeElement.getBoundingClientRect().width / this.koef();
     this.value = this.testAndChangeValue(this.min + Math.round(percent / this.step) * this.step);
-    jQuery(this.elementSlider.nativeElement)[0].style.left = this.calcPercent() + '%';
+    this.sliderLeft = this.calcPercent();
+    this.cd.markForCheck();
     this.change.next(this.value);
     this.onChangeCallback(this.value);
     this.changeEnd.next(this.value);
@@ -182,7 +183,7 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
       return false;
     }
     if (this.filled) {
-      jQuery(this.elementSlider.nativeElement)[0].style.opacity = '1';
+      this.sliderOpacity = 1;
     }
     this.dragSlider = true;
     this.prevScreenX = event.screenX;
@@ -198,13 +199,14 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
         this.newValue += step;
         this.deltaX = (percent - step) * this.widthParentElement / 100 * this.koef();
         this.value = this.testMinMaxValue(this.newValue);
-        jQuery(this.elementSlider.nativeElement)[0].style.left = this.calcPercent() + '%';
+        this.sliderLeft = this.calcPercent();
+        this.cd.markForCheck();
         this.changeSliderPosition(Math.round(this.value));
       }
     });
     this.upGlobal = this.renderer.listen('window', 'mouseup', () => {
       if (this.filled) {
-        jQuery(this.elementSlider.nativeElement)[0].style.opacity = null;
+        this.sliderOpacity = 1;
       }
       this.saveChange();
       this.moveGlobal();
@@ -218,8 +220,9 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
       return;
     }
     this.widthParentElement = this.el.nativeElement.getBoundingClientRect().width;
-    this.widthSliderProcent = jQuery(this.elementSlider.nativeElement)[0].getBoundingClientRect().width * 100 / this.widthParentElement;
-    jQuery(this.elementSlider.nativeElement)[0].style.left = this.calcPercent() + '%';
+    this.widthSliderProcent = this.elementSlider.nativeElement.getBoundingClientRect().width * 100 / this.widthParentElement;
+    this.sliderLeft = this.calcPercent();
+    this.cd.markForCheck();
   }
   testMinMaxValue(value: number): number {
     if (value > this.max) {

@@ -15,7 +15,6 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import jQuery from 'jquery';
 
 import {
   AnimationEvent,
@@ -349,9 +348,9 @@ export class DropDownComponent implements AfterViewInit, OnDestroy {
     this.left = undefined;
     this.right = undefined;
 
-    const bindWidth: number = jQuery(this.bindElement)[0].offsetWidth;
-    const bindHeight: number = jQuery(this.bindElement)[0].offsetHeight;
-    const bindOffset: JQueryCoordinates = jQuery(this.bindElement).offset();
+    const bindWidth: number = this.bindElement.offsetWidth;
+    const bindHeight: number = this.bindElement.offsetHeight;
+    const bindOffset: ClientRect = this.bindElement.getBoundingClientRect();
 
     if (this.useBindWidth) {
       this.width = bindWidth;
@@ -366,10 +365,10 @@ export class DropDownComponent implements AfterViewInit, OnDestroy {
         window.document.body.appendChild(this.el.nativeElement);
       }
 
-      const dropWidth: number = jQuery(this.el.nativeElement)[0].offsetWidth;
-      const dropHeight: number = jQuery(this.el.nativeElement)[0].offsetHeight;
-      const maxRight: number = jQuery(window).innerWidth();
-      const maxBottom: number = jQuery(window).innerHeight();
+      const dropWidth: number = this.el.nativeElement.offsetWidth;
+      const dropHeight: number = this.el.nativeElement.offsetHeight;
+      const maxRight: number = window.innerWidth;
+      const maxBottom: number = window.innerHeight;
 
       let top = 0;
       let bottom = 0;
