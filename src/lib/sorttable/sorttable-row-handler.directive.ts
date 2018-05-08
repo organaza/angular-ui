@@ -7,8 +7,7 @@ import { SortTableRowDirective } from './sorttable-row.directive';
   selector: '[ozSortTableRowHandler]'
 })
 export class SortTableRowHandlerDirective {
-  @Input()
-  sortTableRowHandler: number;
+  @Input('ozSortTableRowHandler') sortTableRowHandler: number;  // tslint:disable-line no-input-rename
 
   @Input()
   canSort = true;

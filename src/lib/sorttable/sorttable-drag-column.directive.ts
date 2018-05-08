@@ -29,7 +29,7 @@ export class SortTableDragColumnDirective implements OnInit, OnDestroy {
     private renderer: Renderer2) {
   }
 
-  @Input('sortTableDragColumn')
+  @Input('ozSortTableDragColumn')
   set sortTableDragColumn(value: number) {
     if (this._index) {
       this.sortTableService.unregisterDragColumn(this.sortTable.sortTable, this.sortTableDragColumn);

@@ -30,7 +30,7 @@ export class SortTableRowDirective implements OnInit, OnDestroy {
     private renderer: Renderer2) {
   }
 
-  @Input('sortTableRow')
+  @Input('ozSortTableRow')
   set index(value: number) {
     if (this._index) {
       this.sortTableService.unregisterRow(this.sortTable.sortTable, this.index);
