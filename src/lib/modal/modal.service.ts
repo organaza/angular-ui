@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 
-import { Type, Component, Injectable, ComponentFactoryResolver, ComponentFactory, ComponentRef, ViewContainerRef } from '@angular/core';
+import { Type, Injectable, ComponentFactoryResolver, ComponentRef } from '@angular/core';
 import { ModalContainerDirective } from './modal-container.directive';
 
 export class ModalWindow {

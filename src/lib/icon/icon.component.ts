@@ -2,12 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  Output,
-  ElementRef,
-  EventEmitter,
-  OnInit,
-  HostListener,
-  HostBinding
 } from '@angular/core';
 
 @Component({

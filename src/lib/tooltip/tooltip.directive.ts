@@ -1,6 +1,5 @@
 import { OnDestroy, Directive, Input, ElementRef, HostListener, Type} from '@angular/core';
 import { TooltipService, Tooltip } from './tooltip.service';
-import { TooltipComponent } from '../tooltip/tooltip/tooltip.component';
 
 @Directive({
   selector: '[ozTooltip]',

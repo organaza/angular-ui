@@ -69,7 +69,6 @@ export class CalendarComponent implements OnInit, OnChanges {
   currentEra: string;
 
   constructor(
-    private el: ElementRef,
     private cd: ChangeDetectorRef,
   ) {
 

@@ -1,4 +1,4 @@
-import { HostBinding, Directive, Input, Output, ElementRef, EventEmitter, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { HostBinding, Directive, Input, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { SortTableService } from '../sorttable/sorttable.service';
 
 @Directive({

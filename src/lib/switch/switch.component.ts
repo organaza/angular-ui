@@ -1,22 +1,14 @@
 import {
-  Directive,
   Component,
   Input,
-  Output,
-  ElementRef,
-  EventEmitter,
   OnInit,
-  OnDestroy,
-  HostListener,
+  ElementRef,
   forwardRef,
   ViewChild,
   ChangeDetectionStrategy,
   ChangeDetectorRef
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { AnimationEvent, trigger, state, style, animate, transition } from '@angular/animations';
-
-import { Subscription } from 'rxjs';
 
 const noop = () => {
 };
@@ -58,7 +50,6 @@ export class SwitchComponent implements OnInit, ControlValueAccessor {
   private onChangeCallback: (_: any) => void = noop;
 
   constructor(
-    private el: ElementRef,
     private cd: ChangeDetectorRef,
   ) {
   }

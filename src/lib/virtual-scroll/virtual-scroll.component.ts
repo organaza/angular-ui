@@ -3,9 +3,7 @@ import {
   ContentChild,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
-  NgModule,
   NgZone,
   OnChanges,
   OnDestroy,
@@ -181,7 +179,7 @@ export class VirtualScrollComponent implements OnInit, OnChanges, OnDestroy {
 
   scrollInto(item: any) {
     const el: Element = this.parentScroll instanceof Window ? document.body : this.parentScroll || this.element.nativeElement;
-    const offsetTop = this.getElementsOffset();
+    // const offsetTop = this.getElementsOffset();
     const index: number = (this.items || []).indexOf(item);
     if (index < 0 || index >= (this.items || []).length) { return; }
 

@@ -1,5 +1,4 @@
 import {
-  Directive,
   Component,
   Input,
   Output,
@@ -87,9 +86,9 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   constructor(
     private el: ElementRef,
     private cd: ChangeDetectorRef,
-    private s: OzSettingsService,
+    settings: OzSettingsService,
   ) {
-    this.outFormat = s.dateFormat;
+    this.outFormat = settings.dateFormat;
     this.opened = false;
   }
 

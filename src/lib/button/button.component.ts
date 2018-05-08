@@ -5,13 +5,9 @@ import {
   Output,
   ElementRef,
   EventEmitter,
-  OnInit,
   HostListener,
-  HostBinding,
-  ChangeDetectorRef
+  HostBinding
 } from '@angular/core';
-
-import jQuery from 'jquery';
 
 @Component({
   selector: 'oz-button',
@@ -77,7 +73,9 @@ export class ButtonComponent {
     }
   }
 
-  constructor(private element: ElementRef) { }
+  constructor(
+
+  ) { }
 
   onClickButton() {
     if (!this.disabled && !this.inProgress) {

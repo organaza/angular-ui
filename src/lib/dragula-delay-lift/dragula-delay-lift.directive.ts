@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, HostBinding } from '@angular/core';
+import { Directive, HostListener, HostBinding } from '@angular/core';
 
 @Directive({ selector: '[ozDragulaDelayLift]' })
 export class DragulaDelayLiftDirective {
@@ -35,7 +35,6 @@ export class DragulaDelayLiftDirective {
     }
 
     constructor(
-      private el: ElementRef
     ) {
     }
 }

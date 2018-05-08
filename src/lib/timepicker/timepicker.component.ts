@@ -1,20 +1,13 @@
-import jQuery from 'jquery';
 import moment, { DurationInputArg2 } from 'moment';
 
 import {
-  Directive,
   Component,
   Input,
-  Output,
-  ElementRef,
-  EventEmitter,
   OnInit,
   OnDestroy,
   HostListener,
   forwardRef,
-  ViewChildren,
   ViewChild,
-  QueryList,
   HostBinding,
   ChangeDetectionStrategy,
   ChangeDetectorRef
@@ -89,7 +82,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   valueInputFormat: string;
 
   focusTimeout = 0;
-  shortcut: ShortcutObservable<any>;
+  shortcut: ShortcutObservable;
 
   private onTouchedCallback: () => void = noop;
   private onChangeCallback: (_: any) => void = noop;
@@ -102,7 +95,6 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   }
 
   constructor(
-    private element: ElementRef,
     private shortcutService: ShortcutService,
     private cd: ChangeDetectorRef,
   ) {
@@ -155,15 +147,15 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     }
   }
   parseValue() {
-    let valueMoment: moment.Duration;
+    // let valueMoment: moment.Duration;
     if (!this.value) {
       this.valueMoment = moment.duration(0);
       this.valueMomentOriginal = moment.duration(0);
-      valueMoment = moment.duration(0);
+      // valueMoment = moment.duration(0);
     } else {
       this.valueMoment = moment.duration(this.value);
       this.valueMomentOriginal = moment.duration(this.value);
-      valueMoment = moment.duration(this.value);
+      // valueMoment = moment.duration(this.value);
     }
     this.parseValueMoment();
   }

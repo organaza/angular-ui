@@ -1,7 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
-
 import { SortTableSettingsService } from './sorttable.settings.service';
-import { Observable } from 'rxjs';
 
 describe('SortTableSettingsService', () => {
   beforeEach(() => {

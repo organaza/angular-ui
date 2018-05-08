@@ -1,4 +1,4 @@
-import { Directive,
+import {
   Component,
   Input,
   Output,
@@ -14,7 +14,7 @@ import { Directive,
   ChangeDetectorRef,
   Renderer2 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 const noop = () => {

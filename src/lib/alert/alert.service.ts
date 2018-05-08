@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observer, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class AlertService {

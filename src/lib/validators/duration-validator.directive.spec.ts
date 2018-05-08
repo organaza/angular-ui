@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async } from '@angular/core/testing';
 
 import { DurationValidatorDirective } from './duration-validator.directive';
 

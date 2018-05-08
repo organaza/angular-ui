@@ -6,7 +6,6 @@ import {
   Component,
   Input,
   Output,
-  OnInit,
   AfterViewInit,
   ElementRef,
   OnDestroy,
@@ -14,10 +13,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 import {
-  AnimationEvent,
   trigger,
   state,
   style,

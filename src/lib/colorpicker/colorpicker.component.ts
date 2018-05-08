@@ -1,10 +1,6 @@
 import {
-  Directive,
   Component,
-  Input,
-  Output,
   ElementRef,
-  EventEmitter,
   OnInit,
   HostListener,
   forwardRef,
@@ -56,7 +52,6 @@ export class ColorPickerComponent implements OnInit, ControlValueAccessor {
   }
 
   constructor(
-    private el: ElementRef,
     private cd: ChangeDetectorRef,
   ) {
     this.opened = false;

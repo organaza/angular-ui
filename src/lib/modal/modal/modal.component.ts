@@ -1,22 +1,17 @@
 import {
   EventEmitter,
   Output,
-  Type,
   Component,
   Directive,
-  ViewChild,
-  ViewContainerRef,
   OnInit,
   OnDestroy,
   ElementRef,
-  ChangeDetectionStrategy,
   ChangeDetectorRef
 } from '@angular/core';
 import { ModalService } from '../../modal/modal.service';
 import { ShortcutService, ShortcutObservable } from '../../shortcut/shortcut.service';
 
 import {
-  AnimationEvent,
   trigger,
   state,
   style,
@@ -81,9 +76,9 @@ export class ModalComponent implements OnInit, OnDestroy {
     return this.__state;
   }
   __state = 'create';
-  shortcut: ShortcutObservable<any>;
-  shortcutLeft: ShortcutObservable<any>;
-  shortcutRight: ShortcutObservable<any>;
+  shortcut: ShortcutObservable;
+  shortcutLeft: ShortcutObservable;
+  shortcutRight: ShortcutObservable;
 
   @Output()
   closed: EventEmitter<{}> = new EventEmitter();

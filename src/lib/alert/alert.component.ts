@@ -3,7 +3,6 @@ import { AlertService } from './alert.service';
 import { ShortcutService } from '../shortcut/shortcut.service';
 
 import {
-  AnimationEvent,
   trigger,
   state,
   style,

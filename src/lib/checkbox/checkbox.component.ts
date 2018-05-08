@@ -1,5 +1,4 @@
 import {
-  Directive,
   Component,
   Input,
   Output,
@@ -56,7 +55,6 @@ export class CheckboxComponent implements OnInit, ControlValueAccessor {
   }
 
   constructor(
-    private el: ElementRef,
     private cd: ChangeDetectorRef,
   ) { }
 

@@ -1,4 +1,4 @@
-import { Injectable, ComponentFactoryResolver, ComponentRef, Type, ElementRef, HostListener } from '@angular/core';
+import { Injectable, ComponentFactoryResolver, ComponentRef, Type } from '@angular/core';
 import { TooltipContainerComponent } from './tooltip-container/tooltip-container.component';
 import { TooltipComponent } from './tooltip/tooltip.component';
 

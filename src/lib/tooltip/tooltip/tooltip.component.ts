@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, HostBinding, ViewChild, ViewContainerRef } from '@angular/core';
 
 import {
-  AnimationEvent,
   trigger,
   state,
   style,

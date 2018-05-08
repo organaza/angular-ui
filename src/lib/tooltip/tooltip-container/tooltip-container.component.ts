@@ -1,4 +1,4 @@
-import { Input, Type, Component, ViewChild, ViewContainerRef, AfterViewInit, HostBinding } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, HostBinding } from '@angular/core';
 import { TooltipService } from '../tooltip.service';
 
 @Component({

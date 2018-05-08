@@ -1,9 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AlertComponent } from './alert.component';
-import { ButtonComponent } from '../button/button.component';
-import { IconComponent } from '../icon/icon.component';
-import { TextinputComponent } from '../textinput/textinput.component';
 import { FormsModule } from '@angular/forms';
 import { AlertService } from './alert.service';
 import { Subject } from 'rxjs';

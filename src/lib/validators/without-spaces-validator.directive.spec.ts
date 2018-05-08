@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async } from '@angular/core/testing';
 
 import { WithOutSpacesValidatorDirective } from './without-spaces-validator.directive';
 

@@ -6,7 +6,6 @@ import {
   EventEmitter,
   OnInit,
   forwardRef,
-  HostListener,
   Renderer2,
   ViewChild,
   ChangeDetectionStrategy,

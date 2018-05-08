@@ -1,5 +1,5 @@
 import { Directive, forwardRef, Attribute } from '@angular/core';
-import { Validator, AbstractControl, NG_VALIDATORS, FormControl } from '@angular/forms';
+import { Validator, AbstractControl, NG_VALIDATORS } from '@angular/forms';
 import moment from 'moment';
 
 

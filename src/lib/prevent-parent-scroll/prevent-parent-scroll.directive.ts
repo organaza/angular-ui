@@ -1,5 +1,4 @@
-import {Directive, ElementRef, OnInit, OnDestroy, Input, NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { Directive, ElementRef, OnInit, OnDestroy, Input } from '@angular/core';
 
 @Directive({
   selector: '[ozPreventParentScroll]'

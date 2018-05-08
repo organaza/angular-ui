@@ -2,7 +2,6 @@ import {
   Input,
   Component,
   ViewChild,
-  ViewContainerRef,
   OnInit,
   ElementRef,
   ChangeDetectionStrategy,

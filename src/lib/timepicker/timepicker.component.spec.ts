@@ -1,8 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TimePickerComponent } from './timepicker.component';
-import { TextinputComponent } from '../textinput/textinput.component';
-import { DropDownComponent } from '../dropdown/dropdown.component';
 import { ShortcutService } from '../shortcut/shortcut.service';
 import { FormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';

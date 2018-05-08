@@ -1,5 +1,5 @@
-import { Subscription, Observable, Observer } from 'rxjs';
-import { Injectable, HostListener } from '@angular/core';
+import { Observable, Observer } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 export class Sign  {
   sign: string;
@@ -9,7 +9,7 @@ export class Sign  {
   working: boolean;
 }
 
-export class ShortcutObservable<T> {
+export class ShortcutObservable {
   id: string;
   observable: any;
 
@@ -110,7 +110,7 @@ export class ShortcutService {
   addInArray(item: Sign) {
     this.arraySignatories.unshift(item);
   }
-  subscribe(sign: string, key: string, callback: any): ShortcutObservable<any> {
+  subscribe(sign: string, key: string, callback: any): ShortcutObservable {
     return new ShortcutObservable(this, (observer, id) => {
       this.addInArray({sign: this.translateSign(sign), keyCode: this.getKeyCode(key), observer, id, working: true});
     }, callback);
