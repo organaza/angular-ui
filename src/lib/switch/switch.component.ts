@@ -6,7 +6,8 @@ import {
   forwardRef,
   ViewChild,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  AfterViewInit
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
@@ -25,7 +26,7 @@ const noop = () => {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class SwitchComponent implements OnInit, ControlValueAccessor {
+export class SwitchComponent implements OnInit, AfterViewInit, ControlValueAccessor {
   @Input()
   labelChecked = 'Good';
 
@@ -55,12 +56,13 @@ export class SwitchComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit() {
-    setTimeout(() => {
-      const checkedWidth = this.idChecked.nativeElement.getBoundingClientRect().width;
-      const uncheckedWidth = this.idUnchecked.nativeElement.getBoundingClientRect().width;
-      this.width = Math.max(checkedWidth, uncheckedWidth);
-      this.cd.detectChanges();
-    });
+  }
+
+  ngAfterViewInit() {
+    const checkedWidth = this.idChecked.nativeElement.getBoundingClientRect().width;
+    const uncheckedWidth = this.idUnchecked.nativeElement.getBoundingClientRect().width;
+    this.width = Math.max(checkedWidth, uncheckedWidth);
+    this.cd.detectChanges();
   }
 
   writeValue(value: any) {
