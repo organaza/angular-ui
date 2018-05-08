@@ -41,7 +41,7 @@ export class SortStartEvent {
 })
 export class SortTableDirective implements OnInit, OnDestroy {
 
-  @Input() sortTable: string;
+  @Input('ozSortTable') sortTable: string;  // tslint:disable-line no-input-rename
   @Input() sortTableCollection: any[];
 
   @Output()

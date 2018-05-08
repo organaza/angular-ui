@@ -7,8 +7,7 @@ import { SortTableDragColumnDirective } from './sorttable-drag-column.directive'
   selector: '[ozSortTableDragColumnHandler]'
 })
 export class SortTableDragColumnHandlerDirective {
-  @Input()
-  sortTableDragColumnHandler: number;
+  @Input('ozSortTableDragColumnHandler') sortTableDragColumnHandler: number; // tslint:disable-line no-input-rename
 
   @Input()
   canSort = true;

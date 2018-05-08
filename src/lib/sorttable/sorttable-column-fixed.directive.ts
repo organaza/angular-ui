@@ -6,7 +6,7 @@ import { SortTableService } from '../sorttable/sorttable.service';
 })
 export class SortTableColumnFixedDirective implements OnInit, OnDestroy {
 
-  @Input() sortTableColumnFixed: string;
+  @Input('ozSortTableColumnFixed') sortTableColumnFixed: string; // tslint:disable-line no-input-rename
 
   @HostBinding('style.flex')
   flex: string;

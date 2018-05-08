@@ -7,7 +7,7 @@ import { SortTableDirective } from './sorttable.directive';
 })
 export class SortTableColumnHeadDirective implements OnInit, OnDestroy {
 
-  @Input() sortTableColumnHead: string;
+  @Input('ozSortTableColumnHead') sortTableColumnHead: string; // tslint:disable-line no-input-rename
 
   get columnId(): string {
     return this.sortTable.sortTable + ':' + this.sortTableColumnHead;
