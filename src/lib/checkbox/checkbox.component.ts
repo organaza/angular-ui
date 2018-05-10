@@ -12,6 +12,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { Strings } from '../string/string';
 
 const noop = () => {
 };
@@ -59,12 +60,9 @@ export class CheckboxComponent implements OnInit, ControlValueAccessor {
   ) { }
 
   writeValue(value: any) {
-    if (value === undefined) {
-      this.value = false;
-      this.onChangeCallback(this.value);
-    }
-    this.value = value;
+    this.value = Strings.parseBoolean(value);
     this.cd.detectChanges();
+    this.onChangeCallback(this.value);
   }
 
   registerOnChange(fn: any) {
