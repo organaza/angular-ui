@@ -8,6 +8,7 @@ export * from './lib/color/color';
 export * from './lib/file/file';
 export * from './lib/ranges/ranges';
 export * from './lib/string/string';
+export * from './lib/bson/objectid';
 
 export { AlertService } from './lib/alert/alert.service';
 export { ModalService } from './lib/modal/modal.service';
