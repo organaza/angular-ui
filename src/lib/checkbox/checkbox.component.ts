@@ -62,7 +62,6 @@ export class CheckboxComponent implements OnInit, ControlValueAccessor {
   writeValue(value: any) {
     this.value = Strings.parseBoolean(value);
     this.cd.detectChanges();
-    this.onChangeCallback(this.value);
   }
 
   registerOnChange(fn: any) {
