@@ -182,7 +182,8 @@ $oz-modal-header-font-size: 200%;
 $oz-modal-sub-header-font-size: 150%;
 $oz-modal-padding-v: 1em;
 $oz-modal-padding-h: 1.5em;
-$oz-modal-background: rgba(47, 69, 82, 0.8);
+$oz-modal-overlay-background: rgba(47, 69, 82, 0.8);
+$oz-modal-background: #fff;
 
 @mixin modal (){
   display: flex;
