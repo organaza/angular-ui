@@ -8,6 +8,8 @@ export class SortField {
 
 @Injectable()
 export class SortTableSettingsService {
+  static key = 'sorttable_column_width';
+
   settings: {
     columnsWidth: { [key: string]: { [key: string]: any } },
     sortField: { [key: string]: SortField },
@@ -16,10 +18,11 @@ export class SortTableSettingsService {
     sortField: {}
   };
   timeout: any;
+
   constructor(
 
   ) {
-    this.updateSettings(JSONUtils.parseLocalStorage('sorttable_column_width', {}));
+    this.updateSettings(JSONUtils.parseLocalStorage(SortTableSettingsService.key, {}));
   }
 
   set columnsWidth(value: { [key: string]: { [key: string]: any } }) {
@@ -50,7 +53,7 @@ export class SortTableSettingsService {
   }
 
   saveInlocalStorage() {
-    JSONUtils.setLocalStorage('sorttable_column_width', this.settings);
+    JSONUtils.setLocalStorage(SortTableSettingsService.key, this.settings);
   }
 
   save() {
