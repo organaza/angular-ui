@@ -10,12 +10,9 @@ export class SortField {
 export class SortTableSettingsService {
   settings: {
     columnsWidth: { [key: string]: { [key: string]: any } },
-    sortField: { [key: string]: SortField }
-   } = {
+    sortField: { [key: string]: SortField },
+  } = {
     columnsWidth: {},
-      // {'fixed': {
-      //   'Title': '1 1 100%',
-      // }},
     sortField: {}
   };
   timeout: any;
@@ -25,11 +22,11 @@ export class SortTableSettingsService {
     this.updateSettings(JSONUtils.parseLocalStorage('sorttable_column_width', {}));
   }
 
-  set columnsWidth(value: { [key: string]: { [key: string]: number } }) {
+  set columnsWidth(value: { [key: string]: { [key: string]: any } }) {
     this.settings.columnsWidth = value;
     this.save();
   }
-  get columnsWidth(): { [key: string]: { [key: string]: number } } {
+  get columnsWidth(): { [key: string]: { [key: string]: any } } {
     return this.settings.columnsWidth;
   }
 
