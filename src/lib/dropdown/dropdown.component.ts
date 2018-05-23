@@ -300,7 +300,9 @@ export class DropDownComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.parent.appendChild(this.el.nativeElement);
+    if (this.parent) {
+      this.parent.appendChild(this.el.nativeElement);
+    }
     clearTimeout(this.calculateTimeout);
     clearTimeout(this.appendTimeout);
     this.state = 'void';
