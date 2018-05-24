@@ -54,6 +54,9 @@ export class ShortcutService {
     }, callback);
   }
   keyDown(event: any) {
+    if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey) {
+      return;
+    }
     if (event.target.localName === 'input' || event.target.localName === 'textarea') {
       return;
     }
