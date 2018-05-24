@@ -82,7 +82,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   valueInputFormat: string;
 
   focusTimeout = 0;
-  shortcut: ShortcutObservable;
+  shortcut: ShortcutObservable<any>;
 
   private onTouchedCallback: () => void = noop;
   private onChangeCallback: (_: any) => void = noop;
@@ -302,7 +302,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     event.stopPropagation();
     window.clearTimeout(this.focusTimeout);
     this.dropdown.show();
-    this.shortcut = this.shortcutService.subscribe('ESC', null, () => {
+    this.shortcut = this.shortcutService.subscribe('Escape', () => {
       this.disableSelectMode();
     });
   }

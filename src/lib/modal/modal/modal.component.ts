@@ -76,9 +76,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     return this.__state;
   }
   __state = 'create';
-  shortcut: ShortcutObservable;
-  shortcutLeft: ShortcutObservable;
-  shortcutRight: ShortcutObservable;
+  shortcut: ShortcutObservable<any>;
 
   @Output()
   closed: EventEmitter<{}> = new EventEmitter();
@@ -89,11 +87,9 @@ export class ModalComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     private el: ElementRef,
   ) {
-    this.shortcut = this.shortcutService.subscribe('ESC', null, () => {
+    this.shortcut = this.shortcutService.subscribe('Escape', () => {
       this.close();
     });
-    this.shortcutLeft = this.shortcutService.subscribe('ArrowLeft', null, () => {});
-    this.shortcutRight = this.shortcutService.subscribe('ArrowRight', null, () => {});
   }
 
   ngOnInit() {
@@ -102,8 +98,6 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.shortcut.unsubscribe();
-    this.shortcutLeft.unsubscribe();
-    this.shortcutRight.unsubscribe();
     this.closed.complete();
   }
 

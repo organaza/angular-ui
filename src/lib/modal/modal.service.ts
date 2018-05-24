@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 import { Type, Injectable, ComponentFactoryResolver, ComponentRef } from '@angular/core';
 import { ModalContainerDirective } from './modal-container.directive';
@@ -22,11 +22,13 @@ export class ModalService {
   modals: ModalWindow[];
   removeStack: ModalWindow[];
   modalAdded: Subject<ModalWindow>;
+  opened: BehaviorSubject<Boolean>;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {
     this.modals = [];
     this.removeStack = [];
     this.modalAdded = new Subject();
+    this.opened = new BehaviorSubject(false);
   }
   registerContainer(container: ModalContainerDirective) {
     this.container = container;
@@ -61,6 +63,7 @@ export class ModalService {
     Object.keys(data).forEach(key => {
       componentRef.instance[key] = data[key];
     });
+    this.opened.next(this.modals.length !== 0);
 
     return componentRef.instance;
   }
@@ -86,6 +89,7 @@ export class ModalService {
         lastModal.contentRef.destroy();
       }
       this.modals.splice(this.modals.indexOf(lastModal), 1);
+      this.opened.next(this.modals.length !== 0);
 
       this.container.active = this.modals.length > 0;
     }, 200);
