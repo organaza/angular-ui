@@ -8,7 +8,8 @@ import {
   OnChanges,
   SimpleChange,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  HostBinding
 } from '@angular/core';
 
 import moment from 'moment';
@@ -45,6 +46,9 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   @Input()
   holidays: any;
+
+  @Input()
+  hideMonthYearSelection: boolean;
 
   @Output()
   change: EventEmitter<{}> = new EventEmitter();

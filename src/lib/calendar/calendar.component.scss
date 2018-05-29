@@ -2,8 +2,6 @@
 
 :host {
   @include component;
-  width: 16em;
-  height: 18em;
   display: flex;
   flex-direction: column;
   user-select: none;
@@ -218,6 +216,8 @@
     justify-content: center;
     border: 1px solid transparent;
     flex: 1 1 100%;
+    width: 30px;
+    height: 30px;
 
     &-label {}
 

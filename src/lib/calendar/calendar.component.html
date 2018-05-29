@@ -1,31 +1,33 @@
-<div class="oz-datepicker-month-year" *ngIf="currentState == 'month'">
-  <div class="oz-datepicker-month-year-prev" (click)="prevMonth()">&lt;</div>
-  <div class="oz-datepicker-month-year-current" (click)="setState('months')">{{getCurrentMonthName()}} {{currentYear}}</div>
-  <div class="oz-datepicker-month-year-next" (click)="nextMonth()">&gt;</div>
-</div>
-<div class="oz-datepicker-month-year" *ngIf="currentState == 'months'">
-  <div class="oz-datepicker-month-year-current" (click)="setState('years')">{{currentYear}}</div>
-</div>
-<div class="oz-datepicker-month-year" *ngIf="currentState == 'years'">
-  <div class="oz-datepicker-month-year-current">{{currentEra}}</div>
-</div>
-<div class="oz-datepicker-months" *ngIf="currentState == 'months'">
-  <div class="oz-datepicker-month oz-datepicker-month-{{i}}"
-    [class.oz-datepicker-month-selected]="currentMonth == i"
-    (click)="setMonth(i)"
-    *ngFor="let month of getMonths(); let i = index">
-    <div class="oz-datepicker-month-number">{{i+1}}</div>
-    <div class="oz-datepicker-month-name">{{month}}</div>
+<ng-container *ngIf="!hideMonthYearSelection">
+  <div class="oz-datepicker-month-year" *ngIf="currentState == 'month'">
+    <div class="oz-datepicker-month-year-prev" (click)="prevMonth()">&lt;</div>
+    <div class="oz-datepicker-month-year-current" (click)="setState('months')">{{getCurrentMonthName()}} {{currentYear}}</div>
+    <div class="oz-datepicker-month-year-next" (click)="nextMonth()">&gt;</div>
   </div>
-</div>
-<div class="oz-datepicker-years" *ngIf="currentState == 'years'">
-  <div class="oz-datepicker-year oz-datepicker-year-{{i}}"
-    [class.oz-datepicker-year-selected]="currentYear == year"
-    (click)="setYear(year)"
-    *ngFor="let year of getYears();let i=index">
-    <div class="oz-datepicker-year-name">{{year}}</div>
+  <div class="oz-datepicker-month-year" *ngIf="currentState == 'months'">
+    <div class="oz-datepicker-month-year-current" (click)="setState('years')">{{currentYear}}</div>
   </div>
-</div>
+  <div class="oz-datepicker-month-year" *ngIf="currentState == 'years'">
+    <div class="oz-datepicker-month-year-current">{{currentEra}}</div>
+  </div>
+  <div class="oz-datepicker-months" *ngIf="currentState == 'months'">
+    <div class="oz-datepicker-month oz-datepicker-month-{{i}}"
+      [class.oz-datepicker-month-selected]="currentMonth == i"
+      (click)="setMonth(i)"
+      *ngFor="let month of getMonths(); let i = index">
+      <div class="oz-datepicker-month-number">{{i+1}}</div>
+      <div class="oz-datepicker-month-name">{{month}}</div>
+    </div>
+  </div>
+  <div class="oz-datepicker-years" *ngIf="currentState == 'years'">
+    <div class="oz-datepicker-year oz-datepicker-year-{{i}}"
+      [class.oz-datepicker-year-selected]="currentYear == year"
+      (click)="setYear(year)"
+      *ngFor="let year of getYears();let i=index">
+      <div class="oz-datepicker-year-name">{{year}}</div>
+    </div>
+  </div>
+</ng-container>
 <ng-container *ngIf="currentState == 'month'">
   <div class="oz-calendar-days">
     <div class="oz-calendar-day oz-calendar-day-{{i}}" *ngFor="let weekday of weekdays;let i=index" >{{weekday}}</div>
