@@ -10,7 +10,6 @@ export class AlertService {
   width = 310;
   // alert, prompt, confirm
   constructor() {
-    console.log('AlertService');
     this.result = new Subject();
   }
   alert(title: string, text: string): Observable<any> {
