@@ -16,7 +16,9 @@ export class ModalWindow {
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ModalService {
   container: ModalContainerDirective;
   modals: ModalWindow[];

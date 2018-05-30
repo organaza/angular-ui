@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ToastService {
   toasts: any[] = [];
   error(text: string, timeout = 3000, persistant = true, handler: any = null, object: any = null) {

@@ -29,7 +29,9 @@ export class ShortcutObservable<T> {
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ShortcutService {
   arraySignatories: Sign[] = [];
   keyPressed = {};
@@ -71,8 +73,8 @@ export class ShortcutService {
     }
   }
   keyUp(key: KeyboardEvent) {
-    this.keyPressed[key.key.toLowerCase()] = null;
-    this.keyPressed[key.code.toLowerCase()] = null;
+    this.keyPressed[key.key.toLowerCase()] = undefined;
+    this.keyPressed[key.code.toLowerCase()] = undefined;
   }
   testPress(event: KeyboardEvent, sign: Sign): boolean {
     return event.key.toLowerCase() === sign.value.toLowerCase() || event.code.toLowerCase() === sign.value.toLowerCase();

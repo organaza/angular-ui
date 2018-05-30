@@ -6,7 +6,9 @@ export class SortField {
   direction: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SortTableSettingsService {
   static key = 'sorttable_column_width';
 

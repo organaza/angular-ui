@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AlertService {
   current: any;
   result: Subject<any>;
   width = 310;
   // alert, prompt, confirm
   constructor() {
+    console.log('AlertService');
     this.result = new Subject();
   }
   alert(title: string, text: string): Observable<any> {

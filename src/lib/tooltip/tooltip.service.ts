@@ -10,7 +10,9 @@ export class Tooltip {
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TooltipService {
   tooltips: Tooltip[];
   container: TooltipContainerComponent;

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -80,16 +80,7 @@ import { OzSettingsService } from './settings/settings.service';
     CommonModule,
     FormsModule,
   ],
-  providers: [
-    SortTableSettingsService,
-    SortTableService,
-    ModalService,
-    AlertService,
-    ToastService,
-    TooltipService,
-    ShortcutService,
-    OzSettingsService,
-  ],
+  providers: [],
   entryComponents: [
     CalendarComponent,
     TooltipComponent,
@@ -187,4 +178,20 @@ import { OzSettingsService } from './settings/settings.service';
     PagerComponent,
   ],
 })
-export class OzModule { }
+export class OzModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: OzModule,
+      providers: [
+        SortTableSettingsService,
+        SortTableService,
+        ModalService,
+        AlertService,
+        ToastService,
+        TooltipService,
+        ShortcutService,
+        OzSettingsService,
+      ]
+    };
+  }
+}

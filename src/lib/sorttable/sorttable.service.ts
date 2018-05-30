@@ -6,7 +6,9 @@ import { SortTableColumnDirective } from './sorttable-column.directive';
 import { SortTableColumnHeadDirective } from './sorttable-column-head.directive';
 import { SortTableSettingsService } from '../sorttable/sorttable.settings.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SortTableService {
   currentDrag: any; // SortTableRowDirective, SortTableDragColumnDirective
   collections: { [key: string]: SortTableDirective } = {};
