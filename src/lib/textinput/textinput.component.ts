@@ -248,7 +248,9 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
           this.value = this.filterFunction(this.value);
         }
         if (this.liveDebounce > 0) {
-          this.onModelChanged.next(this.value);
+          if (this.onModelChanged) {
+            this.onModelChanged.next(this.value);
+          }
         } else {
           this.onChangeCallback(this.value);
         }
