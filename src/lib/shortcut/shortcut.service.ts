@@ -3,6 +3,8 @@ import { Observer, Observable } from 'rxjs';
 
 export class Sign  {
   value: string;
+  meta: boolean;
+  skipInput: boolean;
   observer: Observer<{}>;
   id: string;
   working: boolean;
@@ -50,18 +52,12 @@ export class ShortcutService {
   addInArray(item: Sign) {
     this.arraySignatories.unshift(item);
   }
-  subscribe(value: string, callback: any): ShortcutObservable<any> {
+  subscribe(value: string, meta: boolean, skipInput: boolean, callback: any): ShortcutObservable<any> {
     return new ShortcutObservable<any>(this, (observer, id) => {
-      this.addInArray({value: value, observer, id, working: true});
+      this.addInArray({value: value, meta: meta, skipInput: skipInput, observer, id, working: true});
     }, callback);
   }
   keyDown(event: any) {
-    if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey) {
-      return;
-    }
-    if (event.target.localName === 'input' || event.target.localName === 'textarea') {
-      return;
-    }
     this.keyPressed[event.key.toLowerCase()] = true;
     this.keyPressed[event.code.toLowerCase()] = true;
     for (let i = 0; i < this.arraySignatories.length; ++i) {
@@ -77,7 +73,12 @@ export class ShortcutService {
     this.keyPressed[key.code.toLowerCase()] = undefined;
   }
   testPress(event: KeyboardEvent, sign: Sign): boolean {
-    return event.key.toLowerCase() === sign.value.toLowerCase() || event.code.toLowerCase() === sign.value.toLowerCase();
+    const isMeta = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
+    const isInput = (<Element>event.target).localName && (<Element>event.target).localName === 'input' || (<Element>event.target).localName === 'textarea';
+    if (isInput) {
+      return (event.key.toLowerCase() === sign.value.toLowerCase() || event.code.toLowerCase() === sign.value.toLowerCase()) && sign.meta === isMeta && sign.skipInput;
+    }
+    return (event.key.toLowerCase() === sign.value.toLowerCase() || event.code.toLowerCase() === sign.value.toLowerCase()) && sign.meta === isMeta;
   }
   pause(value: string) {
     for (let i = 0; i < this.arraySignatories.length; ++i) {

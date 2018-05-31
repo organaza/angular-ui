@@ -55,7 +55,7 @@ export class AlertComponent implements OnInit, OnDestroy {
   ) {
   }
   ngOnInit() {
-    this.shortcutESC = this.shortcutService.subscribe('Escape', () => {
+    this.shortcutESC = this.shortcutService.subscribe('Escape', false, true, () => {
       for (let i = 0; i < this.alert.buttons.length; ++i) {
         const button = this.alert.buttons[i];
         if (!button.affirmative) {
@@ -67,7 +67,7 @@ export class AlertComponent implements OnInit, OnDestroy {
       this.alertService.close();
       this.cd.detectChanges();
     });
-    this.shortcutEnter = this.shortcutService.subscribe('Enter', () => {
+    this.shortcutEnter = this.shortcutService.subscribe('Enter', false, true, () => {
       for (let i = 0; i < this.alert.buttons.length; ++i) {
         const button = this.alert.buttons[i];
         if (button.affirmative) {

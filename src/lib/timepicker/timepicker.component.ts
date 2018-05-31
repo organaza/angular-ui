@@ -302,7 +302,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     event.stopPropagation();
     window.clearTimeout(this.focusTimeout);
     this.dropdown.show();
-    this.shortcut = this.shortcutService.subscribe('Escape', () => {
+    this.shortcut = this.shortcutService.subscribe('Escape', false, false, () => {
       this.disableSelectMode();
     });
   }

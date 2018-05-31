@@ -87,7 +87,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     private el: ElementRef,
   ) {
-    this.shortcut = this.shortcutService.subscribe('Escape', () => {
+    this.shortcut = this.shortcutService.subscribe('Escape', false, true, () => {
       this.close();
     });
   }
