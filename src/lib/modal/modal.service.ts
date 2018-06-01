@@ -8,11 +8,13 @@ export class ModalWindow {
   contentRef: ComponentRef<{}>;
   modal: any;
   wait: boolean;
+  containerKey: string;
 
-  constructor(component, data, wait) {
+  constructor(component, data, wait, containerKey) {
     this.data = data;
     this.contentRef = component;
     this.wait = wait;
+    this.containerKey = containerKey;
   }
 }
 
@@ -20,7 +22,7 @@ export class ModalWindow {
   providedIn: 'root',
 })
 export class ModalService {
-  container: ModalContainerDirective;
+  containers: Map<string, ModalContainerDirective>;
   modals: ModalWindow[];
   removeStack: ModalWindow[];
   modalAdded: Subject<ModalWindow>;
@@ -31,9 +33,10 @@ export class ModalService {
     this.removeStack = [];
     this.modalAdded = new Subject();
     this.opened = new BehaviorSubject(false);
+    this.containers = new Map();
   }
-  registerContainer(container: ModalContainerDirective) {
-    this.container = container;
+  registerContainer(key: string, container: ModalContainerDirective) {
+    this.containers.set(key, container);
   }
   registerModal(modal: any) {
     const lastModal = this.modals[this.modals.length - 1];
@@ -48,13 +51,13 @@ export class ModalService {
     }
   }
   // Add new modal and return instance of component
-  add(type: Type<{}>, data: { [index: string]: any; } = {}): any {
+  add(type: Type<{}>, data: { [index: string]: any; } = {}, containerKey: string = 'default'): any {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(type);
-    const componentRef = this.container.target.createComponent(componentFactory);
+    const componentRef = this.containers.get(containerKey).target.createComponent(componentFactory);
 
-    const modal = new ModalWindow(componentRef, data, componentRef.instance['modalWait']);
+    const modal = new ModalWindow(componentRef, data, componentRef.instance['modalWait'], containerKey);
     this.modals.push(modal);
-    this.container.active = true;
+    this.containers.get(containerKey).active = true;
 
     this.modalAdded.next(modal);
 
@@ -93,7 +96,8 @@ export class ModalService {
       this.modals.splice(this.modals.indexOf(lastModal), 1);
       this.opened.next(this.modals.length !== 0);
 
-      this.container.active = this.modals.length > 0;
+
+      this.containers.get(lastModal.containerKey).active = this.modals.length > 0;
     }, 200);
   }
   closeAll() {
