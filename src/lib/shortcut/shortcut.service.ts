@@ -74,11 +74,14 @@ export class ShortcutService {
   }
   testPress(event: KeyboardEvent, sign: Sign): boolean {
     const isMeta = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
-    const isInput = (<Element>event.target).localName && (<Element>event.target).localName === 'input' || (<Element>event.target).localName === 'textarea';
+    const isInput = (<Element>event.target).localName
+      && ((<Element>event.target).localName === 'input' || (<Element>event.target).localName === 'textarea');
     if (isInput) {
-      return (event.key.toLowerCase() === sign.value.toLowerCase() || event.code.toLowerCase() === sign.value.toLowerCase()) && sign.meta === isMeta && sign.skipInput;
+      return (event.key.toLowerCase() === sign.value.toLowerCase() || event.code.toLowerCase() === sign.value.toLowerCase())
+        && sign.meta === isMeta && sign.skipInput;
     }
-    return (event.key.toLowerCase() === sign.value.toLowerCase() || event.code.toLowerCase() === sign.value.toLowerCase()) && sign.meta === isMeta;
+    return (event.key.toLowerCase() === sign.value.toLowerCase() || event.code.toLowerCase() === sign.value.toLowerCase())
+      && sign.meta === isMeta;
   }
   pause(value: string) {
     for (let i = 0; i < this.arraySignatories.length; ++i) {
