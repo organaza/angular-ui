@@ -31,6 +31,6 @@ export class SortTableDragColumnHandlerDirective {
     if (which === 3) { // disable right click drag
       return false;
     }
-    this.sortTableService.startDrag(this.sortTable.sortTable, this.sortTableDragColumn.sortTableDragColumn);
+    this.sortTableService.startDrag(this.sortTable.sortTable, this.sortTableDragColumn.index);
   }
 }

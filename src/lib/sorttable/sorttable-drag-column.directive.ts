@@ -30,32 +30,32 @@ export class SortTableDragColumnDirective implements OnInit, OnDestroy {
   }
 
   @Input('ozSortTableDragColumn')
-  set sortTableDragColumn(value: number) {
+  set index(value: number) {
     if (this._index) {
-      this.sortTableService.unregisterDragColumn(this.sortTable.sortTable, this.sortTableDragColumn);
+      this.sortTableService.unregisterDragColumn(this.sortTable.sortTable, this.index);
     }
     this._index = value;
     this.newIndex = value;
     if (value !== undefined) {
       window.setTimeout(() => {
-        this.sortTableService.registerDragColumn(this.sortTable.sortTable, this.sortTableDragColumn, this);
+        this.sortTableService.registerDragColumn(this.sortTable.sortTable, this.index, this);
       });
     }
   }
-  get sortTableDragColumn(): number {
+  get index(): number {
     return this._index;
   }
   ngOnInit() {
   }
   ngOnDestroy() {
-    this.sortTableService.unregisterDragColumn(this.sortTable.sortTable, this.sortTableDragColumn);
+    this.sortTableService.unregisterDragColumn(this.sortTable.sortTable, this.index);
   }
   startSorting() {
     this.el.nativeElement.classList.add('sorttable-column-move');
     this.moveHandlerSort = this.renderer.listen(this.el.nativeElement, 'mousemove', (event: MouseEvent) => {
       const bounds: ClientRect = this.el.nativeElement.getBoundingClientRect();
       if (event.x > bounds.left && event.x < bounds.right) {
-        this.sortTableService.moveOther(this.sortTable.sortTable, this.sortTableDragColumn, event.x - bounds.left, true);
+        this.sortTableService.moveOther(this.sortTable.sortTable, this.index, event.x - bounds.left, true);
       }
     });
   }
@@ -68,12 +68,12 @@ export class SortTableDragColumnDirective implements OnInit, OnDestroy {
     this.drag = true;
     this.offsetWidth = this.el.nativeElement.offsetWidth;
     this.offsetLeft = this.el.nativeElement.getBoundingClientRect().left;
-    this.newIndex = this.sortTableDragColumn;
+    this.newIndex = this.index;
     this.el.nativeElement.classList.add('sorttable-column-drag');
     if (this.moveHandlerSort) {
       this.moveHandlerSort();
     }
-    this.sortStart.next(new SortStartEvent(this.sortTableDragColumn, this));
+    this.sortStart.next(new SortStartEvent(this.index, this));
   }
   // Used to move another objects in collection
   offsetDrag(offset: number) {
@@ -90,7 +90,7 @@ export class SortTableDragColumnDirective implements OnInit, OnDestroy {
   stopDrag() {
     this.drag = false;
     this.el.nativeElement.classList.remove('sorttable-column-drag');
-    this.sortCompleted.next(new SortCompletedEvent(this.sortTableDragColumn, this.newIndex));
+    this.sortCompleted.next(new SortCompletedEvent(this.index, this.newIndex));
   }
   // getHeight не нашел где используется
   // getWidth(): number {
