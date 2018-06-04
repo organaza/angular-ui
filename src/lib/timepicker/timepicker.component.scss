@@ -16,6 +16,10 @@
   }
 }
 
+oz-textinput {
+  flex: 1 1 100%;
+}
+
 .background {
   @include component-popup-background;
 }
