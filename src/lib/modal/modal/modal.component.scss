@@ -20,7 +20,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid #c5c5c5;
+  border: 1px solid $gray-lightest;
   border-radius: 5px;
   box-shadow: $modal-wrapper-box-shadow;
   max-width: 90%;
@@ -77,8 +77,8 @@
 /deep/ div[ozmodalfooter]  {
   flex: 0 0 auto;
   padding: 0.5em;
-  border-top: 1px solid #ddd;
-  background-color: #f5f5f5;
+  border-top: 1px solid $gray-light;
+  background-color: $gray-lightest;
   display: flex;
   justify-content: flex-end;
   align-items: center;

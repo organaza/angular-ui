@@ -1,5 +1,12 @@
 $black: #272727 !default;
 $white: #fdfdfd !default;
+$gray-lightest: mix($white, $black, 97) !default;
+$gray-lighter: mix($white, $black, 92) !default;
+$gray-light: mix($white, $black, 80) !default;
+$gray-normal: mix($white, $black, 70) !default;
+$gray-dark: mix($white, $black, 50) !default;
+$gray-darker: mix($white, $black, 30) !default;
+
 $global-weight-light: 300 !default;
 $global-weight-normal: 400 !default;
 $global-weight-bold: 500 !default;
@@ -12,15 +19,12 @@ $global-weight-bolder: 600 !default;
 $accent-blue-color: #0F79B7;
 $accent-primary-color: #1997c9;
 $accent-secondary-color: #53b1d7;
-$accent-darker-color: #0179b7;
-$accent-lighter-color: #e8f4f9;
+$accent-darker-color: mix($black, $accent-blue-color, 0);
+$accent-lighter-color: mix($white, $accent-blue-color, 90);
 $warning-color: #ef4957;
 $messages-alert-count-color: #DB6668;
 $messages-online-color: #44d889;
 $messages-pulse-color: #38a5e4;
-$window-background-color: #f1f1f1;
-$window-border-color: #d0d3d5;
-
 
 /////////////////////////////////////
 //// Toasts
@@ -44,20 +48,20 @@ $switch-transition: ease-in-out;
 //// Common
 /////////////////////////////////////
 $oz-control-focus: $accent-secondary-color;
-$oz-control-hover-color: #e8f4f9;
+$oz-control-hover-color: $accent-lighter-color;
 $oz-control-border-radius: 2px;
-$oz-control-border-color: #ddd;
-$oz-control-border-hover-color: #f7f7f7;
+$oz-control-border-color: $gray-light;
+$oz-control-border-hover-color: $gray-lightest;
 $oz-control-border-color-invalid: #a00;
 $oz-control-border-hover-color-invalid: #f00;
 $oz-control-default-padding: 0.5em;
 $oz-control-default-border: 2px;
-$oz-control-prompt-color: #aaa;
+$oz-control-prompt-color: $gray-darker;
 $oz-control-prompt-font-weight: $global-weight-normal;
 $oz-control-prompt-font-style: italic;
-$oz-control-text-color: #000;
+$oz-control-text-color: $black;
 $oz-control-text-interactive-color: $accent-darker-color;
-$oz-control-border: #ddd;
+$oz-control-border: $gray-lighter;
 
 /////////////////////////////////////
 //// Buttons
@@ -109,7 +113,6 @@ $oz-button-disabled-hover: #999;
 
 $font-size-calendar: 9pt;
 $oz-calendar-width: $font-size-calendar*16;
-$oz-calendar-border-color: #aaa;
 $oz-calendar-koef: 7.4;
 
 /////////////////////////////////////
@@ -124,7 +127,6 @@ $toasts-z-index: 400;
 $tooltip-z-index: 500;
 
 $component-popup-background: rgba(0, 0, 0, 0.05);
-$element-rule-color: #eee;
 $component-focus-padding-bottom: 2px;
 $modal-wrapper-box-shadow: 0 0 30px rgba(0,0,0,0.2);
 
