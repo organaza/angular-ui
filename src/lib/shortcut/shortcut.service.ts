@@ -73,7 +73,7 @@ export class ShortcutService {
     this.keyPressed[key.code.toLowerCase()] = undefined;
   }
   testPress(event: KeyboardEvent, sign: Sign): boolean {
-    const isMeta = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
+    const isMeta = event.ctrlKey || event.altKey || event.metaKey;
     const isInput = (<Element>event.target).localName
       && ((<Element>event.target).localName === 'input' || (<Element>event.target).localName === 'textarea');
     if (isInput) {
