@@ -47,11 +47,11 @@ export { VirtualScrollComponent } from './lib/virtual-scroll/virtual-scroll.comp
 //   ModalSubHeaderDirective as ɵbc
 // } from './lib/modal/modal/modal.component';
 
-// export { FormatArrayStringPipe as ɵbq } from './lib/pipes/array-string.pipe';
-// export { DurationToStringPipe as ɵbr } from './lib/pipes/duration-to-string.pipe';
-// export { ObjectKeysPipe as ɵbt } from './lib/pipes/object-keys.pipe';
-// export { ParseBooleanPipe as ɵbu } from './lib/pipes/parse-boolean.pipe';
-// export { TimeStampToDatePipe as ɵbs } from './lib/pipes/timestamp-to-date.pipe';
+export { FormatArrayStringPipe } from './lib/pipes/array-string.pipe';
+export { DurationToStringPipe } from './lib/pipes/duration-to-string.pipe';
+export { ObjectKeysPipe } from './lib/pipes/object-keys.pipe';
+export { ParseBooleanPipe } from './lib/pipes/parse-boolean.pipe';
+export { TimeStampToDatePipe } from './lib/pipes/timestamp-to-date.pipe';
 
 // export { SortTableColumnFixedDirective as ɵbk } from './lib/sorttable/sorttable-column-fixed.directive';
 // export { SortTableColumnHeadDirective as ɵbl } from './lib/sorttable/sorttable-column-head.directive';
