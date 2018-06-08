@@ -6,7 +6,6 @@ import {
   Component,
   Input,
   Output,
-  AfterViewInit,
   ElementRef,
   OnDestroy,
   EventEmitter,
@@ -54,7 +53,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class DropDownComponent implements AfterViewInit, OnDestroy {
+export class DropDownComponent implements OnDestroy {
   @ContentChild('dropdownContent')
   dropdownContent: TemplateRef<any>;
 
@@ -89,7 +88,14 @@ export class DropDownComponent implements AfterViewInit, OnDestroy {
   bindElement: HTMLElement;
 
   @Input()
-  activeElement: HTMLElement;
+  set activeElement(value: HTMLElement) {
+    this._activeElement = value;
+    this.setListeners();
+  }
+  get activeElement(): HTMLElement {
+    return this._activeElement;
+  }
+  _activeElement: HTMLElement;
 
   @Input()
   useBindWidth: boolean;
@@ -164,7 +170,7 @@ export class DropDownComponent implements AfterViewInit, OnDestroy {
   ) {
   }
 
-  ngAfterViewInit() {
+  setListeners() {
     if (this.openHandler) {
       this.openHandler();
     }
