@@ -247,7 +247,7 @@ export class DropDownComponent implements OnDestroy {
       this.leaveActiveHandlerByClickActiveElement();
     }
     setTimeout(() => {
-      if (this.absolute) {
+      if (this.absolute && this.parent) {
         this.parent.appendChild(this.el.nativeElement);
       }
       this.display = 'none';
