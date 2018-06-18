@@ -3,6 +3,7 @@
   "dest": "../../dist/oz",
   "deleteDestPath": false,
   "lib": {
-    "entryFile": "src/public_api.ts"
+    "entryFile": "src/public_api.ts",
+    "styleIncludePaths": ["../../styles", "src/styles"]
   }
 }
