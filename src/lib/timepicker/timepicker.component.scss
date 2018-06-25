@@ -7,7 +7,7 @@
 }
 
 :host.ng-invalid {
-  border-bottom: $oz-control-default-border solid $warning-color;
+  border-bottom: $oz-control-default-border solid $error-color;
 }
 
 :host:hover {

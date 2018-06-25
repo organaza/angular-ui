@@ -176,7 +176,7 @@
 }
 
 .button-primary.attention {
-  background-color: $warning-color;
+  background-color: $error-color;
   &:hover {
     background-color: red;
   }
@@ -187,7 +187,7 @@
 
 .button-icon.attention {
   &:hover {
-    color: $warning-color;
+    color: $error-color;
   }
 }
 
