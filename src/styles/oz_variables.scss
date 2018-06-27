@@ -25,7 +25,7 @@ $global-weight-bolder: 600 !default;
 $accent-blue-color: #0F79B7;
 $accent-primary-color: #1997c9;
 $accent-secondary-color: #53b1d7;
-$accent-darker-color: mix($black, $accent-blue-color, 0);
+$accent-darker-color: mix($black, $accent-blue-color, 20);
 $accent-lighter-color: mix($white, $accent-blue-color, 90);
 $info-color: #45baec;
 $success-color: #31e64f;
@@ -174,15 +174,6 @@ $icons-fontsize-xx-large: 30px;
   &.ng-invalid.ng-dirty {
     border-bottom: $oz-control-default-border solid $error-color;
   }
-}
-@mixin thread-count-messages() {
-  min-width: 1.3em;
-	height: 1.3em;
-	padding: 0.15em 0.45em;
-	background-color: $messages-alert-count-color;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 }
 
 /////////////////////////////////////
