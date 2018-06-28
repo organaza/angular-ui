@@ -75,13 +75,13 @@ $oz-control-border: $gray-lighter;
 // Primary
 $oz-button-primary-radius: 5px;
 
-$oz-button-primary-color: $white;
+$oz-button-primary-color: $always-white;
 $oz-button-primary-background: $accent-primary-color;
 
-$oz-button-primary-hover-color: $white;
+$oz-button-primary-hover-color: $always-white;
 $oz-button-primary-hover-background: $accent-secondary-color;
 
-$oz-button-primary-active-color: $white;
+$oz-button-primary-active-color: $always-white;
 $oz-button-primary-active-background: $accent-darker-color;
 
 // Secondary
