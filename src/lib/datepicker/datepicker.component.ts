@@ -55,6 +55,12 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   @Output()
   changed: EventEmitter<{}> = new EventEmitter();
 
+  @Input()
+  showTime: boolean;
+
+  @Input()
+  relative: boolean;
+
   selectionStart: any;
   selectionStartMoment: any;
   selectionEnd: any;
@@ -95,14 +101,14 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   writeValue(value: string | string[]) {
     this.value = value;
     if (Array.isArray(value) && value.length === 2) {
-      this.valueMoment = this.parseValue(value[0]);
+      this.valueMoment = this.parseValue(value[0], '');
       this.selectionStart = value[0];
       this.selectionEnd = value[1];
-      this.selectionStartMoment = this.parseValue(value[0]);
-      this.selectionEndMoment = this.parseValue(value[1]);
+      this.selectionStartMoment = this.parseValue(value[0], 'from');
+      this.selectionEndMoment = this.parseValue(value[1], 'to');
     } else {
       this.selectionStart = this.selectionEnd = this.value;
-      this.valueMoment = this.selectionStartMoment = this.selectionEndMoment = this.parseValue(this.value);
+      this.valueMoment = this.selectionStartMoment = this.selectionEndMoment = this.parseValue(this.value, '');
     }
     this.cd.detectChanges();
   }
@@ -118,11 +124,19 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   ngOnInit() {
     this.emptyLabel = this.emptyLabel || 'Select date';
   }
-  parseValue(value) {
+  parseValue(value, type: 'from' | 'to' | '') {
     if (!value) {
       return null;
     } else {
-      return moment(value, this.outFormat).utc();
+      let result = moment(value, this.outFormat, true);
+      if (result.isValid()) {
+        return result;
+      }
+      result = moment(this.parseRelative(value, type), this.outFormat);
+      if (result.isValid()) {
+        return result;
+      }
+      return moment();
     }
   }
   openDateSelector() {
@@ -142,13 +156,14 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.el.nativeElement.focus();
   }
   getLabel() {
+    const displayFormat = this.showTime ? 'L LT' : 'L';
     if (!this.range) {
       if (this.valueMoment) {
-        return this.valueMoment.format('L');
+        return this.valueMoment.format(displayFormat);
       }
     } else {
       if (this.selectionStartMoment && this.selectionEndMoment) {
-        return this.selectionStartMoment.format('L') + ' - ' + this.selectionEndMoment.format('L');
+        return this.selectionStartMoment.format(displayFormat) + ' - ' + this.selectionEndMoment.format(displayFormat);
       }
     }
     return this.emptyLabel;
@@ -188,9 +203,24 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.dropdown.hide();
     this.el.nativeElement.focus();
   }
-  setRange(amount: number, unit: moment.DurationInputArg2) {
-    this.selectionStart = moment().utc().subtract(amount, unit).format(this.outFormat);
-    this.selectionEnd = moment().utc().format(this.outFormat);
-    this.writeValue([this.selectionStart, this.selectionEnd]);
+  setRelative(from, to: string) {
+    this.selectionStart = from;
+    this.selectionEnd = to;
+    this.writeValue([from, to]);
+  }
+  parseRelative(value: string, type: 'from' | 'to' | '' = ''): string {
+    const relativeTimeRe = /(([-+]\d*)\s*(m|M|y|h|d|W)|now)\/?(m|M|y|h|d|W)?/;
+    const parsed = relativeTimeRe.exec(value);
+    let date = moment();
+    if (parsed[2] && parsed[3]) {
+      date = date.add(Number(parsed[2]), parsed[3] as moment.DurationInputArg2);
+    }
+    if (parsed[4] && type === 'from') {
+      date = date.startOf(parsed[4] as moment.unitOfTime.StartOf);
+    }
+    if (parsed[4] && type === 'to') {
+      date = date.endOf(parsed[4] as moment.unitOfTime.StartOf);
+    }
+    return date.format(this.outFormat);
   }
 }

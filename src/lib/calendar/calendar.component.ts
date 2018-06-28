@@ -54,10 +54,10 @@ export class CalendarComponent implements OnInit, OnChanges {
   change: EventEmitter<{}> = new EventEmitter();
 
   @Input()
-  currentYear: number = moment.utc().year();
+  currentYear: number = moment().year();
 
   @Input()
-  currentMonth: number = moment.utc().month();
+  currentMonth: number = moment().month();
 
   dateCells: CalendarDay[];
   weekCells: CalendarDay[][];
@@ -79,13 +79,13 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
   render() {
     if (this.currentMonth === null || this.currentMonth === undefined) {
-      this.currentMonth = moment.utc().month();
+      this.currentMonth = moment().month();
     }
     if (this.currentYear === null || this.currentYear === undefined) {
-      this.currentYear = moment.utc().year();
+      this.currentYear = moment().year();
     }
-    const monthStart = moment.utc().year(this.currentYear).month(this.currentMonth).startOf('month');
-    const monthEnd = moment.utc().year(this.currentYear).month(this.currentMonth).endOf('month');
+    const monthStart = moment().year(this.currentYear).month(this.currentMonth).startOf('month');
+    const monthEnd = moment().year(this.currentYear).month(this.currentMonth).endOf('month');
 
     if (monthStart.isoWeekday() !== 1) {
       monthStart.subtract(monthStart.isoWeekday() - 1, 'days');
@@ -103,7 +103,7 @@ export class CalendarComponent implements OnInit, OnChanges {
         label: String(monthStart.date()),
         isoweekday: monthStart.isoWeekday(),
         overflow: monthStart.month() !== this.currentMonth,
-        today: monthStart.isSame(moment.utc(), 'day'),
+        today: monthStart.isSame(moment(), 'day'),
         selected: false,
         selectedStart: false,
         selectedEnd: false,
@@ -138,8 +138,16 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
   setSelection() {
     if (this.selectionStart && this.selectionEnd) {
-      this.selectionStartMoment = moment.utc(this.selectionStart).hour(0).minute(0).second(0);
-      this.selectionEndMoment = moment.utc(this.selectionEnd).hour(23).minute(59).second(59);
+      if (moment.isMoment(this.selectionStart)) {
+        this.selectionStartMoment = this.selectionStart.clone();
+      } else {
+        this.selectionStartMoment = moment(this.selectionStart);
+      }
+      if (moment.isMoment(this.selectionEnd)) {
+        this.selectionEndMoment = this.selectionEnd.clone();
+      } else {
+        this.selectionEndMoment = moment(this.selectionEnd);
+      }
     } else {
       return;
     }
@@ -233,12 +241,20 @@ export class CalendarComponent implements OnInit, OnChanges {
     }
     if (changes['selectionStart']) {
       if (this.selectionStart) {
-        this.selectionStartMoment = moment.utc(this.selectionStart).hour(0).minute(0).second(0);
+        if (moment.isMoment(this.selectionStart)) {
+          this.selectionStartMoment = this.selectionStart.clone();
+        } else {
+          this.selectionStartMoment = moment(this.selectionStart);
+        }
       }
     }
     if (changes['selectionEnd']) {
       if (this.selectionEnd) {
-        this.selectionEndMoment = moment.utc(this.selectionEnd).hour(23).minute(59).second(59);
+        if (moment.isMoment(this.selectionEnd)) {
+          this.selectionEndMoment = this.selectionEnd.clone();
+        } else {
+          this.selectionEndMoment = moment(this.selectionEnd);
+        }
       }
     }
     if (changes['selectionStart'] || changes['selectionEnd']) {
