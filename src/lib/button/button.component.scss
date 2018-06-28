@@ -12,6 +12,10 @@
       color: $oz-button-secondary-hover-color;
     }
 
+    &-link {
+      text-decoration: underline;
+    }
+
     &-tab {
       border-bottom: $oz-button-tab-hover-border
     }
@@ -90,6 +94,12 @@
     border: 1px solid transparent;
     vertical-align: middle;
     background: $oz-button-primary-background;
+  }
+
+  &-link {
+    padding: 5px 10px;
+    color: $oz-button-tab-color;
+    vertical-align: middle;
   }
 
   &-outline-primary {
