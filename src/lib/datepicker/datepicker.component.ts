@@ -211,8 +211,15 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   parseRelative(value: string, type: 'from' | 'to' | '' = ''): string {
     const relativeTimeRe = /(([-+]\d*)\s*(m|M|y|h|d|W)|now)\/?(m|M|y|h|d|W)?/;
     const parsed = relativeTimeRe.exec(value);
-    let date = moment();
+    if (!parsed) {
+      return 'Invalid date';
+    }
+    let date;
+    if (parsed[2] === 'now') {
+      date = moment();
+    }
     if (parsed[2] && parsed[3]) {
+      date = moment();
       date = date.add(Number(parsed[2]), parsed[3] as moment.DurationInputArg2);
     }
     if (parsed[4] && type === 'from') {
@@ -220,6 +227,9 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     }
     if (parsed[4] && type === 'to') {
       date = date.endOf(parsed[4] as moment.unitOfTime.StartOf);
+    }
+    if (!date) {
+      return 'Invalid date';
     }
     return date.format(this.outFormat);
   }
