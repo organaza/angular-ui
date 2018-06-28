@@ -6,6 +6,8 @@ import { IconComponent } from '../icon/icon.component';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { DropDownComponent } from '../dropdown/dropdown.component';
 import { OzSettingsService } from '../settings/settings.service';
+import { FormsModule } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('DatePickerComponent', () => {
   let component: DatePickerComponent;
@@ -20,9 +22,13 @@ describe('DatePickerComponent', () => {
         IconComponent,
         CalendarComponent,
       ],
+      imports: [
+        FormsModule,
+      ],
       providers: [
         OzSettingsService,
-      ]
+      ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
   }));
