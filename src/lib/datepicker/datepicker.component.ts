@@ -215,10 +215,10 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
       return 'Invalid date';
     }
     let date;
-    if (parsed[2] === 'now') {
+    if (parsed[1] === 'now') {
       date = moment();
     }
-    if (parsed[2] && parsed[3]) {
+    if (parsed[1] && parsed[3]) {
       date = moment();
       date = date.add(Number(parsed[2]), parsed[3] as moment.DurationInputArg2);
     }
