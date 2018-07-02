@@ -115,7 +115,7 @@ export class CalendarComponent implements OnInit, OnChanges {
         day.label = '';
       }
 
-      if (this.holidays && this.holidays.some(holiday => day.date.valueOf() === holiday.valueOf() )) {
+      if (this.holidays && this.holidays.some(holiday => day.date.format('DDMMYYYY') === holiday.format('DDMMYYYY'))) {
         if (!day.overflow || day.overflow && !this.hideOverflow) {
           day.holiday = true;
         }
