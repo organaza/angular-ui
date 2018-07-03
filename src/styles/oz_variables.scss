@@ -241,3 +241,11 @@ $oz-modal-background: #fff;
 @mixin FF-only {
   @-moz-document url-prefix() { @content; }
 }
+
+@mixin toast-list-style {
+  width: 80%;
+  position: fixed;
+  bottom: 0;
+  left: 10%;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+}

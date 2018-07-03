@@ -1,11 +1,7 @@
 @import 'oz_variables';
 
 .list {
-  width: 80%;
-  position: fixed;
-  bottom: 0;
-  left: 10%;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  @include toast-list-style;
   z-index: $toasts-z-index;
 }
 
@@ -17,7 +13,7 @@
   border-radius: $oz-control-border-radius;
   position: relative;
   overflow: hidden;
-  transition: all 0.2s ease-out;
+  transition: all 0.1s ease-out;
   transform: translate3d(0, 0, 0);
   line-height: 1;
   padding: 0.7em;
