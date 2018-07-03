@@ -206,7 +206,7 @@ export class SortTableService {
   // Return width by columnId
   getWidth(columnId: string): any {
     const ids = columnId.split(':');
-    let width = 100;
+    let width = '1 1 100%';
     if (this.columnsWidth && this.columnsWidth[ids[0]] && this.columnsWidth[ids[0]][ids[1]]) {
       width = this.columnsWidth[ids[0]][ids[1]];
     }
