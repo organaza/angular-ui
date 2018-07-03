@@ -45,6 +45,8 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   @Input()
   outFormat = 'YYYY-MM-DDTHH:mm:ssZ';
 
+  displayFormat: string;
+
   @Input()
   emptyLabel: string;
 
@@ -89,6 +91,34 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     }
   }
 
+  set labelStart(value: string) {
+    this.valueMoment = this.parseValue(value, '');
+    this.selectionStart = value;
+    this.selectionStartMoment = this.parseValue(value, 'from');
+    if (!this.range) {
+      this.selectionEnd = value;
+      this.selectionEndMoment = this.parseValue(value, 'from');
+    }
+  }
+
+  get labelStart() {
+    if (this.selectionStartMoment) {
+      return this.selectionStartMoment.format(this.displayFormat);
+    }
+    return this.emptyLabel;
+  }
+
+  set labelEnd(value: string) {
+    this.selectionEnd = value;
+    this.selectionEndMoment = this.parseValue(value, 'to');
+  }
+  get labelEnd() {
+    if (this.selectionEndMoment) {
+      return this.selectionEndMoment.format(this.displayFormat);
+    }
+    return this.emptyLabel;
+  }
+
   constructor(
     private el: ElementRef,
     private cd: ChangeDetectorRef,
@@ -127,12 +157,17 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit() {
     this.emptyLabel = this.emptyLabel || 'Select date';
+    this.displayFormat = this.showTime ? 'L LT' : 'L';
   }
   parseValue(value, type: 'from' | 'to' | '') {
     if (!value) {
       return null;
     } else {
       let result = moment(value, this.outFormat, true);
+      if (result.isValid()) {
+        return result;
+      }
+      result = moment(value, this.displayFormat, true);
       if (result.isValid()) {
         return result;
       }
@@ -160,14 +195,13 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.el.nativeElement.focus();
   }
   getLabel() {
-    const displayFormat = this.showTime ? 'L LT' : 'L';
     if (!this.range) {
       if (this.valueMoment) {
-        return this.valueMoment.format(displayFormat);
+        return this.valueMoment.format(this.displayFormat);
       }
     } else {
       if (this.selectionStartMoment && this.selectionEndMoment) {
-        return this.selectionStartMoment.format(displayFormat) + ' - ' + this.selectionEndMoment.format(displayFormat);
+        return this.selectionStartMoment.format(this.displayFormat) + ' - ' + this.selectionEndMoment.format(this.displayFormat);
       }
     }
     return this.emptyLabel;

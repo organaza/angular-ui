@@ -20,7 +20,7 @@
   <ng-template #dropdownContent>
     <div class="dropdown-wrapper" [class.range]="range">
       <div class="date-time-wrapper">
-        <oz-textinput [ngModel]="selectionStart"></oz-textinput>
+        <oz-textinput [(ngModel)]="labelStart"></oz-textinput>
         <oz-calendar class="oz-datepicker-popup-calendar"
           [hideOverflow]="true"
           [(selectionStart)]="selectionStartMoment"
@@ -31,10 +31,9 @@
           (change)="onCalendarChange($event);onCalendarChangeStart($event)"></oz-calendar>
       </div>
       <div class="separator" *ngIf="range"></div>
-      <div class="date-time-wrapper">
-        <oz-textinput [ngModel]="selectionEnd"></oz-textinput>
+      <div class="date-time-wrapper" *ngIf="range">
+        <oz-textinput [(ngModel)]="labelEnd"></oz-textinput>
         <oz-calendar class="oz-datepicker-popup-calendar"
-          *ngIf="range"
           [hideOverflow]="true"
           [(selectionStart)]="selectionStartMoment"
           [(selectionEnd)]="selectionEndMoment"
