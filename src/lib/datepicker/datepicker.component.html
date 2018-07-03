@@ -22,6 +22,7 @@
       <div class="date-time-wrapper">
         <oz-textinput [ngModel]="selectionStart"></oz-textinput>
         <oz-calendar class="oz-datepicker-popup-calendar"
+          [hideOverflow]="true"
           [(selectionStart)]="selectionStartMoment"
           [(selectionEnd)]="selectionEndMoment"
           [currentYear]="selectionStartMoment?.year()"
@@ -34,6 +35,7 @@
         <oz-textinput [ngModel]="selectionEnd"></oz-textinput>
         <oz-calendar class="oz-datepicker-popup-calendar"
           *ngIf="range"
+          [hideOverflow]="true"
           [(selectionStart)]="selectionStartMoment"
           [(selectionEnd)]="selectionEndMoment"
           [currentYear]="selectionEndMoment?.year()"

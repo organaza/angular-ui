@@ -152,7 +152,7 @@ export class CalendarComponent implements OnInit, OnChanges {
       return;
     }
 
-    const period = Math.abs(this.selectionStartMoment.diff(this.selectionEndMoment, 'hours')) > 24;
+    const period = Math.abs(this.selectionStartMoment.diff(this.selectionEndMoment, 'm')) >= 1;
     for (const i in this.dateCells) {
       if (this.dateCells.hasOwnProperty(i)) {
         this.dateCells[i].selectedStart = false;

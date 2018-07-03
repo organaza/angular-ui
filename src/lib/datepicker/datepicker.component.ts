@@ -62,9 +62,9 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   relative: boolean;
 
   selectionStart: any;
-  selectionStartMoment: any;
+  selectionStartMoment: moment.Moment;
   selectionEnd: any;
-  selectionEndMoment: any;
+  selectionEndMoment: moment.Moment;
 
   value: any;
 
@@ -106,6 +106,10 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
       this.selectionEnd = value[1];
       this.selectionStartMoment = this.parseValue(value[0], 'from');
       this.selectionEndMoment = this.parseValue(value[1], 'to');
+      if (this.selectionStartMoment.isAfter(this.selectionEndMoment)) {
+        this.selectionEndMoment = this.selectionStartMoment.clone().add(1, 'd');
+        this.selectionEnd = this.selectionEndMoment.format(this.outFormat);
+      }
     } else {
       this.selectionStart = this.selectionEnd = this.value;
       this.valueMoment = this.selectionStartMoment = this.selectionEndMoment = this.parseValue(this.value, '');
