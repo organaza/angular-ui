@@ -16,7 +16,7 @@
   transition: all 0.1s ease-out;
   transform: translate3d(0, 0, 0);
   line-height: 1;
-  padding: 0.7em;
+  padding: 10px 15px;
 
   &-hide {
     padding: 0 10px;
@@ -25,7 +25,7 @@
   }
 
   &-text {
-    margin-right: 3em;
+    margin-right: 45px;
     transition: all 0.2s ease-out;
   }
 
