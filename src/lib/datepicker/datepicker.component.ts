@@ -119,6 +119,11 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
       this.selectionEnd = value;
       this.selectionEndMoment = this.parseValue(value, 'from');
     }
+    if (this.selectionStartMoment.isAfter(this.selectionEndMoment)) {
+      this.selectionEndMoment = this.selectionStartMoment.clone().add(1, 'd');
+      this.selectionEnd = this.selectionEndMoment.format(this.outFormat);
+    }
+    this.onChange();
   }
 
   get labelStart() {
@@ -140,6 +145,11 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     } else {
       this.selectionEnd = this.selectionEndMoment.format(this.outFormat);
     }
+    if (this.selectionEndMoment.isBefore(this.selectionStartMoment)) {
+      this.selectionStartMoment = this.selectionEndMoment.clone().add(-1, 'd');
+      this.selectionStart = this.selectionEndMoment.format(this.outFormat);
+    }
+    this.onChange();
   }
   get labelEnd() {
     const relative = moment(this.parseRelative(this.selectionStart, 'to'), this.outFormat).isValid();
@@ -169,10 +179,6 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
       this.selectionEnd = this.selectionEndOld = value[1];
       this.selectionStartMoment = this.parseValue(value[0], 'from');
       this.selectionEndMoment = this.parseValue(value[1], 'to');
-      if (this.selectionStartMoment.isAfter(this.selectionEndMoment)) {
-        this.selectionEndMoment = this.selectionStartMoment.clone().add(1, 'd');
-        this.selectionEnd = this.selectionEndOld = this.selectionEndMoment.format(this.outFormat);
-      }
     } else {
       this.selectionStart = this.selectionEnd = this.selectionStartOld = this.selectionEndOld = this.value;
       this.valueMoment = this.selectionStartMoment = this.selectionEndMoment = this.parseValue(this.value, '');
@@ -276,6 +282,11 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.setLabel();
   }
   close() {
+    if (this.range) {
+      this.writeValue([this.selectionStartOld, this.selectionEndOld]);
+    } else {
+      this.writeValue(this.selectionStartOld);
+    }
     this.opened = false;
     this.dropdown.hide();
     this.el.nativeElement.focus();
