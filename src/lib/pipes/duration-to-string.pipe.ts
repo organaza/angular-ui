@@ -43,6 +43,12 @@ export class DurationToStringPipe implements PipeTransform {
       if (format === 'hoursOnlyNumber') {
         return Math.floor(value.asHours());
       }
+      if (format === 'hh:mm:ss') {
+        return Math.floor(value.hours()).toString().padStart(2, '0') + ':' + Math.floor(value.minutes()).toString().padStart(2, '0') + ':' + Math.floor(value.seconds()).toString().padStart(2, '0');
+      }
+      if (format === 'hh:mm') {
+        return Math.floor(value.hours()).toString().padStart(2, '0') + ':' + Math.floor(value.minutes()).toString().padStart(2, '0');
+      }
       if (format === 'minutes') {
         return moment.localeData().relativeTime(Math.floor(value.asMinutes()), true, 'mm', false);
       }
