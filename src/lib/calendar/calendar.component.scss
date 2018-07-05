@@ -299,7 +299,8 @@
     &-selected-end,
     &-selected-start {
       background-color: $accent-primary-color;
-      color: $white;
+      color: $always-white;
+      font-weight: $global-weight-bold;
     }
 
     &-hide-overflow {
@@ -312,6 +313,12 @@
         border: 1px solid transparent;
         outline: 1px solid transparent;
         cursor: default;
+      }
+      &::after {
+        display: none;
+      }
+      &::before {
+        display: none;
       }
     }
   }

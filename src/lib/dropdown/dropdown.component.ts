@@ -192,7 +192,6 @@ export class DropDownComponent implements OnDestroy {
       // this.dropDownNgIf = true;
       // this.calculateBounds();
     }
-    this.parent = this.el.nativeElement.parentElement;
     this.cd.markForCheck();
   }
 
@@ -219,10 +218,11 @@ export class DropDownComponent implements OnDestroy {
 
   openDropdown() {
     if (!this.dropDownNgIf) {
-    this.dropDownNgIf = true;
-    this.calculateBounds();
-    this.cd.markForCheck();
-  }
+      this.dropDownNgIf = true;
+      this.calculateBounds();
+      this.parent = this.el.nativeElement.parentElement;
+      this.cd.markForCheck();
+    }
   }
 
   closeDropdown() {
@@ -247,7 +247,7 @@ export class DropDownComponent implements OnDestroy {
       this.leaveActiveHandlerByClickActiveElement();
     }
     setTimeout(() => {
-      if (this.absolute && this.parent) {
+      if (this.absolute) {
         this.parent.appendChild(this.el.nativeElement);
       }
       this.display = 'none';

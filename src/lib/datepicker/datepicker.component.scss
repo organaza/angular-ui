@@ -17,8 +17,10 @@
   flex-direction: column;
   padding: $oz-control-default-padding;
 }
-.dropdown-wrapper.range {
+.picker-wrapper {
+  display: flex;
   flex-direction: row;
+  flex: 0 0 auto;
 }
 .oz-datepicker {
   &-clear-button {
@@ -46,14 +48,33 @@
 }
 .separator {
   display: flex;
-  margin: 1em;
+  margin: 14px;
   background-color: $oz-control-border-color;
   flex: 0 0 1px;
 }
-.helpers {
+.helpers-buttons {
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;
+  padding-right: 7px;
+}
+.buttons {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 100%;
+  justify-content: space-around;
+}
+.helpers {
+  display: flex;
+  flex-direction: row;
+  flex: 0 0 auto;
+
+}
+.helper-column {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 210px;
+  width: 210px;
   padding: 1em;
   oz-button {
     margin-bottom: 5px;

@@ -37,13 +37,13 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   dropdown: DropDownComponent;
 
   @Input()
-  defaultTime: string;
-
-  @Input()
   range: boolean;
 
   @Input()
-  outFormat = 'YYYY-MM-DDTHH:mm:ssZ';
+  helpers = true;
+
+  @Input()
+  outFormat = 'YYYY-MM-DDTHH:mm:ss';
 
   displayFormat: string;
 
@@ -63,9 +63,21 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   @Input()
   relative: boolean;
 
+  @Input()
+  allowNull: boolean;
+
+  @Input()
+  live: boolean;
+
+  @Input()
+  confirmRequired: boolean;
+
   selectionStart: any;
+  selectionStartOld: any;
   selectionStartMoment: moment.Moment;
+
   selectionEnd: any;
+  selectionEndOld: any;
   selectionEndMoment: moment.Moment;
 
   value: any;
@@ -73,6 +85,8 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   valueMoment: any;
 
   opened: boolean;
+
+  label: string;
 
   private onTouchedCallback: () => void = noop;
   private onChangeCallback: (_: any) => void = noop;
@@ -93,8 +107,14 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
   set labelStart(value: string) {
     this.valueMoment = this.parseValue(value, '');
-    this.selectionStart = value;
     this.selectionStartMoment = this.parseValue(value, 'from');
+
+    if (this.relative) {
+      this.selectionStart = value;
+    } else {
+      this.selectionStart = this.selectionStartMoment.format(this.outFormat);
+    }
+
     if (!this.range) {
       this.selectionEnd = value;
       this.selectionEndMoment = this.parseValue(value, 'from');
@@ -102,6 +122,10 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   get labelStart() {
+    const relative = moment(this.parseRelative(this.selectionStart, 'from'), this.outFormat).isValid();
+    if (relative) {
+      return this.selectionStart;
+    }
     if (this.selectionStartMoment) {
       return this.selectionStartMoment.format(this.displayFormat);
     }
@@ -109,10 +133,19 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   set labelEnd(value: string) {
-    this.selectionEnd = value;
     this.selectionEndMoment = this.parseValue(value, 'to');
+
+    if (this.relative) {
+      this.selectionEnd = value;
+    } else {
+      this.selectionEnd = this.selectionEndMoment.format(this.outFormat);
+    }
   }
   get labelEnd() {
+    const relative = moment(this.parseRelative(this.selectionStart, 'to'), this.outFormat).isValid();
+    if (relative) {
+      return this.selectionEnd;
+    }
     if (this.selectionEndMoment) {
       return this.selectionEndMoment.format(this.displayFormat);
     }
@@ -132,18 +165,19 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.value = value;
     if (Array.isArray(value) && value.length === 2) {
       this.valueMoment = this.parseValue(value[0], '');
-      this.selectionStart = value[0];
-      this.selectionEnd = value[1];
+      this.selectionStart = this.selectionStartOld = value[0];
+      this.selectionEnd = this.selectionEndOld = value[1];
       this.selectionStartMoment = this.parseValue(value[0], 'from');
       this.selectionEndMoment = this.parseValue(value[1], 'to');
       if (this.selectionStartMoment.isAfter(this.selectionEndMoment)) {
         this.selectionEndMoment = this.selectionStartMoment.clone().add(1, 'd');
-        this.selectionEnd = this.selectionEndMoment.format(this.outFormat);
+        this.selectionEnd = this.selectionEndOld = this.selectionEndMoment.format(this.outFormat);
       }
     } else {
-      this.selectionStart = this.selectionEnd = this.value;
+      this.selectionStart = this.selectionEnd = this.selectionStartOld = this.selectionEndOld = this.value;
       this.valueMoment = this.selectionStartMoment = this.selectionEndMoment = this.parseValue(this.value, '');
     }
+    this.setLabel();
     this.cd.detectChanges();
   }
 
@@ -186,7 +220,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.dropdown.show();
   }
 
-  clearDate() {
+  onClearDate() {
     this.changed.next(null);
     this.writeValue(null);
     this.onChangeCallback(null);
@@ -194,60 +228,65 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.dropdown.hide();
     this.el.nativeElement.focus();
   }
-  getLabel() {
+  setLabel() {
     if (!this.range) {
       if (this.valueMoment) {
-        return this.valueMoment.format(this.displayFormat);
+        this.label = this.valueMoment.format(this.displayFormat);
+        this.cd.markForCheck();
+        return;
       }
     } else {
       if (this.selectionStartMoment && this.selectionEndMoment) {
-        return this.selectionStartMoment.format(this.displayFormat) + ' - ' + this.selectionEndMoment.format(this.displayFormat);
+        this.label = this.selectionStartMoment.format(this.displayFormat) + ' - ' + this.selectionEndMoment.format(this.displayFormat);
+        this.cd.markForCheck();
+        return;
       }
     }
-    return this.emptyLabel;
-  }
-  onCalendarChange(event: any) {
-    if (this.range) {
-      return;
-    }
-    this.writeValue(event.format(this.outFormat));
-
-    this.changed.next(this.value);
-    this.onChangeCallback(this.value);
-
-    this.opened = false;
-    this.dropdown.hide();
-    this.el.nativeElement.focus();
+    this.label = this.emptyLabel;
+    this.cd.markForCheck();
   }
   onCalendarChangeStart(event: moment.Moment) {
-    if (!this.range) {
-      return;
-    }
-    this.selectionStart = event.format(this.outFormat);
-    this.writeValue([this.selectionStart, this.selectionEnd]);
+    this.labelStart = event.format(this.outFormat);
+    this.onChange();
   }
   onCalendarChangeEnd(event: moment.Moment) {
-    if (!this.range) {
-      return;
-    }
-    this.selectionEnd = event.format(this.outFormat);
-    this.writeValue([this.selectionStart, this.selectionEnd]);
+    this.labelEnd = event.format(this.outFormat);
+    this.onChange();
   }
-  onClose() {
+  onChange() {
+    if (this.live || !this.confirmRequired) {
+      this.updateValue();
+    }
+    if (!this.live && !this.confirmRequired) {
+      this.close();
+    }
+  }
+  onApply() {
+    this.updateValue();
+    this.close();
+  }
+  updateValue() {
+    if (this.range) {
+      this.writeValue([this.selectionStart, this.selectionEnd]);
+    } else {
+      this.writeValue(this.selectionStart);
+    }
     this.changed.next(this.value);
     this.onChangeCallback(this.value);
-
+    this.setLabel();
+  }
+  close() {
     this.opened = false;
     this.dropdown.hide();
     this.el.nativeElement.focus();
   }
   setRelative(from, to: string) {
-    this.selectionStart = from;
-    this.selectionEnd = to;
-    this.writeValue([from, to]);
+    this.labelStart = from;
+    this.labelEnd = to;
+    this.onChange();
   }
   parseRelative(value: string, type: 'from' | 'to' | '' = ''): string {
-    const relativeTimeRe = /(([-+]\d*)\s*(m|M|y|h|d|W)|now)\/?(m|M|y|h|d|W)?/;
+    const relativeTimeRe = /(([-+]\d*)\s*(m|M|y|h|d|w)|now)\/?(m|M|y|h|d|W)?/;
     const parsed = relativeTimeRe.exec(value);
     if (!parsed) {
       return 'Invalid date';
