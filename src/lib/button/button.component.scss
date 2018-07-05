@@ -186,9 +186,9 @@
 }
 
 .button-primary.attention {
-  background-color: $error-color;
+  background-color: mix($error-color, $always-black, 70);
   &:hover {
-    background-color: red;
+    background-color: mix($error-color, $always-black, 80);
   }
 }
 
