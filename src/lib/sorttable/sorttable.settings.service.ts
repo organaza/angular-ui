@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { JSONUtils } from '../json/json';
 
 export class SortField {
-  name: string;
+  name: any;
   direction: string;
 }
 
