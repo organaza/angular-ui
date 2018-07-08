@@ -220,7 +220,6 @@ export class DropDownComponent implements OnDestroy {
     if (!this.dropDownNgIf) {
       this.dropDownNgIf = true;
       this.calculateBounds();
-      this.parent = this.el.nativeElement.parentElement;
       this.cd.markForCheck();
     }
   }
@@ -343,6 +342,8 @@ export class DropDownComponent implements OnDestroy {
     if (!this.bindElement) {
       return;
     }
+    this.parent = this.el.nativeElement.parentElement;
+
     this.setState('void');
     this.display = 'flex';
     this.flexDirection = 'column';
