@@ -25,7 +25,14 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
   private _rowsNumber = 0;
   private _pageSize = 20;
 
-  currentPage = 1;
+  set currentPage(value: number) {
+    this._currentPage = value;
+    this.onChangeCallback(value);
+  }
+  get currentPage() {
+    return this._currentPage;
+  }
+  _currentPage = 0;
   pageCount = 0;
 
   @Input()
@@ -44,7 +51,7 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
       size = 1;
     }
 
-    this.currentPage = 1;
+    this.currentPage = 0;
     this._pageSize = size;
     this.updatePageCount();
   }
