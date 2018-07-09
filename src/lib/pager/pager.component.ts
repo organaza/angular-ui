@@ -26,13 +26,13 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
   private _pageSize = 20;
 
   set currentPage(value: number) {
-    this._currentPage = value;
-    this.onChangeCallback(value);
+    this._currentPage = Number(value);
+    this.onChangeCallback(value - 1);
   }
   get currentPage() {
     return this._currentPage;
   }
-  _currentPage = 0;
+  _currentPage = 1;
   pageCount = 0;
 
   @Input()
@@ -51,7 +51,7 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
       size = 1;
     }
 
-    this.currentPage = 0;
+    this.currentPage = 1;
     this._pageSize = size;
     this.updatePageCount();
   }
@@ -82,7 +82,7 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
   }
 
   writeValue(value: any) {
-    this.currentPage = value;
+    this.currentPage = Number(value) + 1;
     this.cd.markForCheck();
   }
 
@@ -92,7 +92,7 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
   }
 
   private currentPageChanged(): void {
-    this.onChangeCallback(this.currentPage);
+    this.onChangeCallback(this.currentPage - 1);
     this.cd.markForCheck();
   }
 
@@ -103,7 +103,7 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   public onClickPrev(): void {
     if (this.currentPage > 1) {
-      this.currentPage--;
+      this.currentPage = this.currentPage - 1;
       this.currentPageChanged();
     }
   }
@@ -115,7 +115,7 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   public onClickNext(): void {
     if (this.currentPage < this.pageCount ) {
-      this.currentPage++;
+      this.currentPage = this.currentPage + 1;
       this.currentPageChanged();
     }
   }
