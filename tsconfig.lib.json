@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
     "target": "es2017",
-    "module": "es2017",
+    "module": "es6",
     "moduleResolution": "node",
     "declaration": true,
     "sourceMap": true,
