@@ -46,7 +46,7 @@ $toast-error-color: darken($error-color, 20);
 /////////////////////////////////////
 //// Switch
 /////////////////////////////////////
-$switch-color: $accent-primary-color;
+$switch-color: darken($accent-primary-color, 20);
 $switch-transition: ease-in-out;
 
 /////////////////////////////////////
