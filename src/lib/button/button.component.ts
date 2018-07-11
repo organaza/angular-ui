@@ -6,7 +6,8 @@ import {
   ElementRef,
   EventEmitter,
   HostListener,
-  HostBinding
+  HostBinding,
+  ChangeDetectorRef
 } from '@angular/core';
 
 @Component({
@@ -16,6 +17,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
+  clickCount = 0;
+
   @Input()
   @HostBinding()
   tabindex = 0;
@@ -40,6 +43,9 @@ export class ButtonComponent {
 
   @Input()
   selected: boolean;
+
+  @Input()
+  double: boolean;
 
   @Input()
   color: string;
@@ -73,8 +79,13 @@ export class ButtonComponent {
     }
   }
 
-  constructor(
+  @HostListener('mouseleave', ['$event'])
+  onmouseleave(event: any) {
+    this.clickCount = 0;
+  }
 
+  constructor(
+    private cd: ChangeDetectorRef,
   ) { }
 
   onClickButton() {
@@ -83,12 +94,20 @@ export class ButtonComponent {
     }
   }
   onClick() {
-    if (this.timeout === 0) {
-      this.clicked.next();
-    } else {
-      window.setTimeout(() => {
+    if (this.double) {
+      this.clickCount ++;
+      this.cd.markForCheck();
+      if (this.clickCount === 2) {
         this.clicked.next();
-      }, this.timeout);
+      }
+    } else {
+      if (this.timeout === 0) {
+        this.clicked.next();
+      } else {
+        window.setTimeout(() => {
+          this.clicked.next();
+        }, this.timeout);
+      }
     }
   }
 }

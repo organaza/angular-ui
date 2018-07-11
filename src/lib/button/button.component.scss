@@ -37,6 +37,7 @@
   line-height: 1;
   font-weight: $global-weight-bold;
   justify-content: center;
+  transition: all 0.1s ease-in-out;
 
   $current: &;
 
@@ -83,8 +84,7 @@
   justify-content: center;
   white-space: nowrap;
   outline: none;
-  transition: all 0.1s linear;
-  transition-property: color, background, border;
+  transition: all 0.1s ease-in-out;
   width: 100%;
 
   &-primary {
@@ -222,4 +222,9 @@
     -webkit-transform: scale(1.0);
     transform: scale(1.0);
   }
+}
+
+.button.double {
+  color: $error-color;
+  transform: scale(1.1);
 }
