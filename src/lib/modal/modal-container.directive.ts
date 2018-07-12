@@ -1,7 +1,7 @@
 import { ContentChild, ViewContainerRef, HostBinding, AfterContentInit, Input, OnInit} from '@angular/core';
 import { Directive } from '@angular/core';
 
-import { ModalService } from '../modal/modal.service';
+import { ModalService } from './modal.service';
 
 @Directive({
   selector: '[ozModalContainer]'

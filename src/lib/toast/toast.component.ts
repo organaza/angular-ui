@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastService } from '../toast/toast.service';
+import { ToastService } from './toast.service';
 
 @Component({
   selector: 'oz-toast',

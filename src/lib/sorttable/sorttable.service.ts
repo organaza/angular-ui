@@ -4,7 +4,7 @@ import { SortTableDragColumnDirective } from './sorttable-drag-column.directive'
 import { SortTableDirective } from './sorttable.directive';
 import { SortTableColumnDirective } from './sorttable-column.directive';
 import { SortTableColumnHeadDirective } from './sorttable-column-head.directive';
-import { SortTableSettingsService } from '../sorttable/sorttable.settings.service';
+import { SortTableSettingsService } from './sorttable.settings.service';
 
 @Injectable({
   providedIn: 'root',

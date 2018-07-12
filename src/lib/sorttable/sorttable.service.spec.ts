@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { SortTableService } from '../sorttable/sorttable.service';
-import { SortTableSettingsService } from '../sorttable/sorttable.settings.service';
+import { SortTableService } from './sorttable.service';
+import { SortTableSettingsService } from './sorttable.settings.service';
 
 describe('SortTableService', () => {
   beforeEach(() => {

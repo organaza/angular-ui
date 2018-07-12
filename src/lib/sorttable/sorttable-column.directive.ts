@@ -1,5 +1,5 @@
 import { Directive, Input, ElementRef, OnInit, OnDestroy } from '@angular/core';
-import { SortTableService } from '../sorttable/sorttable.service';
+import { SortTableService } from './sorttable.service';
 import { SortTableDirective } from './sorttable.directive';
 
 @Directive({

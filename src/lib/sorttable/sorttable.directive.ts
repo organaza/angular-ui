@@ -1,5 +1,5 @@
 import { Directive, Input, Output, ElementRef, EventEmitter, HostListener, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import { SortTableService } from '../sorttable/sorttable.service';
+import { SortTableService } from './sorttable.service';
 
 export class SortCompletedEvent {
   oldIndex: number;

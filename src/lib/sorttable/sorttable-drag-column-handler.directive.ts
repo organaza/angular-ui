@@ -1,5 +1,5 @@
 import { Directive, Input, Output, ElementRef, EventEmitter, HostListener } from '@angular/core';
-import { SortTableService } from '../sorttable/sorttable.service';
+import { SortTableService } from './sorttable.service';
 import { SortTableDirective } from './sorttable.directive';
 import { SortTableDragColumnDirective } from './sorttable-drag-column.directive';
 

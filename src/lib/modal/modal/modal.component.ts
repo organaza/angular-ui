@@ -8,7 +8,7 @@ import {
   ElementRef,
   ChangeDetectorRef
 } from '@angular/core';
-import { ModalService } from '../../modal/modal.service';
+import { ModalService } from '../modal.service';
 import { ShortcutService, ShortcutObservable } from '../../shortcut/shortcut.service';
 
 import {

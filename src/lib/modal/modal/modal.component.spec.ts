@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ModalComponent } from './modal.component';
 import { ShortcutService } from '../../shortcut/shortcut.service';
-import { ModalService } from '../../modal/modal.service';
+import { ModalService } from '../modal.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
