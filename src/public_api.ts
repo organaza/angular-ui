@@ -9,6 +9,7 @@ export * from './lib/file/file';
 export * from './lib/ranges/ranges';
 export * from './lib/string/string';
 export * from './lib/bson/objectid';
+export * from './lib/browser/clipboard';
 
 export { AlertService } from './lib/alert/alert.service';
 export { ModalService } from './lib/modal/modal.service';
