@@ -88,7 +88,7 @@
   width: 100%;
 
   &-primary {
-    padding: 0.4em 1.2em;
+    padding: nth($oz-control-default-padding, 1)+$component-focus-padding-bottom 1.2em;
     border-radius: $oz-button-primary-radius;
     color: $oz-button-primary-color;
     border: 1px solid transparent;
@@ -117,7 +117,7 @@
   }
 
   &-secondary {
-    padding: 0.4em 1.2em;
+    padding: nth($oz-control-default-padding, 1)+$component-focus-padding-bottom 1.2em;
     border-radius: $oz-button-secondary-radius;
     color: $oz-button-secondary-color;
     border: $oz-button-secondary-border;
