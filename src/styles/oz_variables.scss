@@ -16,6 +16,10 @@ $global-weight-normal: 400 !default;
 $global-weight-bold: 500 !default;
 $global-weight-bolder: 600 !default;
 
+$global-lineheight: 1.3;
+$global-fontsize: 15px;
+$global-textheight: floor($global-lineheight*$global-fontsize);
+
 /////////////////////////////////////
 //// Colors
 /////////////////////////////////////
@@ -59,7 +63,7 @@ $oz-control-border-color: $gray-light;
 $oz-control-border-hover-color: $gray-lightest;
 $oz-control-border-color-invalid: #a00;
 $oz-control-border-hover-color-invalid: #f00;
-$oz-control-default-padding: 0.5em;
+$oz-control-default-padding: 4px;
 $oz-control-default-border: 2px;
 $oz-control-prompt-color: $gray-darker;
 $oz-control-prompt-font-weight: $global-weight-normal;
@@ -179,8 +183,8 @@ $icons-fontsize-xx-large: 30px;
 /////////////////////////////////////
 $oz-modal-header-font-size: 200%;
 $oz-modal-sub-header-font-size: 150%;
-$oz-modal-padding-v: 1em;
-$oz-modal-padding-h: 1.5em;
+$oz-modal-padding-v: 15px;
+$oz-modal-padding-h: 20px;
 $oz-modal-overlay-background: rgba(47, 69, 82, 0.8);
 $oz-modal-background: #fff;
 

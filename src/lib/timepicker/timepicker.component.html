@@ -17,6 +17,7 @@
     *ngIf="editOpened">
     <oz-textinput
       #input
+      [borderless]="true"
       [prompt]="'ex. 1h 20m'"
       [(ngModel)]="valueInputFormat"
       (keydown)="onKeyDown($event)"

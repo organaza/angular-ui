@@ -49,7 +49,7 @@
     width: 100%;
     background-color: transparent;
     margin: 0;
-    padding: $oz-control-default-padding 0;
+    padding: $oz-control-default-padding;
     color: inherit;
     font-family: inherit;
     line-height: inherit;
@@ -65,7 +65,7 @@
 
   &-prompt {
     font-style: $oz-control-prompt-font-style;
-    padding: $oz-control-default-padding 0;
+    padding: $oz-control-default-padding;
     font-weight: inherit;
     position: absolute;
     left: 0;
@@ -85,18 +85,17 @@
   }
 
   &.showClear {
-    padding-right: 2em;
+    padding-right: 20px;
   }
 
   &-clear {
-    position: absolute;
-    top: 50%;
-    right: 0em;
-    margin-top: -0.7em;
     border-radius: 100%;
     cursor: pointer;
-    padding: 0.35em;
-    font-size: 60%;
+    position: absolute;
+    height: 100%;
+    padding: $oz-control-default-padding;
+    right: 0;
+    align-items: center;
   }
 }
 .multiline-textarea {

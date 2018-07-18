@@ -10,6 +10,10 @@
   border-bottom: $oz-control-default-border solid $error-color;
 }
 
+.component-container-active {
+  border-bottom: $oz-control-default-border solid $oz-control-border;
+}
+
 :host:hover {
   .popup-icon {
     opacity: 1;
@@ -30,9 +34,8 @@ oz-textinput {
 
 .value {
   cursor: pointer;
-  padding: $oz-control-default-padding 0;
+  padding: $oz-control-default-padding;
   color: $oz-control-text-color;
-  border-bottom: $oz-control-default-border solid transparent;
 }
 
 .value-disabled {
@@ -50,9 +53,6 @@ oz-textinput {
   display: flex;
   align-items: center;
   position: relative;
-}
-
-.component-container-active {
 }
 
 .input-container {
@@ -79,7 +79,7 @@ oz-textinput {
 
 .popup-helpers {
   background-color: $white;
-  width: 15em;
+  width: 230px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -87,7 +87,7 @@ oz-textinput {
 }
 
 .popup-helpers-item {
-  padding: 0.6em;
+  padding: 10px;
   cursor: pointer;
   flex: 0 0 25%;
   text-align: center;
@@ -96,50 +96,5 @@ oz-textinput {
 .popup-helpers-item:hover {
   background-color: $accent-primary-color;
   color: $white;
-  padding: 0.6em;
-}
-
-.popup-digits {
-  font-size: 250%;
-  padding: 0.7em 0;
-  margin-bottom: 0.5em;
-}
-
-.popup-digits-item,
-.popup-digits-separator {
-  float: left;
-  position: relative;
-  width: 1.3em;
-  text-align: center;
-}
-
-.popup-digits-separator {
-  width: auto;
-}
-
-.popup-digits-item-down,
-.popup-digits-item-up {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 0.8em;
-  background-color: #eee;
-  text-align: center;
-  font-size: 80%;
-  cursor: pointer;
-  user-select: none;
-}
-
-.popup-digits-item-up {
-  content: "˄";
-  top: -0.8em;
-}
-
-.popup-digits-item-down {
-  content: "˅";
-  bottom: -0.8em;
-}
-
-.popup-digits-clear {
-  clear: both;
+  padding: 10px;
 }

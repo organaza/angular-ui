@@ -3,7 +3,7 @@
 :host {
   @include component;
   @include component-focus;
-  padding: $oz-control-default-padding 0;
+  padding: $oz-control-default-padding;
   display: flex;
   flex-direction: row;
 }
@@ -22,10 +22,10 @@
   align-items: center;
   border: 1px solid $oz-control-border;
   border-radius: $oz-control-border-radius;
-  width: 1.1em;
-  height: 1.1em;
-  min-width: 1.1em;
-  min-height: 1.1em;
+  width: $global-textheight;
+  height: $global-textheight;
+  min-width: $global-textheight;
+  min-height: $global-textheight;
 
   i {
     color: $oz-button-primary-background;
