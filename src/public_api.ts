@@ -7,6 +7,7 @@ export * from './lib/json/json';
 export * from './lib/color/color';
 export * from './lib/file/file';
 export * from './lib/ranges/ranges';
+export * from './lib/dates/dates';
 export * from './lib/string/string';
 export * from './lib/bson/objectid';
 export * from './lib/browser/clipboard';

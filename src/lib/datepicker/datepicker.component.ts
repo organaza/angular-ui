@@ -17,6 +17,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import moment from 'moment';
 import { DropDownComponent } from '../dropdown/dropdown.component';
 import { OzSettingsService } from '../settings/settings.service';
+import { DateUtils } from '../dates/dates';
 
 const noop = () => {
 };
@@ -127,7 +128,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   get labelStart() {
-    const relative = moment(this.parseRelative(this.selectionStart, 'from'), this.outFormat).isValid();
+    const relative = DateUtils.parseRelative(this.selectionStart, 'from').isValid();
     if (relative) {
       return this.selectionStart;
     }
@@ -152,7 +153,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.onChange();
   }
   get labelEnd() {
-    const relative = moment(this.parseRelative(this.selectionStart, 'to'), this.outFormat).isValid();
+    const relative = DateUtils.parseRelative(this.selectionStart, 'to').isValid();
     if (relative) {
       return this.selectionEnd;
     }
@@ -211,7 +212,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
       if (result.isValid()) {
         return result;
       }
-      result = moment(this.parseRelative(value, type), this.outFormat);
+      result = DateUtils.parseRelative(value, type);
       if (result.isValid()) {
         return result;
       }
@@ -295,30 +296,5 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.labelStart = from;
     this.labelEnd = to;
     this.onChange();
-  }
-  parseRelative(value: string, type: 'from' | 'to' | '' = ''): string {
-    const relativeTimeRe = /(([-+]\d*)\s*(m|M|y|h|d|w)|now)\/?(m|M|y|h|d|W)?/;
-    const parsed = relativeTimeRe.exec(value);
-    if (!parsed) {
-      return 'Invalid date';
-    }
-    let date;
-    if (parsed[1] === 'now') {
-      date = moment();
-    }
-    if (parsed[1] && parsed[3]) {
-      date = moment();
-      date = date.add(Number(parsed[2]), parsed[3] as moment.DurationInputArg2);
-    }
-    if (parsed[4] && type === 'from') {
-      date = date.startOf(parsed[4] as moment.unitOfTime.StartOf);
-    }
-    if (parsed[4] && type === 'to') {
-      date = date.endOf(parsed[4] as moment.unitOfTime.StartOf);
-    }
-    if (!date) {
-      return 'Invalid date';
-    }
-    return date.format(this.outFormat);
   }
 }
