@@ -49,7 +49,7 @@
     width: 100%;
     background-color: transparent;
     margin: 0;
-    padding: $oz-control-default-padding;
+    padding: $oz-control-textinput-padding;
     color: inherit;
     font-family: inherit;
     line-height: inherit;
@@ -65,7 +65,7 @@
 
   &-prompt {
     font-style: $oz-control-prompt-font-style;
-    padding: $oz-control-default-padding;
+    padding: $oz-control-textinput-padding;
     font-weight: inherit;
     position: absolute;
     left: 0;
@@ -93,7 +93,7 @@
     cursor: pointer;
     position: absolute;
     height: 100%;
-    padding: $oz-control-default-padding;
+    padding: $oz-control-textinput-padding;
     right: 0;
     align-items: center;
   }
