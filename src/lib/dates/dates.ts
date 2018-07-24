@@ -5,7 +5,7 @@ export class DateUtils {
     const relativeTimeRe = /(([-+]\d*)\s*(m|M|y|h|d|w)|now)\/?(m|M|y|h|d|W)?/;
     const parsed = relativeTimeRe.exec(value);
     if (!parsed) {
-      return moment('Invalid date');
+      return moment('Invalid date', 'YYYY MM DD', true);
     }
     let date;
     if (parsed[1] === 'now') {
