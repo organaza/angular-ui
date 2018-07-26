@@ -1,0 +1,101 @@
+<ng-template #selectedItemActionsDefault>
+
+</ng-template>
+<ng-template #selectedItemTemplateDefault>
+  <div class="value"
+    [class.center]="dropdownHorizontalPosition === 'center'"
+    [class.tags]="tags"
+    [class.disabled]="disabled"
+    [class.active]="opened"
+    [class.hide]="hideActiveValue"
+    ozPreventParentScroll
+    [scrollDisabled]="!opened"
+    (click)="switchPopup(!opened)">
+    <div class="labels {{manyLayout}}"
+      [class.empty]="!labels[0].item"
+      [class.active]="opened"
+      [class.disabled]="disabled">
+      <ng-container *ngIf="labels.length<=hideMoreThan">
+        <div class="label {{manyLayout}}" *ngFor="let label of labels"
+        [class.many]="many && opened && label.item"
+        [class.not-remove]="!label.can_remove">
+          <div class="text" [innerHTML]="label.label"></div>
+          <oz-button
+            *ngIf="(many && opened && label.item && label.can_remove) || (opened && label.item && allowNull && label.can_remove)"
+            class="clear"
+            typeButton="icon"
+            iconClass="close"
+            iconSize="normal"
+            (click)="onRemoveItem($event, label.item)">
+          </oz-button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="labels.length>hideMoreThan">
+        <div class="label {{manyLayout}}"
+        [ozTooltip]="plainLabels | formatArrayString"
+        tooltipDirection="bottom"
+        [class.many]="many && opened">
+          <div class="value">{{labels.length}}</div>
+        </div>
+      </ng-container>
+    </div>
+    <oz-icon
+      class="icon"
+      [icon]="opened?'keyboard_arrow_up':'keyboard_arrow_down'"
+      size="small">
+    </oz-icon>
+    <ng-container *ngTemplateOutlet="selectedItemActions || selectedItemActionsDefault; context: thisContext"></ng-container>
+  </div>
+</ng-template>
+
+<div class="value-holder" #valueElement>
+  <ng-container *ngTemplateOutlet="selectedItemTemplate || selectedItemTemplateDefault; context: thisContext"></ng-container>
+</div>
+
+<oz-dropdown
+  #dropdown
+  class="oz-select-dropdown dropdown"
+  [bindElement]="valueElement"
+  [useBindWidth]="true"
+  [displayBackground]="true"
+  [bindInside]="true"
+  [closeByClickElement]="false"
+  [positionHorizontal]="dropdownHorizontalPosition"
+  (displayed)="dropdownDisplayed()"
+  (closed)="switchPopup(false)">
+  <ng-template #dropdownContent>
+    <div class="resizer" [class.active]="true">
+      <ng-container *ngTemplateOutlet="selectedItemTemplate || selectedItemTemplateDefault; context: thisContext"></ng-container>
+    </div>
+    <div class="search" ozPreventParentScroll>
+      <div class="prompt" *ngIf="!search" (click)="focusOnInput()" i18n>Type for search</div>
+      <div class="spinner loader-spinner" *ngIf="loading"></div>
+      <input #input class="input" type="text" [(ngModel)]="searchModel" (keydown)="onSearchKeyDown($event)">
+    </div>
+    <div class="options" (scroll)="onPopupScroll($event)" ozPreventParentScroll>
+      <div *ngIf="firstItemTemplate"
+        class="option"
+        [class.cursor]="selectedIndex == -1"
+        (mouseover)="setIndex(-1)">
+        <ng-container *ngTemplateOutlet="firstItemTemplate; context: thisContext"></ng-container>
+      </div>
+      <div *ngFor="let item of filteredOptions; let i = index"
+        class="option"
+        [class.active]="checkSelection(item)"
+        [class.cursor]="selectedIndex == i"
+        (mouseover)="setIndex(i)">
+        <div class="zone-click" (click)="toggleItem(item)"></div>
+        <div [innerHTML]="getLabelForItem(item)"></div>
+      </div>
+      <div *ngIf="lastItemTemplate"
+        class="option"
+        [class.cursor]="selectedIndex == filteredOptions.length + 2"
+        (mouseover)="setIndex(filteredOptions.length + 2)">
+        <ng-container *ngTemplateOutlet="lastItemTemplate; context: thisContext"></ng-container>
+      </div>
+      <div *ngIf="haveNextpage"
+        class="option loading"
+        (click)="selectItem(null)"><span i18n>Load more</span> ...</div>
+    </div>
+  </ng-template>
+</oz-dropdown>
