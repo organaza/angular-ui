@@ -34,7 +34,6 @@ export { RangeComponent } from './lib/range/range.component';
 export { SwitchComponent } from './lib/switch/switch.component';
 export { TextinputComponent } from './lib/textinput/textinput.component';
 export { TimePickerComponent } from './lib/timepicker/timepicker.component';
-export { VirtualScrollComponent } from './lib/virtual-scroll/virtual-scroll.component';
 
 // export { DragulaDelayLiftDirective } from './lib/dragula-delay-lift/dragula-delay-lift.directive';
 // export { ModalContainerDirective } from './lib/modal/modal-container.directive';
