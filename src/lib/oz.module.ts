@@ -68,7 +68,6 @@ import { ObjectKeysPipe } from './pipes/object-keys.pipe';
 import { FormatArrayStringPipe } from './pipes/array-string.pipe';
 import { DurationToStringPipe } from './pipes/duration-to-string.pipe';
 import { TimeStampToDatePipe } from './pipes/timestamp-to-date.pipe';
-import { VirtualScrollComponent } from './virtual-scroll/virtual-scroll.component';
 import { SortTableSettingsService } from './sorttable/sorttable.settings.service';
 import { PagerComponent } from './pager/pager.component';
 import { ShortcutService } from './shortcut/shortcut.service';
@@ -127,7 +126,6 @@ import { OzSettingsService } from './settings/settings.service';
     ObjectKeysPipe,
     ParseBooleanPipe,
     DragulaDelayLiftDirective,
-    VirtualScrollComponent,
     IconComponent,
     PagerComponent,
   ],
@@ -173,7 +171,6 @@ import { OzSettingsService } from './settings/settings.service';
     ObjectKeysPipe,
     ParseBooleanPipe,
     DragulaDelayLiftDirective,
-    VirtualScrollComponent,
     IconComponent,
     PagerComponent,
   ],
