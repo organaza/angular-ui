@@ -45,7 +45,7 @@ export class ModalService {
     }
     lastModal.modal = modal;
     if (!lastModal.wait) {
-      window.setTimeout(() => {
+      setTimeout(() => {
         lastModal.modal.state = 'show';
       });
     }
@@ -89,7 +89,7 @@ export class ModalService {
     if (!lastModal) {
       return;
     }
-    window.setTimeout(() => {
+    setTimeout(() => {
       if (lastModal.contentRef) {
         lastModal.contentRef.destroy();
       }

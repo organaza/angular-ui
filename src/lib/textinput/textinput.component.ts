@@ -312,11 +312,11 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
     this.switchPopup(false);
   }
   onFocusIn() {
-    window.clearTimeout(this.focusOutTimeout);
+    clearTimeout(this.focusOutTimeout);
   }
 
   focusOnInput() {
-    window.setTimeout(() => {
+    setTimeout(() => {
       this.container.nativeElement.focus();
     });
   }

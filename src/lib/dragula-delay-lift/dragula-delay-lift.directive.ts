@@ -22,7 +22,7 @@ export class DragulaDelayLiftDirective {
     @HostListener('touchstart', ['$event'])
     // @HostListener('mousedown', ['$event'])
     onDown(e: Event) {
-        this.touchTimeout = window.setTimeout(() => {
+        this.touchTimeout = setTimeout(() => {
             this.draggable = true;
         }, this.dragDelay);
     }

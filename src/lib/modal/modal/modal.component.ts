@@ -105,7 +105,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     this.modalService.close(this);
     this.state = 'close';
     this.cd.detectChanges();
-    window.setTimeout(() => {
+    setTimeout(() => {
       this.closed.next(true);
     }, 200);
 

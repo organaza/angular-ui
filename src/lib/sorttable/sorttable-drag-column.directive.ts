@@ -37,7 +37,7 @@ export class SortTableDragColumnDirective implements OnInit, OnDestroy {
     this._index = value;
     this.newIndex = value;
     if (value !== undefined) {
-      window.setTimeout(() => {
+      setTimeout(() => {
         this.sortTableService.registerDragColumn(this.sortTable.sortTable, this.index, this);
       });
     }

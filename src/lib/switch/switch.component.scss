@@ -16,7 +16,7 @@
   border: 2px solid $switch-color;
   background-color: $switch-color;
   display: flex;
-  color: rgba(white, 0.4);
+  color: rgba($always-white, 0.7);
 
   input {
     position: absolute;

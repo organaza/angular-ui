@@ -276,7 +276,7 @@ export class DropDownComponent implements OnDestroy {
   addLeaveActiveHandler() {
     this.leaveActiveHandler = this.renderer.listen(this.activeElement, 'mouseleave', (moveEvent: MouseEvent) => {
       this.leaveActiveHandler();
-      this.dropDownTimeout = window.setTimeout(() => {
+      this.dropDownTimeout = setTimeout(() => {
         this.closeDropdown();
         this.enterDropdownHandler();
       }, 100);
@@ -366,7 +366,7 @@ export class DropDownComponent implements OnDestroy {
       this.minWidth = bindWidth;
     }
 
-    this.calculateTimeout = window.setTimeout(() => {
+    this.calculateTimeout = setTimeout(() => {
       if (this.absolute) {
         window.document.body.appendChild(this.el.nativeElement);
       }
@@ -465,7 +465,7 @@ export class DropDownComponent implements OnDestroy {
         this.left = maxRight - dropWidth - 10;
       }
 
-      this.appendTimeout = window.setTimeout(() => {
+      this.appendTimeout = setTimeout(() => {
         this.setState('show');
         this.displayed.next();
       }, 0);
