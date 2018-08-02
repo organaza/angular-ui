@@ -44,17 +44,17 @@ export class ToastService {
     };
     this.toasts.push(toast);
     if (!persistant) {
-      window.setTimeout(() => {
+      setTimeout(() => {
         this.close(toast);
       }, timeout);
     }
-    window.setTimeout(() => {
+    setTimeout(() => {
       toast.hide = false;
     }, 100);
   }
   close(toast: any) {
     toast.hide = true;
-    window.setTimeout(() => {
+    setTimeout(() => {
       const index = this.toasts.indexOf(toast);
       this.toasts.splice(index, 1);
     }, 500);

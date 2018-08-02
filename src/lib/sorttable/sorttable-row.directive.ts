@@ -39,7 +39,7 @@ export class SortTableRowDirective implements OnInit, OnDestroy {
     this.newIndex = value;
     if (value !== undefined) {
 
-      window.setTimeout(() => {
+      setTimeout(() => {
         this.sortTableService.registerRow(this.sortTable.sortTable, this.index, this);
       });
     }

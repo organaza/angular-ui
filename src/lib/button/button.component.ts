@@ -104,7 +104,7 @@ export class ButtonComponent {
       if (this.timeout === 0) {
         this.clicked.next();
       } else {
-        window.setTimeout(() => {
+        setTimeout(() => {
           this.clicked.next();
         }, this.timeout);
       }

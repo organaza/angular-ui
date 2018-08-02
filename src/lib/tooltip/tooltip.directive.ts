@@ -13,7 +13,7 @@ export class TooltipDirective implements OnDestroy {
     this._ozTooltip = value;
     if (this.tooltip) {
       this.tooltip.componentRef.instance['text'] = value;
-      window.setTimeout(() => {
+      setTimeout(() => {
         this.place();
       });
     }
@@ -29,7 +29,7 @@ export class TooltipDirective implements OnDestroy {
     this._tooltipDisabled = value;
     if (value) {
       if (this.tooltip) {
-        window.clearTimeout(this.showTimeout);
+        clearTimeout(this.showTimeout);
         this.tooltipService.remove(this.tooltip);
       }
     }
@@ -81,11 +81,11 @@ export class TooltipDirective implements OnDestroy {
     if (!this.tooltipType && (!this.ozTooltip || !this.ozTooltip.trim())) {
       return;
     }
-    window.clearTimeout(this.showTimeout);
+    clearTimeout(this.showTimeout);
     if (this.tooltip) {
       this.tooltipService.remove(this.tooltip);
     }
-    this.showTimeout = window.setTimeout(() => {
+    this.showTimeout = setTimeout(() => {
       if (this.tooltipDisabled) {
         return;
       }
@@ -101,27 +101,27 @@ export class TooltipDirective implements OnDestroy {
           this.tooltipHideBack
         );
       }
-      window.setTimeout(() => {
+      setTimeout(() => {
         this.place();
       });
     }, this.tooltipTimeout);
   }
 
   @HostListener('mouseleave') onMouseLeave() {
-    window.clearTimeout(this.showTimeout);
+    clearTimeout(this.showTimeout);
     if (this.tooltip) {
       this.tooltipService.remove(this.tooltip);
     }
   }
   @HostListener('mousedown') onMouseDown() {
-    window.clearTimeout(this.showTimeout);
+    clearTimeout(this.showTimeout);
     if (this.tooltip) {
       this.tooltipService.remove(this.tooltip);
     }
   }
 
   ngOnDestroy() {
-    window.clearTimeout(this.showTimeout);
+    clearTimeout(this.showTimeout);
     if (this.tooltip) {
       this.tooltipService.remove(this.tooltip);
     }

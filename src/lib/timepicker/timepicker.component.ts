@@ -89,7 +89,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
 
   @HostListener('focus', ['$event'])
   onFocus(event: any) {
-    this.focusTimeout = window.setTimeout(() => {
+    this.focusTimeout = setTimeout(() => {
       this.openEdit(true);
     }, 50);
   }
@@ -300,7 +300,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   enableSelectMode(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
-    window.clearTimeout(this.focusTimeout);
+    clearTimeout(this.focusTimeout);
     this.dropdown.show();
     this.shortcut = this.shortcutService.subscribe('Escape', false, false, () => {
       this.disableSelectMode();
