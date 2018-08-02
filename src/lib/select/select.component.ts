@@ -38,7 +38,7 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   onChangeCallback: (_: any) => void = noop;
 
   loading: boolean;
-  thisContext = {select: this};
+  thisContext: {select: SelectComponent};
   selectedIndex = 0;
   searchString: string;
 
@@ -122,6 +122,7 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   constructor(private el: ElementRef,
     private cd: ChangeDetectorRef,
   ) {
+    this.thisContext = {select: this};
   }
 
   writeValue(value: any) {
