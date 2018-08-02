@@ -8,7 +8,7 @@ export class DragulaDelayLiftDirective {
     @HostBinding('class.gu-lift')
     draggable = false;
 
-    touchTimeout: number;
+    touchTimeout: any;
 
     @HostListener('touchmove', ['$event'])
     // @HostListener('mousemove', ['$event'])

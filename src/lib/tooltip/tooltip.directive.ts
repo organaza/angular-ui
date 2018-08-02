@@ -6,7 +6,7 @@ import { TooltipService, Tooltip } from './tooltip.service';
 })
 
 export class TooltipDirective implements OnDestroy {
-  showTimeout = -1;
+  showTimeout: any = -1;
 
   @Input()
   set ozTooltip(value: string) {

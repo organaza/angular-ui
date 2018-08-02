@@ -81,7 +81,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
 
   valueInputFormat: string;
 
-  focusTimeout = 0;
+  focusTimeout: any = 0;
   shortcut: ShortcutObservable<any>;
 
   private onTouchedCallback: () => void = noop;

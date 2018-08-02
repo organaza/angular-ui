@@ -151,9 +151,9 @@ export class DropDownComponent implements OnDestroy {
 
   openHandler: any;
 
-  calculateTimeout: number;
-  appendTimeout: number;
-  dropDownTimeout: number;
+  calculateTimeout: any;
+  appendTimeout: any;
+  dropDownTimeout: any;
 
   leaveDropdownHandler: Function;
   enterDropdownHandler: Function;
