@@ -7,41 +7,37 @@
     [class.tags]="tags"
     [class.disabled]="disabled"
     [class.active]="opened"
-    [class.hide]="hideActiveValue"
     ozPreventParentScroll
     [scrollDisabled]="!opened"
     (click)="switchPopup(!opened)">
     <div class="labels {{manyLayout}}"
-      [class.empty]="!labels[0].item"
+      [class.empty]="!(model.selected | async)[0]"
       [class.active]="opened"
       [class.disabled]="disabled">
-      <ng-container *ngIf="labels.length<=hideMoreThan">
-        <div class="label {{manyLayout}}" *ngFor="let label of labels"
-        [class.many]="many && opened && label.item"
-        [class.not-remove]="!label.can_remove">
-          <div class="text" [innerHTML]="label.label"></div>
+      <ng-container>
+        <div class="label {{manyLayout}}" *ngFor="let item of (model.selected | async); let i = index"
+        [class.many]="model.many && opened"
+        [class.not-remove]="!item.canRemove">
+          <div class="text" [innerHTML]="item.label"></div>
           <oz-button
-            *ngIf="(many && opened && label.item && label.can_remove) || (opened && label.item && allowNull && label.can_remove)"
+            *ngIf="(model.many && opened && item) || (opened && item)"
             class="clear"
             typeButton="icon"
             iconClass="close"
             iconSize="normal"
-            (click)="onRemoveItem($event, label.item)">
+            (click)="onRemoveItem($event, i)">
           </oz-button>
         </div>
       </ng-container>
-      <ng-container *ngIf="labels.length>hideMoreThan">
-        <div class="label {{manyLayout}}"
-        [ozTooltip]="plainLabels | formatArrayString"
-        tooltipDirection="bottom"
-        [class.many]="many && opened">
-          <div class="value">{{labels.length}}</div>
+      <ng-container *ngIf="!(model.selected | async)[0]">
+        <div class="label">
+          <div class="value">{{model.prompt}}</div>
         </div>
       </ng-container>
     </div>
     <oz-icon
       class="icon"
-      [icon]="opened?'keyboard_arrow_up':'keyboard_arrow_down'"
+      [icon]="opened ? model.iconOpened : model.iconClosed"
       size="small">
     </oz-icon>
     <ng-container *ngTemplateOutlet="selectedItemActions || selectedItemActionsDefault; context: thisContext"></ng-container>
@@ -68,9 +64,8 @@
       <ng-container *ngTemplateOutlet="selectedItemTemplate || selectedItemTemplateDefault; context: thisContext"></ng-container>
     </div>
     <div class="search" ozPreventParentScroll>
-      <div class="prompt" *ngIf="!search" (click)="focusOnInput()" i18n>Type for search</div>
-      <div class="spinner loader-spinner" *ngIf="loading"></div>
-      <input #input class="input" type="text" [(ngModel)]="searchModel" (keydown)="onSearchKeyDown($event)">
+      <div class="prompt" *ngIf="!searchString" (click)="focusOnInput()" i18n>Type for search</div>
+      <input #input class="input" type="text" [(ngModel)]="searchString" (ngModelChange)="model.search($event)" (keydown)="onSearchKeyDown($event)">
     </div>
     <div class="options" (scroll)="onPopupScroll($event)" ozPreventParentScroll>
       <div *ngIf="firstItemTemplate"
@@ -79,23 +74,26 @@
         (mouseover)="setIndex(-1)">
         <ng-container *ngTemplateOutlet="firstItemTemplate; context: thisContext"></ng-container>
       </div>
-      <div *ngFor="let item of filteredOptions; let i = index"
+      <div *ngFor="let item of (model.list | async); let i = index"
         class="option"
-        [class.active]="checkSelection(item)"
+        [class.active]="model.isSelected(item)"
         [class.cursor]="selectedIndex == i"
         (mouseover)="setIndex(i)">
-        <div class="zone-click" (click)="toggleItem(item)"></div>
-        <div [innerHTML]="getLabelForItem(item)"></div>
+        <div class="zone-click" (click)="model.select(i)"></div>
+        <div [innerHTML]="item.label"></div>
       </div>
       <div *ngIf="lastItemTemplate"
-        class="option"
-        [class.cursor]="selectedIndex == filteredOptions.length + 2"
-        (mouseover)="setIndex(filteredOptions.length + 2)">
+        class="option">
         <ng-container *ngTemplateOutlet="lastItemTemplate; context: thisContext"></ng-container>
       </div>
-      <div *ngIf="haveNextpage"
-        class="option loading"
-        (click)="selectItem(null)"><span i18n>Load more</span> ...</div>
+      <div *ngIf="model.loading | async" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+      <div *ngIf="(model.haveNext | async) && !(model.loading | async)"
+        class="option load-more"
+        (click)="onLoadMore()"><span i18n>Load more</span> ...</div>
     </div>
   </ng-template>
 </oz-dropdown>
