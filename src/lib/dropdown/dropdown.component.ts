@@ -164,7 +164,7 @@ export class DropDownComponent implements OnDestroy {
   parent: HTMLElement;
 
   constructor(
-    private el: ElementRef,
+    public el: ElementRef,
     private renderer: Renderer2,
     private cd: ChangeDetectorRef,
   ) {

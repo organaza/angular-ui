@@ -1,5 +1,3 @@
-import jQuery from 'jquery';
-
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -24,17 +22,15 @@ import { ISelectModel } from './select.model';
 const noop = () => {
 };
 
-export const SELECT_VALUE_ACCESSOR = {
-  provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => SelectComponent),
-  multi: true
-};
-
 @Component({
   selector: 'oz-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
-  providers: [SELECT_VALUE_ACCESSOR],
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => SelectComponent),
+    multi: true
+  }],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor {
@@ -43,7 +39,7 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
 
   loading: boolean;
   thisContext = {select: this};
-  selectedIndex = -1;
+  selectedIndex = 0;
   searchString: string;
 
   @Input()
@@ -183,9 +179,9 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
     this.selectedIndex = value;
   }
   onSearchKeyDown(event: KeyboardEvent) {
-    const optionsList = jQuery('.oz-select-dropdown .options');
-    const activeOptionOffset = jQuery('.oz-select-dropdown .option.cursor').offset();
-    const searchHeight = jQuery('.oz-select-dropdown .search').height();
+    const optionsList = this.dropdown.el.nativeElement.getElementsByClassName('options')[0];
+    const activeOption = this.dropdown.el.nativeElement.getElementsByClassName('option cursor')[0];
+    const searchElement = this.dropdown.el.nativeElement.getElementsByClassName('search')[0];
 
     if (event.key === 'Enter') {
       this.model.select(this.selectedIndex);
@@ -209,8 +205,11 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
       this.selectedIndex = Math.min(this.selectedIndex + 1, this.model.list.getValue().length - 1);
       event.preventDefault();
     }
-    if (activeOptionOffset && optionsList) {
-      optionsList.scrollTop(activeOptionOffset.top - optionsList.offset().top - searchHeight + optionsList.scrollTop());
+    if (activeOption && optionsList) {
+      const activeOptionRect = activeOption.getBoundingClientRect();
+      const optionsListRect = optionsList.getBoundingClientRect();
+      const searchHeight = searchElement ? searchElement.offsetHeight : 0;
+      optionsList.scrollTop = activeOptionRect.top - optionsListRect.top - searchHeight + optionsList.scrollTop;
     }
   }
   onEnter() {
