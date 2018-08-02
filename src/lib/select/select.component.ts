@@ -108,7 +108,7 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   @ContentChild('firstItemTemplate')
   firstItemTemplate: TemplateRef<any>;
 
-  @HostListener('keydown', ['event'])
+  @HostListener('keydown', ['$event'])
   onKeyDown(event: any) {
     if (!this.opened) {
       if (event.keyCode === 32 || event.keyCode === 13) {
