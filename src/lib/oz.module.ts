@@ -73,6 +73,7 @@ import { PagerComponent } from './pager/pager.component';
 import { ShortcutService } from './shortcut/shortcut.service';
 import { ParseBooleanPipe } from './pipes/parse-boolean.pipe';
 import { OzSettingsService } from './settings/settings.service';
+import { SelectComponent } from './select/select.component';
 
 @NgModule({
   imports: [
@@ -128,6 +129,7 @@ import { OzSettingsService } from './settings/settings.service';
     DragulaDelayLiftDirective,
     IconComponent,
     PagerComponent,
+    SelectComponent,
   ],
   exports: [
     AlertComponent,
@@ -173,6 +175,7 @@ import { OzSettingsService } from './settings/settings.service';
     DragulaDelayLiftDirective,
     IconComponent,
     PagerComponent,
+    SelectComponent,
   ],
 })
 export class OzModule {

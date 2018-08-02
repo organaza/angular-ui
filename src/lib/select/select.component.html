@@ -1,0 +1,99 @@
+<ng-template #selectedItemActionsDefault>
+
+</ng-template>
+<ng-template #selectedItemTemplateDefault>
+  <div class="value"
+    [class.center]="dropdownHorizontalPosition === 'center'"
+    [class.tags]="tags"
+    [class.disabled]="disabled"
+    [class.active]="opened"
+    ozPreventParentScroll
+    [scrollDisabled]="!opened"
+    (click)="switchPopup(!opened)">
+    <div class="labels {{manyLayout}}"
+      [class.empty]="!(model.selected | async)[0]"
+      [class.active]="opened"
+      [class.disabled]="disabled">
+      <ng-container>
+        <div class="label {{manyLayout}}" *ngFor="let item of (model.selected | async); let i = index"
+        [class.many]="model.many && opened"
+        [class.not-remove]="!item.canRemove">
+          <div class="text" [innerHTML]="item.label"></div>
+          <oz-button
+            *ngIf="(model.many && opened && item) || (opened && item)"
+            class="clear"
+            typeButton="icon"
+            iconClass="close"
+            iconSize="normal"
+            (click)="onRemoveItem($event, i)">
+          </oz-button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!(model.selected | async)[0]">
+        <div class="label">
+          <div class="value">{{model.prompt}}</div>
+        </div>
+      </ng-container>
+    </div>
+    <oz-icon
+      class="icon"
+      [icon]="opened ? model.iconOpened : model.iconClosed"
+      size="small">
+    </oz-icon>
+    <ng-container *ngTemplateOutlet="selectedItemActions || selectedItemActionsDefault; context: thisContext"></ng-container>
+  </div>
+</ng-template>
+
+<div class="value-holder" #valueElement>
+  <ng-container *ngTemplateOutlet="selectedItemTemplate || selectedItemTemplateDefault; context: thisContext"></ng-container>
+</div>
+
+<oz-dropdown
+  #dropdown
+  class="oz-select-dropdown dropdown"
+  [bindElement]="valueElement"
+  [useBindWidth]="true"
+  [displayBackground]="true"
+  [bindInside]="true"
+  [closeByClickElement]="false"
+  [positionHorizontal]="dropdownHorizontalPosition"
+  (displayed)="dropdownDisplayed()"
+  (closed)="switchPopup(false)">
+  <ng-template #dropdownContent>
+    <div class="resizer" [class.active]="true">
+      <ng-container *ngTemplateOutlet="selectedItemTemplate || selectedItemTemplateDefault; context: thisContext"></ng-container>
+    </div>
+    <div class="search" ozPreventParentScroll>
+      <div class="prompt" *ngIf="!searchString" (click)="focusOnInput()" i18n>Type for search</div>
+      <input #input class="input" type="text" [(ngModel)]="searchString" (ngModelChange)="model.search($event)" (keydown)="onSearchKeyDown($event)">
+    </div>
+    <div class="options" (scroll)="onPopupScroll($event)" ozPreventParentScroll>
+      <div *ngIf="firstItemTemplate"
+        class="option"
+        [class.cursor]="selectedIndex == -1"
+        (mouseover)="setIndex(-1)">
+        <ng-container *ngTemplateOutlet="firstItemTemplate; context: thisContext"></ng-container>
+      </div>
+      <div *ngFor="let item of (model.list | async); let i = index"
+        class="option"
+        [class.active]="model.isSelected(item)"
+        [class.cursor]="selectedIndex == i"
+        (mouseover)="setIndex(i)">
+        <div class="zone-click" (click)="model.select(i)"></div>
+        <div [innerHTML]="item.label"></div>
+      </div>
+      <div *ngIf="lastItemTemplate"
+        class="option">
+        <ng-container *ngTemplateOutlet="lastItemTemplate; context: thisContext"></ng-container>
+      </div>
+      <div *ngIf="model.loading | async" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+      <div *ngIf="(model.haveNext | async) && !(model.loading | async)"
+        class="option load-more"
+        (click)="onLoadMore()"><span i18n>Load more</span> ...</div>
+    </div>
+  </ng-template>
+</oz-dropdown>
