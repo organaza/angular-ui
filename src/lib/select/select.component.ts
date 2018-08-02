@@ -44,6 +44,7 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   loading: boolean;
   thisContext = {select: this};
   selectedIndex = -1;
+  searchString: string;
 
   @Input()
   model: ISelectModel;
@@ -107,7 +108,7 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   @ContentChild('firstItemTemplate')
   firstItemTemplate: TemplateRef<any>;
 
-  @HostListener('keydown', ['$event'])
+  @HostListener('keydown', ['event'])
   onKeyDown(event: any) {
     if (!this.opened) {
       if (event.keyCode === 32 || event.keyCode === 13) {
@@ -181,30 +182,32 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   setIndex(value: number) {
     this.selectedIndex = value;
   }
-  onSearchKeyDown($event: any) {
+  onSearchKeyDown(event: KeyboardEvent) {
     const optionsList = jQuery('.oz-select-dropdown .options');
     const activeOptionOffset = jQuery('.oz-select-dropdown .option.cursor').offset();
     const searchHeight = jQuery('.oz-select-dropdown .search').height();
 
-    if ($event.keyCode === 13) {
-      $event.preventDefault();
-      this.onEnter();
+    if (event.key === 'Enter') {
+      this.model.select(this.selectedIndex);
+      event.preventDefault();
       return false;
     }
-    if ($event.keyCode === 27) {
-      $event.preventDefault();
+    if (event.key === 'Escape') {
+      event.preventDefault();
       this.switchPopup(false);
       return false;
     }
-    if ($event.keyCode === 38) {
+    if (event.key === 'ArrowUp') {
       if (this.tags) {
         this.selectedIndex = Math.max(this.selectedIndex - 1, -1);
       } else {
         this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
       }
+      event.preventDefault();
     }
-    if ($event.keyCode === 40) {
+    if (event.key === 'ArrowDown') {
       this.selectedIndex = Math.min(this.selectedIndex + 1, this.model.list.getValue().length - 1);
+      event.preventDefault();
     }
     if (activeOptionOffset && optionsList) {
       optionsList.scrollTop(activeOptionOffset.top - optionsList.offset().top - searchHeight + optionsList.scrollTop());
@@ -212,13 +215,13 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   }
   onEnter() {
   }
-  onPopupScroll($event: any) {
-    $event.stopImmediatePropagation();
+  onPopupScroll(event: any) {
+    event.stopImmediatePropagation();
   }
-  onRemoveItem($event: MouseEvent, index: number) {
+  onRemoveItem(event: MouseEvent, index: number) {
     this.model.unselect(index);
-    $event.stopImmediatePropagation();
-    $event.preventDefault();
+    event.stopImmediatePropagation();
+    event.preventDefault();
   }
   dropdownDisplayed() {
     this.focusOnInput();

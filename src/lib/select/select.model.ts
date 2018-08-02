@@ -9,6 +9,7 @@ export interface ISelectModel {
   haveNext: BehaviorSubject<boolean>;
   currentPage: number;
   many: boolean;
+  allowNull: boolean;
   prompt: string;
   iconClosed: string;
   iconOpened: string;
@@ -42,22 +43,26 @@ export class SelectModelBase implements ISelectModel {
   loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
   haveNext: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  currentPage = 0;
+  public currentPage = 0;
 
-  many: boolean;
+  public many: boolean;
+  public prompt = '---';
+  public iconClosed = 'chevron-down';
+  public iconOpened = 'chevron-up';
+  public staticData: any;
+  public allowNull: boolean;
+  public dataHandler: () => Observable<any[]>;
+
+  // Need implementation:
   // checkSelection: boolean;
   // removeSelected = true;
-  filterFunction: any;
-  limit: number;
-  createNewOption = false;
-  hideActiveValue = false;
-  hideMoreThan = 1000;
-  reloadOnOpen: boolean;
-  useValidationValue = true;
-  prompt = '---';
-  iconClosed = 'chevron-down';
-  iconOpened = 'chevron-up';
-  options: any[];
+  // filterFunction: any;
+  // limit: number;
+  // createNewOption = false;
+  // hideActiveValue = false;
+  // hideMoreThan = 1000;
+  // reloadOnOpen: boolean;
+  // useValidationValue = true;
 
   private searchString = '';
 
@@ -67,6 +72,7 @@ export class SelectModelBase implements ISelectModel {
 
   search(query: string) {
     this.searchString = query;
+    this.list.next([]);
     this.loadPage(0).subscribe();
   }
   select(index: number) {
@@ -84,16 +90,16 @@ export class SelectModelBase implements ISelectModel {
   unselect(index: number) {
     this.selected.next([...this.selected.getValue().filter((item, i) => i !== index)]);
   }
-  setData(value: any) {
-    if (!value || value.lenght === 0) {
+  setData(data: any) {
+    if (!data || data.lenght === 0) {
       return;
     }
-    this.loadData(0, value).subscribe(data => {
+    this.loadData(0, data).subscribe(items => {
       if (this.many) {
-        data = data.filter(d => value.findIndex(i => this.compareDataWithItem(d, i)) > -1);
-        this.selected.next([...data]);
+        items = items.filter(i => data.findIndex(d => this.compareDataWithItem(d, i)) > -1);
+        this.selected.next([...items]);
       } else {
-        this.selected.next([value]);
+        this.selected.next([items.find(i => this.compareDataWithItem(data, i))]);
       }
     });
   }
@@ -109,7 +115,7 @@ export class SelectModelBase implements ISelectModel {
   }
   loadPage(page: number) {
     this.loading.next(true);
-    return this.loadData(page).pipe(delay(500), tap(data => {
+    return this.loadData(page).pipe(tap(data => {
       this.list.next([...this.list.getValue(), ...data]);
       this.loading.next(false);
     }));
@@ -131,8 +137,18 @@ export class SelectModelBase implements ISelectModel {
     return this.compareItems(this.convertDataToItem(data), item);
   }
 
-  protected loadData(page: number, value?: any) {
+  protected loadData(page: number, value?: any): Observable<ISelectItem[]> {
+    // If data is static just display list
+    if (this.staticData) {
+      return of(this.staticData.filter(d => {
+        return d.label.toLowerCase().indexOf(this.searchString.toLocaleLowerCase()) > -1;
+      })).pipe(tap(() => this.haveNext.next(false)));
+    }
     // On load data you have to return observable with data and set haveNext if needed
+    if (this.dataHandler) {
+      return this.dataHandler();
+    }
+    // Test data
     return of([
       {label: '1' + this.searchString, id: 'id1'}, {label: '2' + this.searchString, id: 'id2'},
       {label: '3' + this.searchString, id: 'id3'}, {label: '4' + this.searchString, id: 'id4'},

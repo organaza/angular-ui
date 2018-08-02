@@ -20,7 +20,7 @@
         [class.not-remove]="!item.canRemove">
           <div class="text" [innerHTML]="item.label"></div>
           <oz-button
-            *ngIf="(model.many && opened && item) || (opened && item)"
+            *ngIf="(model.many && opened && item) || (opened && item && model.allowNull)"
             class="clear"
             typeButton="icon"
             iconClass="close"
