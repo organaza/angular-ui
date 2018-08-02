@@ -91,7 +91,8 @@ export class SelectModelBase implements ISelectModel {
     this.selected.next([...this.selected.getValue().filter((item, i) => i !== index)]);
   }
   setData(data: any) {
-    if (!data || data.lenght === 0) {
+    if (data === undefined || data === null || (this.many && data.length === 0)) {
+      this.selected.next([]);
       return;
     }
     this.loadData(0, data).subscribe(items => {

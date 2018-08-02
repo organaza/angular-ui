@@ -17,8 +17,8 @@
       <ng-container>
         <div class="label {{manyLayout}}" *ngFor="let item of (model.selected | async); let i = index"
         [class.many]="model.many && opened"
-        [class.not-remove]="!item.canRemove">
-          <div class="text" [innerHTML]="item.label"></div>
+        [class.not-remove]="!item?.canRemove">
+          <div class="text" [innerHTML]="item?.label"></div>
           <oz-button
             *ngIf="(model.many && opened && item) || (opened && item && model.allowNull)"
             class="clear"
