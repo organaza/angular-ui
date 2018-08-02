@@ -70,7 +70,7 @@ export class ButtonComponent {
 
   @HostListener('keydown', ['$event'])
   onKeyDownListener(event: any) {
-    if (event.code === 'Enter') {
+    if (event.key === 'Enter') {
       event.preventDefault();
       if (!this.disabled) {
         this.onClick();

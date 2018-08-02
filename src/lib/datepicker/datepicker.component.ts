@@ -97,9 +97,9 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
   @HostListener('keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
-    if (event.code === 'Enter') {
+    if (event.key === 'Enter') {
       this.openDateSelector();
-    } else if (event.code === 'Escape') {
+    } else if (event.key === 'Escape') {
       this.opened = false;
       this.changed.next(this.value);
       this.onChangeCallback(this.value);

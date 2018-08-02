@@ -50,7 +50,7 @@ export class CheckboxComponent implements OnInit, ControlValueAccessor {
 
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    if (event.code === 'Enter' || event.code === 'Space') {
+    if (event.key === 'Enter' || event.key === ' ') {
       this.onClickCheckbox(event);
     }
   }
