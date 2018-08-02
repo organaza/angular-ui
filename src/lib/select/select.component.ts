@@ -18,10 +18,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { JSONUtils } from '../json/json';
 import { DropDownComponent } from '../dropdown/dropdown.component';
 import { ISelectModel } from './select.model';
-import { takeUntil } from '../../../../../node_modules/rxjs/operators';
 
 const noop = () => {
 };
@@ -47,13 +45,8 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   thisContext = {select: this};
   selectedIndex = -1;
 
-  searchString = '';
-
   @Input()
   model: ISelectModel;
-
-  @Input()
-  prompt = '---';
 
   @ViewChild('dropdown')
   dropdown: DropDownComponent;
@@ -211,7 +204,7 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
       }
     }
     if ($event.keyCode === 40) {
-      // this.selectedIndex = Math.min(this.selectedIndex + 1, this.filteredOptions.length - 1);
+      this.selectedIndex = Math.min(this.selectedIndex + 1, this.model.list.getValue().length - 1);
     }
     if (activeOptionOffset && optionsList) {
       optionsList.scrollTop(activeOptionOffset.top - optionsList.offset().top - searchHeight + optionsList.scrollTop());
@@ -221,8 +214,6 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   }
   onPopupScroll($event: any) {
     $event.stopImmediatePropagation();
-  }
-  updateValueOtherNotChange(updateLabel: boolean) {
   }
   onRemoveItem($event: MouseEvent, index: number) {
     this.model.unselect(index);
