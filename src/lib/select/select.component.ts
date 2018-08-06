@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { DropDownComponent } from '../dropdown/dropdown.component';
-import { ISelectModel, ISelectItem } from './select.model';
+import { ISelectModel } from './select.model';
 
 const noop = () => {
 };
