@@ -8,7 +8,7 @@ export class DurationToStringPipe implements PipeTransform {
     if (value === null) {
       return '-';
     }
-    value = moment.duration(value, 's');
+    value = moment.duration(Number.parseInt(value), 's');
 
     if (!format) {
       const str: string[] = [];
