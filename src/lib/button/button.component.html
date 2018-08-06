@@ -15,7 +15,7 @@
     [icon]="iconClass"
   ></oz-icon>
   <span [class.in-progress]="inProgress" *ngIf="iconClass && text">&nbsp;</span>
-  <span [class.in-progress]="inProgress">{{text}}</span>
+  <span [class.in-progress]="inProgress"><ng-content></ng-content>{{text}}</span>
   <div *ngIf="inProgress" class="spinner">
     <div class="bounce1"></div>
     <div class="bounce2"></div>
