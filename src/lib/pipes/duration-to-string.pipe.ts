@@ -1,5 +1,5 @@
-import { Pipe, PipeTransform } from '../../../../../../nativescript/Organaza/node_modules/@angular/core';
-import moment from '../../../../../../nativescript/Organaza/node_modules/moment';
+import { Pipe, PipeTransform } from '@angular/core';
+import moment from 'moment';
 
 @Pipe({ name: 'durationToString' })
 export class DurationToStringPipe implements PipeTransform {

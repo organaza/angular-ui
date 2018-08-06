@@ -1,6 +1,5 @@
-import { Subject, BehaviorSubject, of, Observable } from 'rxjs';
-import { JSONUtils } from '../json/json';
-import { delay, tap } from '../../../../../node_modules/rxjs/operators';
+import { BehaviorSubject, of, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 export interface ISelectModel {
   list: BehaviorSubject<ISelectItem[]>;
