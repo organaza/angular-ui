@@ -1,5 +1,5 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import moment from 'moment';
+import { Pipe, PipeTransform } from '../../../../../../nativescript/Organaza/node_modules/@angular/core';
+import moment from '../../../../../../nativescript/Organaza/node_modules/moment';
 
 @Pipe({ name: 'durationToString' })
 export class DurationToStringPipe implements PipeTransform {
@@ -8,7 +8,14 @@ export class DurationToStringPipe implements PipeTransform {
     if (value === null) {
       return '-';
     }
-    value = moment.duration(Number.parseInt(value), 's');
+    const numberValue = Number.parseInt(value);
+    if (isNaN(numberValue)) {
+      value = moment.duration(value);
+    } else {
+      value = moment.duration(numberValue, 's');
+    }
+
+
 
     if (!format) {
       const str: string[] = [];
