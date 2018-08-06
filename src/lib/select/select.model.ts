@@ -108,7 +108,7 @@ export class SelectModelBase implements ISelectModel {
     if (this.many) {
       return this.selected.getValue().map(item => item.id);
     } else {
-      return this.selected.getValue()[0].id;
+      return this.selected.getValue()[0] ? this.selected.getValue()[0].id : undefined;
     }
   }
   isSelected(item: ISelectItem) {

@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { DropDownComponent } from '../dropdown/dropdown.component';
-import { ISelectModel } from './select.model';
+import { ISelectModel, ISelectItem } from './select.model';
 
 const noop = () => {
 };
@@ -79,6 +79,9 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
 
   @Input()
   disabled: boolean;
+
+  @Input()
+  closeOnSelect: boolean;
 
   @Input()
   live = false;
@@ -222,6 +225,12 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
     this.model.unselect(index);
     event.stopImmediatePropagation();
     event.preventDefault();
+  }
+  onSelect(index: number) {
+    this.model.select(index);
+    if (this.closeOnSelect) {
+      this.switchPopup(false);
+    }
   }
   dropdownDisplayed() {
     this.focusOnInput();

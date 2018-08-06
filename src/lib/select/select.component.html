@@ -79,7 +79,7 @@
         [class.active]="model.isSelected(item)"
         [class.cursor]="selectedIndex == i"
         (mouseover)="setIndex(i)">
-        <div class="zone-click" (click)="model.select(i)"></div>
+        <div class="zone-click" (click)="onSelect(i)"></div>
         <div [innerHTML]="item.label"></div>
       </div>
       <div *ngIf="lastItemTemplate"
