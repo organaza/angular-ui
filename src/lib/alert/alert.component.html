@@ -11,9 +11,8 @@
       <!-- <a class="{{button.class}}" (click)="onCliclNotificationButton(button)">{{button.label}}</a> -->
       <oz-button
         [timeout]="0"
-        [text]="button.label"
         [isAttention]="button.isAttention"
-        (clicked)="onClickAlertButton(button)">
+        (clicked)="onClickAlertButton(button)">{{button.label}}
       </oz-button>
     </div>
   </div>

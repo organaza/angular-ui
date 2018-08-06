@@ -47,33 +47,33 @@
         <div class="helpers-buttons" *ngIf="range && helpers">
           <div class="helpers">
             <div class="helper-column">
-              <oz-button typeButton="link" i18n-text text="Last 3 hours" (clicked)="setRelative('-3h', 'now')" *ngIf="showTime"></oz-button>
-              <oz-button typeButton="link" i18n-text text="Last 6 hours" (clicked)="setRelative('-6h', 'now')" *ngIf="showTime"></oz-button>
-              <oz-button typeButton="link" i18n-text text="Last 12 hours" (clicked)="setRelative('-12h', 'now')" *ngIf="showTime"></oz-button>
-              <oz-button typeButton="link" i18n-text text="Last 24 hours" (clicked)="setRelative('-24h', 'now')" *ngIf="showTime"></oz-button>
-              <oz-button typeButton="link" i18n-text text="Last 2 days" (clicked)="setRelative('-2d', 'now')"></oz-button>
-              <oz-button typeButton="link" i18n-text text="Last 7 days" (clicked)="setRelative('-7d', 'now')"></oz-button>
-              <oz-button typeButton="link" i18n-text text="Last 30 days" (clicked)="setRelative('-30d', 'now')"></oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-3h', 'now')" *ngIf="showTime">Last 3 hours</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-6h', 'now')" *ngIf="showTime">Last 6 hours</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-12h', 'now')" *ngIf="showTime">Last 12 hours</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-24h', 'now')" *ngIf="showTime">Last 24 hours</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-2d', 'now')">Last 2 days</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-7d', 'now')">Last 7 days</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-30d', 'now')">Last 30 days</oz-button>
             </div>
             <div class="helper-column">
-              <oz-button typeButton="link" i18n-text text="Today" (clicked)="setRelative('now/d', 'now/d')"></oz-button>
-              <oz-button typeButton="link" i18n-text text="Yesterday" (clicked)="setRelative('-1d/d','-1d/d')"></oz-button>
-              <oz-button typeButton="link" i18n-text text="Day before yesterday" (clicked)="setRelative('-2d/d', '-2d/d')"></oz-button>
-              <oz-button typeButton="link" i18n-text text="This day last week" (clicked)="setRelative('-7d/d', '-7d/d')"></oz-button>
-              <oz-button typeButton="link" i18n-text text="Previous week" (clicked)="setRelative('-1w/W', '-1w/W')"></oz-button>
-              <oz-button typeButton="link" i18n-text text="This week" (clicked)="setRelative('now/W', 'now/W')"></oz-button>
-              <oz-button typeButton="link" i18n-text text="This month" (clicked)="setRelative('now/M', 'now/M')"></oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('now/d', 'now/d')">Today</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-1d/d','-1d/d')">Yesterday</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-2d/d', '-2d/d')">Day before yesterday</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-7d/d', '-7d/d')">This day last week</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-1w/W', '-1w/W')">Previous week</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('now/W', 'now/W')">This week</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('now/M', 'now/M')">This month</oz-button>
             </div>
           </div>
           <div class="buttons">
-            <oz-button *ngIf="allowNull" [isAttention]="true" class="oz-datepicker-clear-button" i18n-text text="Clear date" (clicked)="onClearDate()"></oz-button>
-            <oz-button *ngIf="confirmRequired" class="oz-datepicker-clear-button" i18n-text text="Apply" (clicked)="onApply()"></oz-button>
+            <oz-button *ngIf="allowNull" [isAttention]="true" class="oz-datepicker-clear-button" i18n (clicked)="onClearDate()">Clear date</oz-button>
+            <oz-button *ngIf="confirmRequired" class="oz-datepicker-clear-button" i18n (clicked)="onApply()">Apply</oz-button>
           </div>
         </div>
       </div>
       <div class="buttons" *ngIf="!range || !helpers">
-        <oz-button *ngIf="allowNull" [isAttention]="true" class="oz-datepicker-clear-button" i18n-text text="Clear date" (clicked)="onClearDate()"></oz-button>
-        <oz-button *ngIf="confirmRequired" class="oz-datepicker-clear-button" i18n-text text="Apply" (clicked)="onApply()"></oz-button>
+        <oz-button *ngIf="allowNull" [isAttention]="true" class="oz-datepicker-clear-button" i18n (clicked)="onClearDate()">Clear date</oz-button>
+        <oz-button *ngIf="confirmRequired" class="oz-datepicker-clear-button" i18n (clicked)="onApply()">Apply</oz-button>
       </div>
     </div>
   </ng-template>
