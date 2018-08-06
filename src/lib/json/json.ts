@@ -26,7 +26,9 @@ export class JSONUtils {
     return result;
   }
   static setLocalStorage(key: string, def: any): any {
-    window.localStorage.setItem(key, JSON.stringify(def));
+    if (localStorage) {
+      localStorage.setItem(key, JSON.stringify(def));
+    }
   }
   static jsonClone(object: any): any {
     if (object === undefined) {
