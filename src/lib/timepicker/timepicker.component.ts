@@ -60,6 +60,9 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   disabled = false;
 
   @Input()
+  iconClass = 'icon-timelapse';
+
+  @Input()
   nopadding: boolean;
 
   @Input()
@@ -168,11 +171,13 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     if (this.valueMoment.minutes()) {
       this.valueInputFormat += ((this.valueInputFormat.length > 0) ? ' ' : '') + this.valueMoment.minutes() + 'm';
     }
+    if (this.valueMoment.seconds()) {
+      this.valueInputFormat += ((this.valueInputFormat.length > 0) ? ' ' : '') + this.valueMoment.seconds() + 's';
+    }
   }
   setFromHelper(value: any) {
     this.valueMoment = moment.duration(value.value, value.unit);
     this.parseValueMoment();
-    this.formatDigits();
     this.disableSelectMode();
     this.updateValue();
   }
@@ -197,7 +202,6 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
       setTimeout(() => {
         this.input.switchPopup(true);
       });
-      this.formatDigits();
     }
     this.cd.markForCheck();
   }
@@ -226,20 +230,14 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
       if (this.valueMoment.minutes() > 0) {
         str.push(moment.localeData().relativeTime(this.valueMoment.minutes(), true, 'mm', false));
       }
+      if (this.valueMoment.seconds() > 0) {
+        str.push(moment.localeData().relativeTime(this.valueMoment.seconds(), true, 'ss', false));
+      }
       if (str.length === 0) {
         str.push('0');
       }
       return str.join(' ');
     }
-  }
-  formatDigits() {
-    const min = this.valueMoment.asMinutes();
-    const hours = Math.floor(min / 60);
-    const minutes = min - 60 * hours;
-    this.d1 = Math.floor(hours / 10);
-    this.d2 = hours - this.d1 * 10;
-    this.d3 = Math.floor(minutes / 10);
-    this.d4 = minutes - this.d3 * 10;
   }
   add(value: number, unit: DurationInputArg2, flagParseValueMoment = false) {
     this.valueMoment.add(value, unit);
@@ -249,13 +247,12 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     if (flagParseValueMoment) {
       this.parseValueMoment();
     }
-    this.formatDigits();
   }
   onKeyDown($event: any) {
     if (($event.key < '0' || $event.key > '9')
-      && $event.keyCode !== 87 && $event.keyCode !== 68 && $event.keyCode !== 72 && $event.keyCode !== 77
-      && $event.keyCode !== 39 && $event.keyCode !== 37 && $event.keyCode !== 8 && $event.keyCode !== 46
-      && $event.keyCode !== 32 && $event.keyCode !== 9) {
+      && $event.code !== 'KeyW' && $event.code !== 'KeyD' && $event.code !== 'KeyH' && $event.code !== 'KeyM' && $event.code !== 'KeyS'
+      && $event.code !== 'ArrowRight' && $event.code !== 'ArrowLeft' && $event.code !== 'Backspace' && $event.code !== 'Delete'
+      && $event.code !== 'Space' && $event.code !== 'Tab') {
       $event.preventDefault();
       return false;
     }
@@ -279,6 +276,9 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
         str = '';
       } else if (valueInputFormat[0].toLowerCase() === 'm') { // minutes
         this.add(parseInt(str, 10), 'minutes');
+        str = '';
+      } else if (valueInputFormat[0].toLowerCase() === 's') { // minutes
+        this.add(parseInt(str, 10), 'seconds');
         str = '';
       } else {
         str += valueInputFormat[0];

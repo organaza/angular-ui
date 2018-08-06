@@ -9,7 +9,7 @@
     [class.value-active]="editOpened">
     {{getLabel()}}
   </div>
-  <i class="popup-icon icon-timelapse button"
+  <i class="popup-icon {{iconClass}} button"
     *ngIf="!disabled && !editOpened"
     (mousedown)="enableSelectMode($event)"></i>
   <div class="input-container"
