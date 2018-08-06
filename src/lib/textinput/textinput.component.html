@@ -45,5 +45,5 @@
     [class.oz-textinput-prompt-active]="opened">
     {{prompt}}
   </div>
-  <i tabindex="-1" class="icon-close oz-textinput-clear" (mousedown)="clear($event)" *ngIf="showClear && value"></i>
+  <i tabindex="-1" class="icon-close oz-textinput-clear" (mousedown)="clear($event)" *ngIf="showClear && (value !== undefined && value !== '')"></i>
 </div>
