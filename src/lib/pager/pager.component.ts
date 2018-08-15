@@ -82,7 +82,11 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
   }
 
   writeValue(value: any) {
-    this.currentPage = Number(value) + 1;
+    if (value) {
+      this.currentPage = Number(value) + 1;
+    } else {
+      this.currentPage = 1;
+    }
     this.cd.markForCheck();
   }
 
