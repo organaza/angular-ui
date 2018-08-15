@@ -166,7 +166,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   constructor(
     private el: ElementRef,
     private cd: ChangeDetectorRef,
-    settings: OzSettingsService,
+    private settings: OzSettingsService,
   ) {
     this.outFormat = settings.dateFormat;
     this.opened = false;
@@ -198,7 +198,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit() {
     this.emptyLabel = this.emptyLabel || 'Select date';
-    this.displayFormat = this.showTime ? 'L LT' : 'L';
+    this.displayFormat = this.showTime ? this.settings.dateTimeShowFormat : this.settings.dateShowFormat;
   }
   parseValue(value, type: 'from' | 'to' | '') {
     if (!value) {

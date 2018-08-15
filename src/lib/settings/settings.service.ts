@@ -6,6 +6,9 @@ import { Injectable } from '@angular/core';
 export class OzSettingsService {
   dateFormat = 'YYYY-MM-DDTHH:mm:ssZ';
 
+  dateTimeShowFormat = 'L LT';
+  dateShowFormat = 'L';
+
   constructor(
 
   ) {
