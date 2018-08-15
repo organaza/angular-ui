@@ -1,4 +1,4 @@
-import moment, { DurationInputArg2 } from 'moment';
+import moment, { unitOfTime } from 'moment';
 
 import {
   Component,
@@ -68,10 +68,15 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   @Input()
   hoursInDay = 8;
 
+  @Input()
+  defaultInputUnit: unitOfTime.DurationConstructor = 'hours';
+
+  @Input()
+  showClear = false;
+
   valueMoment: moment.Duration;
   valueMomentOriginal: moment.Duration;
-
-  @HostBinding('class.active')
+  @HostBinding('class.focus')
   editOpened: boolean;
   popupOpened: boolean;
 
@@ -150,15 +155,12 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     }
   }
   parseValue() {
-    // let valueMoment: moment.Duration;
     if (!this.value) {
       this.valueMoment = moment.duration(0);
       this.valueMomentOriginal = moment.duration(0);
-      // valueMoment = moment.duration(0);
     } else {
       this.valueMoment = moment.duration(this.value);
       this.valueMomentOriginal = moment.duration(this.value);
-      // valueMoment = moment.duration(this.value);
     }
     this.parseValueMoment();
   }
@@ -239,7 +241,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
       return str.join(' ');
     }
   }
-  add(value: number, unit: DurationInputArg2, flagParseValueMoment = false) {
+  add(value: number, unit: unitOfTime.DurationConstructor, flagParseValueMoment = false) {
     this.valueMoment.add(value, unit);
     if (this.valueMoment.asMilliseconds() < 0) {
       this.valueMoment = moment.duration(0);
@@ -286,7 +288,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
       valueInputFormat = valueInputFormat.substr(1);
     }
     if (str.length > 0) {
-      this.add(parseInt(str, 10), 'hours');
+      this.add(parseInt(str, 10), this.defaultInputUnit);
       str = '';
     }
     if (this.max) {
@@ -314,5 +316,11 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   }
   parseTextinput(event: any) {
     this.openEdit(false);
+  }
+  onClear(event: MouseEvent) {
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    this.writeValue('0');
+    this.updateValue();
   }
 }

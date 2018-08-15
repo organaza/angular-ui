@@ -327,7 +327,7 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
       return this.value;
     }
   }
-  clear(event: MouseEvent) {
+  onClear(event: MouseEvent) {
     event.stopImmediatePropagation();
     event.preventDefault();
     this.value = '';

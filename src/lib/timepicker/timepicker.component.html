@@ -5,13 +5,17 @@
     (click)="openEdit(true)"
     [style.opacity]="opacity"
     [class.value-empty]="getLabel() == emptyLabel"
-    [class.value-disabled]="disabled"
-    [class.value-active]="editOpened">
+    [class.value-disabled]="disabled">
     {{getLabel()}}
   </div>
-  <i class="popup-icon {{iconClass}} button"
+  <oz-icon
+    tabindex="-1"
     *ngIf="!disabled && !editOpened"
-    (mousedown)="enableSelectMode($event)"></i>
+    class="popup-icon button"
+    icon="{{iconClass}}"
+    size="normal"
+    (mousedown)="enableSelectMode($event)">
+  </oz-icon>
   <div class="input-container"
     [class.container-active]="editOpened"
     *ngIf="editOpened">
@@ -24,6 +28,14 @@
       (ngModelChange)="parseTextinput($event)">
     </oz-textinput>
   </div>
+  <oz-icon
+    *ngIf="showClear && (valueMoment.asSeconds() > 0)"
+    tabindex="-1"
+    class="icon-close clear"
+    icon="clear"
+    size="normal"
+    (mousedown)="onClear($event)">
+  </oz-icon>
 </div>
 <oz-dropdown #dropdown
   class="oz-select-dropdown dropdown"

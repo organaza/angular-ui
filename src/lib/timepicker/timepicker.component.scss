@@ -6,12 +6,12 @@
   @include component-invalid;
 }
 
-:host.ng-invalid {
-  border-bottom: $oz-control-default-border solid $error-color;
+:host.focus {
+  border-bottom: $oz-control-default-border solid $oz-control-focus;
 }
 
-.component-container-active {
-  border-bottom: $oz-control-default-border solid $oz-control-border;
+:host.ng-invalid {
+  border-bottom: $oz-control-default-border solid $error-color;
 }
 
 :host:hover {
@@ -36,6 +36,7 @@ oz-textinput {
   cursor: pointer;
   padding: $oz-control-default-padding;
   color: $oz-control-text-color;
+  flex: 1 1 100%;
 }
 
 .value-disabled {
@@ -71,10 +72,10 @@ oz-textinput {
   background-color: $white;
 }
 
-.popup-icon {
-  opacity: 0;
+oz-icon {
+  // opacity: 0;
   padding: $oz-control-default-padding;
-  z-index: 2;
+  cursor: pointer;
 }
 
 .popup-helpers {
@@ -97,4 +98,7 @@ oz-textinput {
   background-color: $accent-primary-color;
   color: $white;
   padding: 10px;
+}
+.clear {
+  cursor: pointer;
 }

@@ -8,7 +8,7 @@
 }
 :host.disabled,
 :host.borderless {
-  border-bottom: $oz-control-default-border solid transparent;
+  border: 0;
 }
 
 .uppercase {
