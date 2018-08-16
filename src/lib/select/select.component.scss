@@ -99,7 +99,7 @@
 .label {
   display: flex;
   align-items: center;
-  padding: $oz-control-default-padding;
+  padding: 0 nth($oz-control-default-padding, 2);
 
   &.horizontal {
     flex: 0 0 auto;
