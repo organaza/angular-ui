@@ -39,4 +39,15 @@ export class JSONUtils {
   static jsonCompare(objectA: any, objectB: any): boolean {
     return JSON.stringify(objectA) === JSON.stringify(objectB);
   }
+
+  static jsonDiff(objectA: any, objectB: any): {[s: string]: [any, any]} {
+    const result = {};
+    const keys = Array.from(new Set([...Object.keys(objectA), ...Object.keys(objectB)]));
+    for (const key of keys) {
+      if (objectA[key] !== objectB[key]) {
+        result[key] = [objectA[key], objectB[key]];
+      }
+    }
+    return result;
+  }
 }
