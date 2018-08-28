@@ -8,7 +8,7 @@
 }
 :host.disabled,
 :host.borderless {
-  border: 0;
+  border: 0 !important;
 }
 
 .uppercase {
