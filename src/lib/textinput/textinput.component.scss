@@ -70,9 +70,12 @@
     position: absolute;
     left: 0;
     top: 0;
+    bottom: 0;
     width: 100%;
     color: inherit;
     opacity: 0.5;
+    display: flex;
+    align-items: center;
   }
 
   &-prompt-nopadding {
