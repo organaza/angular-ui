@@ -72,7 +72,7 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
   min = 0;
 
   @Input()
-  max = 100;
+  max = Number.MAX_VALUE;
 
   @Input()
   maxlength: any;
