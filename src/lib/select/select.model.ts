@@ -10,8 +10,6 @@ export interface ISelectModel {
   many: boolean;
   allowNull: boolean;
   prompt: string;
-  iconClosed: string;
-  iconOpened: string;
 
   // Search for item
   search(query: string): void;
@@ -46,8 +44,6 @@ export class SelectModelBase implements ISelectModel {
 
   public many: boolean;
   public prompt = '---';
-  public iconClosed = 'chevron-down';
-  public iconOpened = 'chevron-up';
   public staticData: any;
   public allowNull: boolean;
   public dataHandler: () => Observable<any[]>;

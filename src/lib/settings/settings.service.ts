@@ -9,6 +9,10 @@ export class OzSettingsService {
   dateTimeShowFormat = 'L LT';
   dateShowFormat = 'L';
 
+  timepickerHelperIcon = 'timelapse';
+  selectIconUp = 'keyboard_arrow_up';
+  selectIconDown = 'keyboard_arrow_down';
+
   constructor(
 
   ) {

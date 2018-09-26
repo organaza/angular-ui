@@ -37,7 +37,7 @@
     </div>
     <oz-icon
       class="icon"
-      [icon]="opened ? model.iconOpened : model.iconClosed"
+      [icon]="opened ? iconOpened : iconClosed"
       size="small">
     </oz-icon>
     <ng-container *ngTemplateOutlet="selectedItemActions || selectedItemActionsDefault; context: thisContext"></ng-container>

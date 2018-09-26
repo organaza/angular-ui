@@ -17,6 +17,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { TextinputComponent } from '../textinput/textinput.component';
 import { ShortcutService, ShortcutObservable } from '../shortcut/shortcut.service';
 import { DropDownComponent } from '../dropdown/dropdown.component';
+import { OzSettingsService } from '../settings/settings.service';
 
 const noop = () => {
 };
@@ -60,7 +61,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   disabled = false;
 
   @Input()
-  iconClass = 'icon-timelapse';
+  icon: string;
 
   @Input()
   nopadding: boolean;
@@ -104,6 +105,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
 
   constructor(
     private shortcutService: ShortcutService,
+    private settingService: OzSettingsService,
     private cd: ChangeDetectorRef,
   ) {
     this.editOpened = false;
@@ -125,6 +127,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
       { value: 32, unit: 'h', label: moment.localeData().relativeTime(32, true, 'hh', false) },
       { value: 40, unit: 'h', label: moment.localeData().relativeTime(40, true, 'hh', false) },
     ];
+    this.icon = this.settingService.timepickerHelperIcon;
   }
   writeValue(value: any) {
     this.value = value;

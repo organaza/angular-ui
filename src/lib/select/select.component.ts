@@ -18,6 +18,7 @@ import {
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { DropDownComponent } from '../dropdown/dropdown.component';
 import { ISelectModel } from './select.model';
+import { OzSettingsService } from '../settings/settings.service';
 
 const noop = () => {
 };
@@ -44,6 +45,12 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
 
   @Input()
   model: ISelectModel;
+
+  @Input()
+  iconClosed: string;
+
+  @Input()
+  iconOpened: string;
 
   @ViewChild('dropdown')
   dropdown: DropDownComponent;
@@ -123,9 +130,12 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
 
 
   constructor(private el: ElementRef,
+    private settingService: OzSettingsService,
     private cd: ChangeDetectorRef,
   ) {
     this.thisContext = {select: this};
+    this.iconClosed = this.settingService.selectIconDown;
+    this.iconOpened = this.settingService.selectIconUp;
   }
 
   writeValue(value: any) {
