@@ -342,7 +342,10 @@ export class DropDownComponent implements OnDestroy {
     if (!this.bindElement) {
       return;
     }
-    this.parent = this.el.nativeElement.parentElement;
+    const parent = this.el.nativeElement.parentElement;
+    if (parent.tagName !== 'BODY') {
+      this.parent = this.el.nativeElement.parentElement;
+    }
 
     this.setState('void');
     this.display = 'flex';
