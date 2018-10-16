@@ -156,8 +156,8 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
     if (event.key === 'Enter' || event.key === 'Tab') {
       this.enter.next();
       this.switchPopup(false, false, this.keepFocus);
-      this.container.nativeElement.blur();
       if (event.key === 'Enter') {
+        this.container.nativeElement.blur();
         event.preventDefault();
         return false;
       }
