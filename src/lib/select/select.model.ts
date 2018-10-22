@@ -122,6 +122,12 @@ export class SelectModelBase implements ISelectModel {
   }
 
   protected compareItems(itema: ISelectItem, itemb: ISelectItem) {
+    if (!itema && itemb) {
+      return false;
+    }
+    if (itema && !itemb) {
+      return false;
+    }
     return itema.id === itemb.id;
   }
 

@@ -200,6 +200,9 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
     if (event.key === 'Enter') {
       this.model.select(this.selectedIndex);
       event.preventDefault();
+      if (this.closeOnSelect) {
+        this.switchPopup(false);
+      }
       return false;
     }
     if (event.key === 'Escape') {
