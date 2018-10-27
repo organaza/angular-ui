@@ -3,8 +3,7 @@ import moment from 'moment';
 
 @Pipe({ name: 'durationToString' })
 export class DurationToStringPipe implements PipeTransform {
-
-  transform(value: any, format: any) {
+  static t(value: any, format: any) {
     if (value === null) {
       return '-';
     }
@@ -69,6 +68,10 @@ export class DurationToStringPipe implements PipeTransform {
         return value.asMinutes();
       }
     }
+  }
+
+  transform(value: any, format: any) {
+    return DurationToStringPipe.t(value, format);
   }
 
 }

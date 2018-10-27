@@ -4,7 +4,7 @@ import moment from 'moment';
 @Pipe({ name: 'timestampToDate' })
 export class TimeStampToDatePipe implements PipeTransform {
 
-  transform(value: any, format: string, local: boolean = true, unix: boolean = false) {
+  static t(value: any, format: string, local: boolean = true, unix: boolean = false) {
     if (value === null) {
       return null;
     }
@@ -36,4 +36,7 @@ export class TimeStampToDatePipe implements PipeTransform {
     }
   }
 
+  transform(value: any, format: string, local: boolean = true, unix: boolean = false) {
+    TimeStampToDatePipe.t(value, format, local, unix);
+  }
 }
