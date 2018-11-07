@@ -37,6 +37,6 @@ export class TimeStampToDatePipe implements PipeTransform {
   }
 
   transform(value: any, format: string, local: boolean = true, unix: boolean = false) {
-    TimeStampToDatePipe.t(value, format, local, unix);
+    return TimeStampToDatePipe.t(value, format, local, unix);
   }
 }
