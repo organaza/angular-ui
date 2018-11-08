@@ -10,7 +10,7 @@
 .container {
   z-index: $oz-control-popup-z-index+1;
   background-color: $white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border-radius: $oz-control-border-radius;
   border: 1px solid $oz-control-border-color;
   display: flex;
