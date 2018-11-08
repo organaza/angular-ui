@@ -89,6 +89,7 @@ export class ModalService {
     if (!lastModal) {
       return;
     }
+    lastModal.modal.state = 'close';
     setTimeout(() => {
       if (lastModal.contentRef) {
         lastModal.contentRef.destroy();
