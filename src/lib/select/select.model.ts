@@ -31,7 +31,8 @@ export interface ISelectModel {
 export interface ISelectItem {
   id: any;
   label: string;
-  canRemove?: boolean;
+  cantRemove?: boolean;
+  [x: string]: any;
 }
 
 export class SelectModelBase implements ISelectModel {
@@ -46,7 +47,9 @@ export class SelectModelBase implements ISelectModel {
   public prompt = '---';
   public staticData: any;
   public allowNull: boolean;
-  public dataHandler: () => Observable<any[]>;
+  public dataHandler: () => Observable<ISelectItem[]>;
+  public convertDataToItemHandler: (data: any) => ISelectItem;
+  public convertItemToDataHandler: (value: ISelectItem[] | ISelectItem) => any;
 
   // Need implementation:
   // checkSelection: boolean;
@@ -85,6 +88,9 @@ export class SelectModelBase implements ISelectModel {
   unselect(index: number) {
     this.selected.next([...this.selected.getValue().filter((item, i) => i !== index)]);
   }
+  getData () {
+    return this.convertItemToData();
+  }
   setData(data: any) {
     if (data === undefined || data === null || (this.many && data.length === 0)) {
       this.selected.next([]);
@@ -98,13 +104,6 @@ export class SelectModelBase implements ISelectModel {
         this.selected.next([items.find(i => this.compareDataWithItem(data, i))]);
       }
     });
-  }
-  getData() {
-    if (this.many) {
-      return this.selected.getValue().map(item => item.id);
-    } else {
-      return this.selected.getValue()[0] ? this.selected.getValue()[0].id : undefined;
-    }
   }
   isSelected(item: ISelectItem) {
     return this.selected.getValue().findIndex(i => this.compareItems(i, item)) > -1;
@@ -132,10 +131,27 @@ export class SelectModelBase implements ISelectModel {
   }
 
   protected convertDataToItem(data: any): ISelectItem {
+    if (this.convertDataToItemHandler) {
+      return this.convertDataToItemHandler(data);
+    }
     return {id: data, label: data};
   }
 
-  protected compareDataWithItem(data: ISelectItem, item: ISelectItem) {
+  protected convertItemToData() {
+    if (this.many) {
+      if (this.convertItemToDataHandler) {
+        return this.convertItemToDataHandler(this.selected.getValue());
+      }
+      return this.selected.getValue().map(item => item.id);
+    } else {
+      if (this.convertItemToDataHandler) {
+        return this.convertItemToDataHandler(this.selected.getValue()[0] || undefined);
+      }
+      return this.selected.getValue()[0] ? this.selected.getValue()[0].id : undefined;
+    }
+  }
+
+  protected compareDataWithItem(data: any, item: ISelectItem) {
     return this.compareItems(this.convertDataToItem(data), item);
   }
 

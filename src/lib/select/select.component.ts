@@ -58,6 +58,9 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   @ViewChild('input')
   input: ElementRef;
 
+  @ViewChild('value')
+  valueElement: ElementRef;
+
   @Input()
   @HostBinding()
   tabindex = 0;
@@ -88,7 +91,7 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   disabled: boolean;
 
   @Input()
-  closeOnSelect: boolean;
+  closeOnSelect = true;
 
   @Input()
   live = false;

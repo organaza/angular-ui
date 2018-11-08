@@ -3,6 +3,7 @@
 </ng-template>
 <ng-template #selectedItemTemplateDefault>
   <div class="value"
+    #value
     [class.center]="dropdownHorizontalPosition === 'center'"
     [class.tags]="tags"
     [class.disabled]="disabled"
@@ -17,7 +18,7 @@
       <ng-container>
         <div class="label {{manyLayout}}" *ngFor="let item of (model.selected | async); let i = index"
         [class.many]="model.many && opened"
-        [class.not-remove]="!item?.canRemove">
+        [class.not-remove]="item?.cantRemove">
           <div class="text" [innerHTML]="item?.label"></div>
           <oz-button
             *ngIf="(model.many && opened && item) || (opened && item && model.allowNull)"
