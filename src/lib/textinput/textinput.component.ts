@@ -331,11 +331,7 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
     event.stopImmediatePropagation();
     event.preventDefault();
     this.value = '';
-    if (this.liveDebounce > 0) {
-      this.onModelChanged.next(this.value);
-    } else {
-      this.onChangeCallback(this.value);
-    }
+    this.onChangeCallback(this.value);
   }
   onPaste(event: any) {
     if (this.live) {
