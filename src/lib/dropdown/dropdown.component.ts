@@ -81,9 +81,6 @@ export class DropDownComponent implements OnDestroy {
   @HostBinding('style.flex-direction')
   flexDirection = 'column';
 
-  @HostBinding('class.scroll')
-  scroll = false;
-
   @Input()
   bindElement: HTMLElement;
 
@@ -350,7 +347,6 @@ export class DropDownComponent implements OnDestroy {
     this.setState('void');
     this.display = 'flex';
     this.flexDirection = 'column';
-    this.scroll = false;
 
     this.bottom = undefined;
     this.top = undefined;
@@ -429,7 +425,6 @@ export class DropDownComponent implements OnDestroy {
           this.top -= (this.position.height - 4);
         }
         if (!canPlaceDown && this.absolute) {
-          this.scroll = true;
           this.bottom = 20;
         } else if (!this.absolute) {
           this.maxHeight = maxBottom - this.top - 20;
