@@ -7,7 +7,7 @@ export class DurationToStringPipe implements PipeTransform {
     if (value === null) {
       return '-';
     }
-    const numberValue = Number.parseInt(value);
+    const numberValue = Number.parseInt(value, 10);
     if (isNaN(numberValue)) {
       value = moment.duration(value);
     } else {
