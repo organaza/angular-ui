@@ -51,6 +51,9 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
   @Output()
   blur: EventEmitter<{}> = new EventEmitter();
 
+  @Output()
+  clear: EventEmitter<{}> = new EventEmitter();
+
   onModelChanged: Subject<any> = new Subject<any>();
 
   @Input()
@@ -332,6 +335,7 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
     event.preventDefault();
     this.value = '';
     this.onChangeCallback(this.value);
+    this.clear.next(true);
   }
   onPaste(event: any) {
     if (this.live) {
