@@ -32,6 +32,7 @@ export interface ISelectItem {
   id: any;
   label: string;
   cantRemove?: boolean;
+  item?: any;
   [x: string]: any;
 }
 
@@ -44,12 +45,13 @@ export class SelectModelBase implements ISelectModel {
   public currentPage = 0;
 
   public many: boolean;
+  public loadSelected = true;
   public prompt = '---';
   public staticData: any;
   public allowNull: boolean;
   public dataHandler: () => Observable<ISelectItem[]>;
   public convertDataToItemHandler: (data: any) => ISelectItem;
-  public convertItemToDataHandler: (value: ISelectItem[] | ISelectItem) => any;
+  public convertItemToDataHandler: (value: ISelectItem) => any;
 
   // Need implementation:
   // checkSelection: boolean;
@@ -96,14 +98,16 @@ export class SelectModelBase implements ISelectModel {
       this.selected.next([]);
       return;
     }
-    this.loadData(0, data).subscribe(items => {
-      if (this.many) {
-        items = items.filter(i => data.findIndex(d => this.compareDataWithItem(d, i)) > -1);
-        this.selected.next([...items]);
-      } else {
-        this.selected.next([items.find(i => this.compareDataWithItem(data, i))]);
-      }
-    });
+    if (this.loadSelected) {
+      this.loadData(0, data).subscribe(items => {
+        if (this.many) {
+          items = items.filter(i => data.findIndex(d => this.compareDataWithItem(d, i)) > -1);
+          this.selected.next([...items]);
+        } else {
+          this.selected.next([items.find(i => this.compareDataWithItem(data, i))]);
+        }
+      });
+    }
   }
   isSelected(item: ISelectItem) {
     return this.selected.getValue().findIndex(i => this.compareItems(i, item)) > -1;
@@ -140,7 +144,7 @@ export class SelectModelBase implements ISelectModel {
   protected convertItemToData() {
     if (this.many) {
       if (this.convertItemToDataHandler) {
-        return this.convertItemToDataHandler(this.selected.getValue());
+        return this.selected.getValue().map(this.convertItemToDataHandler);
       }
       return this.selected.getValue().map(item => item.id);
     } else {

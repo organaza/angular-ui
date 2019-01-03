@@ -55,6 +55,7 @@ export { DurationToStringPipe } from './lib/pipes/duration-to-string.pipe';
 export { ObjectKeysPipe } from './lib/pipes/object-keys.pipe';
 export { ParseBooleanPipe } from './lib/pipes/parse-boolean.pipe';
 export { TimeStampToDatePipe } from './lib/pipes/timestamp-to-date.pipe';
+export { FilterPipe } from './lib/pipes/filter.pipe';
 
 // export { SortTableColumnFixedDirective as ɵbk } from './lib/sorttable/sorttable-column-fixed.directive';
 // export { SortTableColumnHeadDirective as ɵbl } from './lib/sorttable/sorttable-column-head.directive';

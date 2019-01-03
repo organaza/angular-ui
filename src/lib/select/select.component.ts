@@ -19,6 +19,8 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { DropDownComponent } from '../dropdown/dropdown.component';
 import { ISelectModel } from './select.model';
 import { OzSettingsService } from '../settings/settings.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 const noop = () => {
 };
@@ -43,8 +45,19 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   selectedIndex = 0;
   searchString: string;
 
+  modelChanged: Subject<boolean> = new Subject();
+
   @Input()
-  model: ISelectModel;
+  set model(value: ISelectModel) {
+    this.modelChanged.next(true);
+    this._model = value;
+    this.model.selected.pipe(takeUntil(this.modelChanged)).subscribe(() => this.applyChanges());
+  }
+  get model(): ISelectModel {
+    return  this._model;
+  }
+
+  _model: ISelectModel;
 
   @Input()
   iconClosed: string;
@@ -70,6 +83,9 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
 
   @Output()
   changed = new EventEmitter();
+
+  @Output()
+  itemChange = new EventEmitter<any>();
 
   @Input()
   set openByClick(value: boolean) {
@@ -152,6 +168,7 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
 
   applyChanges() {
     this.onChangeCallback(this.model.getData());
+    this.itemChange.next(this.model.selected.getValue());
     this.changed.next(this.model.getData());
   }
 

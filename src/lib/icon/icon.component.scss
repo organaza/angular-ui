@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   display: flex;
-  transition: all 0.1s ease-out;
+  transition: all 0.1s ease-in-out;
 }
 .large {
   font-size: $icons-fontsize-large;

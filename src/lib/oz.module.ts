@@ -74,6 +74,7 @@ import { ShortcutService } from './shortcut/shortcut.service';
 import { ParseBooleanPipe } from './pipes/parse-boolean.pipe';
 import { OzSettingsService } from './settings/settings.service';
 import { SelectComponent } from './select/select.component';
+import { FilterPipe } from './pipes/filter.pipe';
 
 @NgModule({
   imports: [
@@ -126,6 +127,7 @@ import { SelectComponent } from './select/select.component';
     TimeStampToDatePipe,
     ObjectKeysPipe,
     ParseBooleanPipe,
+    FilterPipe,
     DragulaDelayLiftDirective,
     IconComponent,
     PagerComponent,
@@ -172,6 +174,7 @@ import { SelectComponent } from './select/select.component';
     TimeStampToDatePipe,
     ObjectKeysPipe,
     ParseBooleanPipe,
+    FilterPipe,
     DragulaDelayLiftDirective,
     IconComponent,
     PagerComponent,

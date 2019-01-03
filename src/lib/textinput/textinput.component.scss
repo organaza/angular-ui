@@ -4,7 +4,7 @@
   @include component;
   @include component-focus;
   @include component-invalid;
-  border-bottom: $oz-control-default-border solid $oz-control-border;
+  border-bottom: $oz-control-default-border solid $oz-control-border-color;
 }
 :host.disabled,
 :host.borderless {
