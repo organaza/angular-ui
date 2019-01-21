@@ -5,11 +5,18 @@
     &-primary {
       background: $oz-button-primary-hover-background;
       color: $oz-button-primary-hover-color;
+      &.disabled {
+        background: $oz-button-disabled;
+      }
     }
 
     &-secondary {
       background: $oz-button-secondary-hover-background;
       color: $oz-button-secondary-hover-color;
+      &.disabled {
+        background: $oz-button-secondary-background;
+        color: $oz-button-secondary-color;
+      }
     }
 
     &-link {
@@ -23,10 +30,6 @@
       // background-color: $oz-button-tab-selected-background-color;
       border-bottom: $oz-button-tab-hover-border
     }
-  }
-
-  .disabled {
-    background: $oz-button-disabled-hover;
   }
 }
 :host {
@@ -66,10 +69,6 @@
         // background: $oz-button-secondary-active-background;
         color: $oz-button-secondary-active-color;
       }
-    }
-
-    .disabled {
-      background: $oz-button-disabled-hover;
     }
   }
 }
@@ -138,12 +137,16 @@
   }
 }
 
-.disabled {
+.button-primary.disabled {
   background: $oz-button-disabled;
 
   &:hover {
     background: $oz-button-disabled-hover;
   }
+}
+
+.button-secondary.disabled {
+  opacity: 0.6
 }
 
 .disabled.button-icon {
