@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { JSONUtils } from '../json/json';
-import { SortOptions } from 'web/model/sort.model';
 
 export class SortField {
   name: any;
@@ -15,7 +14,7 @@ export class SortTableSettingsService {
 
   settings: {
     columnsWidth: { [key: string]: { [key: string]: any } },
-    sortOptions: { [key: string]: SortOptions },
+    sortOptions: { [key: string]: any },
   } = {
     columnsWidth: {},
     sortOptions: {}
@@ -36,13 +35,13 @@ export class SortTableSettingsService {
     return this.settings.columnsWidth;
   }
 
-  getSortOptions (id: string): SortOptions {
+  getSortOptions (id: string): any {
     if (!this.settings.sortOptions[id]) {
-      return new SortOptions();
+      return {};
     }
     return this.settings.sortOptions[id];
   }
-  setSortOptions (id: string, value: SortOptions) {
+  setSortOptions (id: string, value: any) {
     this.settings.sortOptions[id] = value;
     this.save();
   }
