@@ -3,6 +3,9 @@
 :host {
   flex: 1 1 100%;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .label {
   overflow: hidden;
