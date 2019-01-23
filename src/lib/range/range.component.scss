@@ -29,14 +29,14 @@
     transform: scale(1.2);
   }
   &:hover .slider.filled {
-    transform: scale(1);
+    transform: scale(1.2);
   }
 
   .progress {
     width: 100%;
     content: '';
     background-color: $oz-button-primary-background;
-    height: 1px;
+    height: 2px;
     border: 0;
     position: relative;
 
@@ -50,7 +50,7 @@
     display: block;
     height: 9px;
     width: 9px;
-    border: 1px solid $oz-button-primary-hover-background;
+    border: 2px solid $oz-button-primary-hover-background;
     border-radius: 100%;
     position: absolute;
     background-color: $white;
@@ -62,11 +62,12 @@
     height: 6px;
     background-color: transparent;
     border-radius: 15px;
-    border: 1px solid $oz-button-primary-background;
+    border: 2px solid $oz-button-primary-background;
     .slider {
-      top: -3px;
+      top: -4px;
       height: 10px;
       width: 10px;
+      margin-left: -2px;
     }
   }
 

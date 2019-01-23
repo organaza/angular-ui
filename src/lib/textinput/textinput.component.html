@@ -6,6 +6,13 @@
     [class.container-nopadding]="nopadding"
     *ngIf="multiline"
     (click)="switchPopup(true)">{{getDisplayValue()}}<span *ngIf="percentage">%</span>&nbsp;</div>
+  <div *ngIf="value===undefined || value===null || value===''"
+    tabindex="-1"
+    class="oz-textinput-prompt"
+    [class.oz-textinput-prompt-nopadding]="nopadding"
+    [class.oz-textinput-prompt-active]="opened">
+    {{prompt}}
+  </div>
   <input *ngIf="!multiline"
     tabindex="-1"
     class="oz-textinput-container"
@@ -38,13 +45,7 @@
     (blur)="blur.next()"
     (paste)="onPaste($event)"
     #container></textarea>
-  <div *ngIf="value===undefined || value===null || value===''"
-    tabindex="-1"
-    class="oz-textinput-prompt"
-    [class.oz-textinput-prompt-nopadding]="nopadding"
-    [class.oz-textinput-prompt-active]="opened">
-    {{prompt}}
-  </div>
+
   <oz-icon
     *ngIf="showClear && (value !== undefined && value !== '')"
     tabindex="-1"

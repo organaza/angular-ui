@@ -55,7 +55,6 @@
     line-height: inherit;
     font-weight: inherit;
     text-align: inherit;
-    z-index: 1;
 
     &-nopadding {
       padding-top: 0;
@@ -82,7 +81,7 @@
   }
 
   &-prompt-active {
-    z-index: 0;
+
   }
 
   &.showClear {

@@ -233,6 +233,6 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
     return value;
   }
   calcPercent(): number {
-    return (this.testMinMaxValue(this.value) - this.min) * this.koef() - this.widthSliderProcent / 2;
+    return (this.testMinMaxValue(this.value) - this.min) * this.koef();
   }
 }
