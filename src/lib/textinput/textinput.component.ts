@@ -156,9 +156,9 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
 
   @HostListener('keydown', ['$event'])
   onKeyDownListener(event: any) {
-    if (event.key === 'Enter' || event.key === 'Tab') {
-      this.enter.next();
+    if (event.key === 'Enter') {
       this.switchPopup(false, false, this.keepFocus);
+      this.enter.next();
       if (event.key === 'Enter') {
         this.container.nativeElement.blur();
         event.preventDefault();
