@@ -20,6 +20,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { JSONUtils } from '../json/json';
 
 @Component({
   selector: 'oz-dropdown',
@@ -118,6 +119,9 @@ export class DropDownComponent implements OnDestroy {
   @Input()
   set position(value: any) {
     if (!value) {
+      return;
+    }
+    if (JSONUtils.jsonCompare(this.__position, value)) {
       return;
     }
     this.__position = value;
