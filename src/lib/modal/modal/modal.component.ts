@@ -31,6 +31,7 @@ import {
       })),
       state('create', style({
         opacity: 0,
+        display: 'none',
         transform: 'translateY(0) scale(0.95)',
       })),
       state('show', style({
