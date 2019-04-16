@@ -42,7 +42,7 @@ import {
         opacity: 0,
         transform: 'translateY(0) scale(0.95)',
       })),
-      transition('void => create', animate('0ms')),
+      transition('void => create', animate('10ms')),
       transition('void => show', animate('200ms 100ms ease-out')),
       transition('create => show', animate('200ms 100ms ease-out')),
       transition('show => close', animate('200ms ease-out')),

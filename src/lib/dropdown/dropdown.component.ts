@@ -44,8 +44,8 @@ import { JSONUtils } from '../json/json';
         opacity: 0,
       })),
 
-      transition('void => in-down', animate('0ms')),
-      transition('void => in-up', animate('0ms')),
+      transition('void => in-down', animate('10ms')),
+      transition('void => in-up', animate('10ms')),
       transition('in-up => show', animate('150ms ease-out')),
       transition('in-down => show', animate('150ms ease-out')),
       transition('show => void', animate('150ms ease-out')),

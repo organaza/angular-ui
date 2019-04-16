@@ -1,5 +1,5 @@
-<div class="modal-background" [@backgroundState]="state" (click)="close()"></div>
-<div class="modal-wrapper" [@state]="state">
+<div class="modal-background {{state}}" [@backgroundState]="state" (click)="close()"></div>
+<div class="modal-wrapper {{state}}" [@state]="state">
   <div class="title-bar">
     <div class="title">
       <ng-content select="[ozModalHeader]"></ng-content>
@@ -12,12 +12,7 @@
     <div class="title-buttons">
       <ng-content select="[ozModalHeaderButtons]"></ng-content>
     </div>
-    <oz-button
-      class="close-button"
-      typeButton="icon"
-      iconClass="close"
-      iconSize="x-large"
-      (clicked)="close()">
+    <oz-button class="close-button" typeButton="icon" iconClass="close" iconSize="x-large" (clicked)="close()">
     </oz-button>
 
   </div>

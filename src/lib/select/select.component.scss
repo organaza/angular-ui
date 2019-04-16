@@ -120,12 +120,12 @@
     bottom: 0;
     align-self: stretch;
 
-    /deep/ .button {
+    ::ng-deep .button {
       color: #aaa;
     }
   }
   .clear:hover {
-    /deep/ .button {
+    ::ng-deep .button {
       color: $error-color;
     }
   }
