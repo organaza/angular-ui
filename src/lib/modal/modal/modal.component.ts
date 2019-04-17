@@ -31,7 +31,6 @@ import {
       })),
       state('create', style({
         opacity: 0,
-        display: 'none',
         transform: 'translateY(0) scale(0.95)',
       })),
       state('show', style({
@@ -42,10 +41,10 @@ import {
         opacity: 0,
         transform: 'translateY(0) scale(0.95)',
       })),
-      transition('void => create', animate('10ms')),
-      transition('void => show', animate('200ms 100ms ease-out')),
-      transition('create => show', animate('200ms 100ms ease-out')),
-      transition('show => close', animate('200ms ease-out')),
+      transition('void => create', animate('0ms')),
+      transition('void => show', animate('150ms 75ms ease-out')),
+      transition('create => show', animate('150ms 75ms ease-out')),
+      transition('show => close', animate('150ms ease-out')),
     ]),
     trigger('backgroundState', [
       state('void', style({
@@ -60,10 +59,10 @@ import {
       state('close', style({
         opacity: 0,
       })),
-      transition('void => create', animate('200ms ease-out')),
-      transition('void => show', animate('200ms ease-out')),
-      transition('create => show', animate('0ms ease-out')),
-      transition('show => close', animate('200ms 100ms ease-out')),
+      transition('void => create', animate('150ms ease-out')),
+      transition('void => show', animate('150ms ease-out')),
+      transition('create => show', animate('0ms')),
+      transition('show => close', animate('150ms 75ms ease-out')),
     ])
   ]
 })
