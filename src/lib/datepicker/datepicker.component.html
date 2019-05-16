@@ -29,6 +29,8 @@
             [currentYear]="selectionStartMoment?.year()"
             [currentMonth]="selectionStartMoment?.month()"
             [hideOverflow]="false"
+            [minDate]="minDate"
+            [maxDate]="maxDate"
             (change)="onCalendarChangeStart($event)"></oz-calendar>
         </div>
         <div class="separator" *ngIf="range"></div>
@@ -41,28 +43,44 @@
             [currentYear]="selectionEndMoment?.year()"
             [currentMonth]="selectionEndMoment?.month()"
             [hideOverflow]="false"
+            [minDate]="minDate"
+            [maxDate]="maxDate"
             (change)="onCalendarChangeEnd($event)"></oz-calendar>
         </div>
         <div class="separator" *ngIf="range && helpers"></div>
         <div class="helpers-buttons" *ngIf="range && helpers">
           <div class="helpers">
             <div class="helper-column">
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-3h', 'now')" *ngIf="showTime">Last 3 hours</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-6h', 'now')" *ngIf="showTime">Last 6 hours</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-12h', 'now')" *ngIf="showTime">Last 12 hours</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-24h', 'now')" *ngIf="showTime">Last 24 hours</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-2d', 'now')">Last 2 days</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-7d', 'now')">Last 7 days</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-30d', 'now')">Last 30 days</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-3h', 'now')" *ngIf="showTime"
+                [disabled]="minDate || maxDate">Last 3 hours</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-6h', 'now')" *ngIf="showTime"
+                [disabled]="minDate || maxDate">Last 6 hours</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-12h', 'now')" *ngIf="showTime"
+                [disabled]="minDate || maxDate">Last 12 hours</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-24h', 'now')" *ngIf="showTime"
+                [disabled]="minDate || maxDate">Last 24 hours</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-2d', 'now')"
+                [disabled]="minDate || maxDate">Last 2 days</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-7d', 'now')"
+                [disabled]="minDate || maxDate">Last 7 days</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-30d', 'now')"
+                [disabled]="minDate || maxDate">Last 30 days</oz-button>
             </div>
             <div class="helper-column">
-              <oz-button typeButton="link" i18n (clicked)="setRelative('now/d', 'now/d')">Today</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-1d/d','-1d/d')">Yesterday</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-2d/d', '-2d/d')">Day before yesterday</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-7d/d', '-7d/d')">This day last week</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('-1w/W', '-1w/W')">Previous week</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('now/W', 'now/W')">This week</oz-button>
-              <oz-button typeButton="link" i18n (clicked)="setRelative('now/M', 'now/M')">This month</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('now/d', 'now/d')"
+                [disabled]="minDate || maxDate">Today</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-1d/d','-1d/d')"
+                [disabled]="minDate || maxDate">Yesterday</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-2d/d', '-2d/d')"
+                [disabled]="minDate || maxDate">Day before yesterday</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-7d/d', '-7d/d')"
+                [disabled]="minDate || maxDate">This day last week</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('-1w/W', '-1w/W')"
+                [disabled]="minDate || maxDate">Previous week</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('now/W', 'now/W')"
+                [disabled]="minDate || maxDate">This week</oz-button>
+              <oz-button typeButton="link" i18n (clicked)="setRelative('now/M', 'now/M')"
+                [disabled]="minDate || maxDate">This month</oz-button>
             </div>
           </div>
           <div class="buttons">

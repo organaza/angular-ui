@@ -1,5 +1,7 @@
 @import 'oz_variables';
 
+$disabled-date-color: #777;
+
 :host {
   @include component;
   display: flex;
@@ -220,6 +222,11 @@
     height: 30px;
 
     &-label {}
+
+    &.disabled {
+      color: $disabled-date-color;
+      pointer-events: none;
+    }
 
     &-6,
     &-7 {

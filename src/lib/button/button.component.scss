@@ -21,6 +21,12 @@
 
     &-link {
       text-decoration: underline;
+
+      &.disabled {
+        color: $oz-button-disabled;
+        pointer-events: none;
+        text-decoration: none;
+      }
     }
 
     &-tab {
@@ -155,6 +161,11 @@
     color: $oz-button-disabled;
   }
 }
+
+  .disabled.button-link {
+    color: $oz-button-disabled;
+    pointer-events: none;
+  }
 
 .in-progress {
   opacity: 0;
