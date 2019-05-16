@@ -73,6 +73,12 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   @Input()
   confirmRequired: boolean;
 
+  @Input()
+  maxDate: Date;
+
+  @Input()
+  minDate: Date;
+
   selectionStart: any;
   selectionStartOld: any;
   selectionStartMoment: moment.Moment;

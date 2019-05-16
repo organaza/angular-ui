@@ -46,6 +46,7 @@
           [class.oz-calendar-date-period]="date.period"
           [class.oz-calendar-date-selected-start]="date.selectedEnd"
           [class.oz-calendar-date-selected-end]="date.selectedStart"
+          [class.disabled]="isDateDisabled(date)"
           (click)="onClick($event, date)">
           <div class="oz-calendar-date-label">{{date.label}}</div>
         </div>

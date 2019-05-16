@@ -59,6 +59,12 @@ export class CalendarComponent implements OnInit, OnChanges {
   @Input()
   currentMonth: number = moment().month();
 
+  @Input()
+  minDate: Date;
+
+  @Input()
+  maxDate: Date;
+
   dateCells: CalendarDay[];
   weekCells: CalendarDay[][];
   weekdays: string[];
@@ -266,5 +272,17 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.weekdays = moment.weekdaysMin();
     this.weekdays.push(this.weekdays.shift());
     this.render();
+  }
+
+  isDateDisabled(date) {
+    if (this.minDate && date.date.toDate() < this.minDate) {
+        return true;
+    }
+
+    if (this.maxDate && date.date.toDate() > this.maxDate) {
+      return true;
+    }
+
+    return false;
   }
 }
