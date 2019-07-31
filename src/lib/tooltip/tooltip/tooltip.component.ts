@@ -1,13 +1,19 @@
-import { Component, OnInit, Input, HostBinding, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  HostBinding,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 
 import {
   trigger,
   state,
   style,
   animate,
-  transition
+  transition,
 } from '@angular/animations';
-
 
 @Component({
   selector: 'oz-tooltip',
@@ -15,22 +21,27 @@ import {
   styleUrls: ['./tooltip.component.scss'],
   animations: [
     trigger('state', [
-      state('void', style({
-        opacity: 0,
-        transform: 'translateY(0) scale(0.95)',
-      })),
-      state('show', style({
-        opacity: 1,
-        transform: 'translateY(0) scale(1)',
-      })),
+      state(
+        'void',
+        style({
+          opacity: 0,
+          transform: 'translateY(0) scale(0.95)',
+        }),
+      ),
+      state(
+        'show',
+        style({
+          opacity: 1,
+          transform: 'translateY(0) scale(1)',
+        }),
+      ),
       transition('void => show', animate('150ms linear')),
       transition('show => void', animate('150ms linear')),
     ]),
-  ]
+  ],
 })
-
 export class TooltipComponent implements OnInit {
-  @ViewChild('container', { read: ViewContainerRef }) target;
+  @ViewChild('container', { read: ViewContainerRef, static: true }) target;
 
   @Input()
   text: string;
@@ -60,7 +71,7 @@ export class TooltipComponent implements OnInit {
   @HostBinding('style.text-align')
   textAlign = 'center';
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

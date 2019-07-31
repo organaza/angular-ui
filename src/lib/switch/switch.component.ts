@@ -44,8 +44,8 @@ export class SwitchComponent implements OnInit, AfterViewInit, ControlValueAcces
     return this.value;
   }
 
-  @ViewChild('idChecked') idChecked: ElementRef;
-  @ViewChild('idUnchecked') idUnchecked: ElementRef;
+  @ViewChild('idChecked', {static: true}) idChecked: ElementRef;
+  @ViewChild('idUnchecked', {static: true}) idUnchecked: ElementRef;
 
   private onTouchedCallback: () => void = noop;
   private onChangeCallback: (_: any) => void = noop;

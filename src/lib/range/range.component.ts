@@ -79,7 +79,7 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
   widthSliderProcent: number;
   widthParentElement: number;
 
-  @ViewChild('elementSlider') elementSlider: ElementRef;
+  @ViewChild('elementSlider', {static: true}) elementSlider: ElementRef;
 
   writeValue(value: any) {
     if (value === undefined || value === null) {

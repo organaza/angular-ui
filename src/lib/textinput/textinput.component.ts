@@ -148,7 +148,7 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
   }
   _value: any;
 
-  @ViewChild('container')
+  @ViewChild('container', {static: true})
   container: ElementRef;
 
   private onTouchedCallback: () => void = noop;

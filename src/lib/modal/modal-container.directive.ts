@@ -1,13 +1,21 @@
-import { ContentChild, ViewContainerRef, HostBinding, AfterContentInit, Input, OnInit} from '@angular/core';
+import {
+  ContentChild,
+  ViewContainerRef,
+  HostBinding,
+  AfterContentInit,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { Directive } from '@angular/core';
 
 import { ModalService } from './modal.service';
 
 @Directive({
-  selector: '[ozModalContainer]'
+  selector: '[ozModalContainer]',
 })
 export class ModalContainerDirective implements OnInit {
-  @ContentChild('modalContainer', { read: ViewContainerRef }) target;
+  @ContentChild('modalContainer', { read: ViewContainerRef, static: true })
+  target;
 
   @HostBinding('class.active')
   active: boolean;
@@ -17,16 +25,16 @@ export class ModalContainerDirective implements OnInit {
   @Input()
   ozModalContainer: string;
 
-  constructor(public modalService: ModalService) {
-
-  }
+  constructor(public modalService: ModalService) {}
 
   ngOnInit(): void {
-    this.modalService.registerContainer(this.ozModalContainer || 'default', this);
+    this.modalService.registerContainer(
+      this.ozModalContainer || 'default',
+      this,
+    );
   }
 
   close() {
     this.modalService.close();
   }
-
 }

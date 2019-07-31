@@ -31,7 +31,7 @@ const noop = () => {
 })
 
 export class ColorPickerComponent implements OnInit, ControlValueAccessor {
-  @ViewChild('dropdown')
+  @ViewChild('dropdown', {static: true})
   dropdown: DropDownComponent;
 
   value: string;

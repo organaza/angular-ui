@@ -38,10 +38,10 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   @HostBinding()
   tabindex = 0;
 
-  @ViewChild('dropdown')
+  @ViewChild('dropdown', {static: true})
   dropdown: DropDownComponent;
 
-  @ViewChild('input')
+  @ViewChild('input', {static: true})
   input: TextinputComponent;
 
   value: string;

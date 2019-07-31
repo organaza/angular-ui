@@ -13,7 +13,7 @@ import {
   HostListener,
   forwardRef,
   HostBinding,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { DropDownComponent } from '../dropdown/dropdown.component';
@@ -22,26 +22,28 @@ import { OzSettingsService } from '../settings/settings.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-const noop = () => {
-};
+const noop = () => {};
 
 @Component({
   selector: 'oz-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => SelectComponent),
-    multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SelectComponent),
+      multi: true,
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class SelectComponent
+  implements OnInit, OnDestroy, ControlValueAccessor {
   onTouchedCallback: () => void = noop;
   onChangeCallback: (_: any) => void = noop;
 
   loading: boolean;
-  thisContext: {select: SelectComponent};
+  thisContext: { select: SelectComponent };
   selectedIndex = 0;
   searchString: string;
 
@@ -51,10 +53,12 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   set model(value: ISelectModel) {
     this.modelChanged.next(true);
     this._model = value;
-    this.model.selected.pipe(takeUntil(this.modelChanged)).subscribe(() => this.applyChanges());
+    this.model.selected
+      .pipe(takeUntil(this.modelChanged))
+      .subscribe(() => this.applyChanges());
   }
   get model(): ISelectModel {
-    return  this._model;
+    return this._model;
   }
 
   _model: ISelectModel;
@@ -65,10 +69,10 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   @Input()
   iconOpened: string;
 
-  @ViewChild('dropdown')
+  @ViewChild('dropdown', { static: true })
   dropdown: DropDownComponent;
 
-  @ViewChild('input')
+  @ViewChild('input', { static: true })
   input: ElementRef;
 
   @Input()
@@ -112,22 +116,22 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
   @Input()
   dropdownHorizontalPosition = 'right-inside';
 
-  @ContentChild('selectedItemTemplateDefault')
+  @ContentChild('selectedItemTemplateDefault', { static: true })
   selectedItemTemplateDefault: TemplateRef<any>;
 
-  @ContentChild('selectedItemActionsDefault')
+  @ContentChild('selectedItemActionsDefault', { static: true })
   selectedItemActionsDefault: TemplateRef<any>;
 
-  @ContentChild('selectedItemActions')
+  @ContentChild('selectedItemActions', { static: true })
   selectedItemActions: TemplateRef<any>;
 
-  @ContentChild('selectedItemTemplate')
+  @ContentChild('selectedItemTemplate', { static: true })
   selectedItemTemplate: TemplateRef<any>;
 
-  @ContentChild('lastItemTemplate')
+  @ContentChild('lastItemTemplate', { static: true })
   lastItemTemplate: TemplateRef<any>;
 
-  @ContentChild('firstItemTemplate')
+  @ContentChild('firstItemTemplate', { static: true })
   firstItemTemplate: TemplateRef<any>;
 
   @HostListener('keydown', ['$event'])
@@ -144,12 +148,12 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
     }
   }
 
-
-  constructor(private el: ElementRef,
+  constructor(
+    private el: ElementRef,
     private settingService: OzSettingsService,
     private cd: ChangeDetectorRef,
   ) {
-    this.thisContext = {select: this};
+    this.thisContext = { select: this };
     this.iconClosed = this.settingService.selectIconDown;
     this.iconOpened = this.settingService.selectIconUp;
   }
@@ -172,9 +176,7 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
     this.changed.next(this.model.getData());
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.dropdown = null;
@@ -210,9 +212,15 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
     this.selectedIndex = value;
   }
   onSearchKeyDown(event: KeyboardEvent) {
-    const optionsList = this.dropdown.el.nativeElement.getElementsByClassName('options')[0];
-    const activeOption = this.dropdown.el.nativeElement.getElementsByClassName('option cursor')[0];
-    const searchElement = this.dropdown.el.nativeElement.getElementsByClassName('search')[0];
+    const optionsList = this.dropdown.el.nativeElement.getElementsByClassName(
+      'options',
+    )[0];
+    const activeOption = this.dropdown.el.nativeElement.getElementsByClassName(
+      'option cursor',
+    )[0];
+    const searchElement = this.dropdown.el.nativeElement.getElementsByClassName(
+      'search',
+    )[0];
 
     if (event.key === 'Enter') {
       this.model.select(this.selectedIndex);
@@ -236,18 +244,24 @@ export class SelectComponent implements OnInit, OnDestroy, ControlValueAccessor 
       event.preventDefault();
     }
     if (event.key === 'ArrowDown') {
-      this.selectedIndex = Math.min(this.selectedIndex + 1, this.model.list.getValue().length - 1);
+      this.selectedIndex = Math.min(
+        this.selectedIndex + 1,
+        this.model.list.getValue().length - 1,
+      );
       event.preventDefault();
     }
     if (activeOption && optionsList) {
       const activeOptionRect = activeOption.getBoundingClientRect();
       const optionsListRect = optionsList.getBoundingClientRect();
       const searchHeight = searchElement ? searchElement.offsetHeight : 0;
-      optionsList.scrollTop = activeOptionRect.top - optionsListRect.top - searchHeight + optionsList.scrollTop;
+      optionsList.scrollTop =
+        activeOptionRect.top -
+        optionsListRect.top -
+        searchHeight +
+        optionsList.scrollTop;
     }
   }
-  onEnter() {
-  }
+  onEnter() {}
   onPopupScroll(event: any) {
     event.stopImmediatePropagation();
   }

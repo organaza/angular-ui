@@ -31,7 +31,7 @@ export class TextWithTooltipComponent implements OnInit {
 
   displayTooltip: boolean;
 
-  @ViewChild('wrapper') wrapper: ElementRef;
+  @ViewChild('wrapper', {static: true}) wrapper: ElementRef;
 
   @HostListener('mouseenter') onMouseEnter() {
     this.displayTooltip = !(this.wrapper.nativeElement.scrollWidth > this.wrapper.nativeElement.offsetWidth);

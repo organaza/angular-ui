@@ -10,7 +10,7 @@ import {
   OnDestroy,
   EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 
 import {
@@ -18,7 +18,7 @@ import {
   state,
   style,
   animate,
-  transition
+  transition,
 } from '@angular/animations';
 import { JSONUtils } from '../json/json';
 
@@ -28,34 +28,45 @@ import { JSONUtils } from '../json/json';
   styleUrls: ['./dropdown.component.scss'],
   animations: [
     trigger('state', [
-      state('in-down', style({
-        // transform: 'translateY(-12.5%) scaleY(0.75)',
-        opacity: 0,
-      })),
-      state('in-up', style({
-        // transform: 'translateY(12.5%) scaleY(0.75)',
-        opacity: 0,
-      })),
-      state('show', style({
-        // transform: 'translateY(0) scaleY(1)',
-        opacity: 1,
-      })),
-      state('void', style({
-        opacity: 0,
-      })),
+      state(
+        'in-down',
+        style({
+          // transform: 'translateY(-12.5%) scaleY(0.75)',
+          opacity: 0,
+        }),
+      ),
+      state(
+        'in-up',
+        style({
+          // transform: 'translateY(12.5%) scaleY(0.75)',
+          opacity: 0,
+        }),
+      ),
+      state(
+        'show',
+        style({
+          // transform: 'translateY(0) scaleY(1)',
+          opacity: 1,
+        }),
+      ),
+      state(
+        'void',
+        style({
+          opacity: 0,
+        }),
+      ),
 
       transition('void => in-down', animate('10ms')),
       transition('void => in-up', animate('10ms')),
       transition('in-up => show', animate('150ms ease-out')),
       transition('in-down => show', animate('150ms ease-out')),
       transition('show => void', animate('150ms ease-out')),
-    ])
+    ]),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class DropDownComponent implements OnDestroy {
-  @ContentChild('dropdownContent')
+  @ContentChild('dropdownContent', { static: true })
   dropdownContent: TemplateRef<any>;
 
   @HostBinding('style.left.px')
@@ -168,8 +179,7 @@ export class DropDownComponent implements OnDestroy {
     public el: ElementRef,
     private renderer: Renderer2,
     private cd: ChangeDetectorRef,
-  ) {
-  }
+  ) {}
 
   setListeners() {
     if (this.openHandler) {
@@ -178,16 +188,24 @@ export class DropDownComponent implements OnDestroy {
     if (this.activeElement) {
       this.dropDownNgIf = false;
       if (this.mouseover) {
-        this.openHandler = this.renderer.listen(this.activeElement, 'mouseover', (moveEvent: MouseEvent) => {
-          this.openDropdownByClick();
-        });
-      } else {
-        this.openHandler = this.renderer.listen(this.activeElement, 'mouseup', (moveEvent: MouseEvent) => {
-          if (!this.dropDownNgIf) {
-            moveEvent.stopImmediatePropagation();
+        this.openHandler = this.renderer.listen(
+          this.activeElement,
+          'mouseover',
+          (moveEvent: MouseEvent) => {
             this.openDropdownByClick();
-          }
-        });
+          },
+        );
+      } else {
+        this.openHandler = this.renderer.listen(
+          this.activeElement,
+          'mouseup',
+          (moveEvent: MouseEvent) => {
+            if (!this.dropDownNgIf) {
+              moveEvent.stopImmediatePropagation();
+              this.openDropdownByClick();
+            }
+          },
+        );
       }
     } else {
       // this.dropDownNgIf = true;
@@ -200,10 +218,10 @@ export class DropDownComponent implements OnDestroy {
     this.dropDownNgIf = true;
     this.calculateBounds();
     // setTimeout(() => {
-      if (!this.displayBackground) {
-        this.addLeaveDropdownHandler();
-      }
-      this.addEnterDropDownHandler();
+    if (!this.displayBackground) {
+      this.addLeaveDropdownHandler();
+    }
+    this.addEnterDropDownHandler();
     // }, 150);
     if (!this.displayBackground) {
       this.addLeaveActiveHandler();
@@ -260,44 +278,64 @@ export class DropDownComponent implements OnDestroy {
   }
 
   addLeaveDropdownHandler() {
-    this.leaveDropdownHandler = this.renderer.listen(this.el.nativeElement, 'mouseleave', (moveEvent: MouseEvent) => {
-      this.closeDropdown();
-    });
+    this.leaveDropdownHandler = this.renderer.listen(
+      this.el.nativeElement,
+      'mouseleave',
+      (moveEvent: MouseEvent) => {
+        this.closeDropdown();
+      },
+    );
   }
 
   addEnterDropDownHandler() {
-    this.enterDropdownHandler = this.renderer.listen(this.el.nativeElement, 'mouseenter', (moveEvent: MouseEvent) => {
-      this.dropDownNgIf = true;
-      clearTimeout(this.dropDownTimeout);
-      this.enterDropdownHandler();
-      this.cd.markForCheck();
-    });
+    this.enterDropdownHandler = this.renderer.listen(
+      this.el.nativeElement,
+      'mouseenter',
+      (moveEvent: MouseEvent) => {
+        this.dropDownNgIf = true;
+        clearTimeout(this.dropDownTimeout);
+        this.enterDropdownHandler();
+        this.cd.markForCheck();
+      },
+    );
   }
 
   addLeaveActiveHandler() {
-    this.leaveActiveHandler = this.renderer.listen(this.activeElement, 'mouseleave', (moveEvent: MouseEvent) => {
-      this.leaveActiveHandler();
-      this.dropDownTimeout = setTimeout(() => {
-        this.closeDropdown();
-        this.enterDropdownHandler();
-      }, 100);
-    });
+    this.leaveActiveHandler = this.renderer.listen(
+      this.activeElement,
+      'mouseleave',
+      (moveEvent: MouseEvent) => {
+        this.leaveActiveHandler();
+        this.dropDownTimeout = setTimeout(() => {
+          this.closeDropdown();
+          this.enterDropdownHandler();
+        }, 100);
+      },
+    );
   }
 
   addClickDropdownHandler() {
-    this.clickDropdownHandler = this.renderer.listen(this.el.nativeElement, 'mouseup', (moveEvent: MouseEvent) => {
-      this.closeDropdown();
-    });
+    this.clickDropdownHandler = this.renderer.listen(
+      this.el.nativeElement,
+      'mouseup',
+      (moveEvent: MouseEvent) => {
+        this.closeDropdown();
+      },
+    );
   }
 
   addLeaveActiveHandlerByClickActiveElement() {
-    this.leaveActiveHandlerByClickActiveElement = this.renderer.listen(this.activeElement, 'mouseup', (moveEvent: MouseEvent) => {
-      this.closeDropdown();
-      this.enterDropdownHandler();
-      if (this.leaveActiveHandler) {
-        this.leaveActiveHandler();
-      }
-    });
+    this.leaveActiveHandlerByClickActiveElement = this.renderer.listen(
+      this.activeElement,
+      'mouseup',
+      (moveEvent: MouseEvent) => {
+        this.closeDropdown();
+        this.enterDropdownHandler();
+        if (this.leaveActiveHandler) {
+          this.leaveActiveHandler();
+        }
+      },
+    );
   }
 
   setState(newState: string) {
@@ -398,7 +436,6 @@ export class DropDownComponent implements OnDestroy {
         canPlaceDown = false;
       }
 
-
       if (this.bindInside) {
         bottom = maxBottom - bindOffset.top - bindHeight;
       } else {
@@ -413,7 +450,7 @@ export class DropDownComponent implements OnDestroy {
         canPlaceUp = false;
       }
 
-      if (this.positionVertical === 'up' || canPlaceUp && !canPlaceDown) {
+      if (this.positionVertical === 'up' || (canPlaceUp && !canPlaceDown)) {
         this.setState('in-up');
         this.flexDirection = 'column-reverse';
         this.bottom = bottom;
@@ -426,7 +463,7 @@ export class DropDownComponent implements OnDestroy {
         this.setState('in-down');
         this.top = top - 1;
         if (this.position && this.position.top) {
-          this.top -= (this.position.height - 4);
+          this.top -= this.position.height - 4;
         }
         if (!canPlaceDown && this.absolute) {
           this.bottom = 20;
@@ -441,9 +478,9 @@ export class DropDownComponent implements OnDestroy {
         }
       } else if (this.position && this.position.left) {
         this.left = bindOffset.left + this.position.left;
-      } else  {
+      } else {
         if (this.positionHorizontal === 'center') {
-          this.left = bindOffset.left - ((dropWidth - bindWidth) / 2);
+          this.left = bindOffset.left - (dropWidth - bindWidth) / 2;
         }
 
         if (this.positionHorizontal === 'right-inside') {

@@ -34,7 +34,7 @@ const noop = () => {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatePickerComponent implements OnInit, ControlValueAccessor {
-  @ViewChild('dropdown')
+  @ViewChild('dropdown', {static: true})
   dropdown: DropDownComponent;
 
   @Input()
