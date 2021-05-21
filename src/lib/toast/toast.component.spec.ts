@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ToastComponent } from './toast.component';
 import { ToastService } from './toast.service';
@@ -7,20 +7,23 @@ describe('ToastComponent', () => {
   let component: ToastComponent;
   let fixture: ComponentFixture<ToastComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ToastComponent ],
-      providers: [
-        {
-          provide: ToastService,
-          useClass: class {
-            close = () => {};
-          }
-        }
-      ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      return TestBed.configureTestingModule({
+        declarations: [ToastComponent],
+        providers: [
+          {
+            provide: ToastService,
+            useClass: class {
+              close = () => {
+                return;
+              };
+            },
+          },
+        ],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ToastComponent);

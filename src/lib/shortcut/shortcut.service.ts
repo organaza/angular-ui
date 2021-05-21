@@ -1,27 +1,31 @@
 import { Injectable } from '@angular/core';
-import { Observer, Observable } from 'rxjs';
+import { Observer, Observable, Subscriber } from 'rxjs';
 
-export class Sign  {
+export class Sign {
   value: string;
   meta: boolean;
   skipInput: boolean;
-  observer: Observer<{}>;
+  observer: Observer<KeyboardEvent>;
   id: string;
   working: boolean;
 }
 
-export class ShortcutObservable<T> {
+export class ShortcutObservable {
   id: string;
-  observable: any;
+  observable: Observable<KeyboardEvent>;
 
-  constructor(private shortcutService: ShortcutService, func: any, callback: any) {
+  constructor(
+    private shortcutService: ShortcutService,
+    func: (observer: Subscriber<KeyboardEvent>, id: string) => void,
+    callback: (event: KeyboardEvent) => void,
+  ) {
     this.id = '_' + Math.random().toString(36).substr(2, 9);
-    this.observable = new Observable<T>((observer) => {
+    this.observable = new Observable<KeyboardEvent>((observer) => {
       func(observer, this.id);
     });
     this.observable.subscribe(callback);
   }
-  unsubscribe() {
+  unsubscribe(): void {
     for (let i = 0; i < this.shortcutService.arraySignatories.length; ++i) {
       if (this.shortcutService.arraySignatories[i].id === this.id) {
         this.shortcutService.arraySignatories.splice(i, 1);
@@ -38,9 +42,7 @@ export class ShortcutService {
   arraySignatories: Sign[] = [];
   keyPressed = {};
 
-  constructor(
-
-  ) {
+  constructor() {
     window.addEventListener('keydown', (event) => {
       this.keyDown(event);
     });
@@ -49,48 +51,76 @@ export class ShortcutService {
     });
   }
 
-  addInArray(item: Sign) {
+  addInArray(item: Sign): void {
     this.arraySignatories.unshift(item);
   }
-  subscribe(value: string, meta: boolean, skipInput: boolean, callback: any): ShortcutObservable<any> {
-    return new ShortcutObservable<any>(this, (observer, id) => {
-      this.addInArray({value: value, meta: meta, skipInput: skipInput, observer, id, working: true});
-    }, callback);
+  subscribe(
+    value: string,
+    meta: boolean,
+    skipInput: boolean,
+    callback: (event: KeyboardEvent) => void,
+  ): ShortcutObservable {
+    return new ShortcutObservable(
+      this,
+      (observer, id) => {
+        this.addInArray({
+          value: value,
+          meta: meta,
+          skipInput: skipInput,
+          observer,
+          id,
+          working: true,
+        });
+      },
+      callback,
+    );
   }
-  keyDown(event: any) {
+  keyDown(event: KeyboardEvent): void {
     this.keyPressed[event.key.toLowerCase()] = true;
     this.keyPressed[event.code.toLowerCase()] = true;
     for (let i = 0; i < this.arraySignatories.length; ++i) {
-      if (this.testPress(event, this.arraySignatories[i]) && this.arraySignatories[i].working) {
+      if (
+        this.testPress(event, this.arraySignatories[i]) &&
+        this.arraySignatories[i].working
+      ) {
         event.preventDefault();
         this.arraySignatories[i].observer.next(event);
         break;
       }
     }
   }
-  keyUp(key: KeyboardEvent) {
+  keyUp(key: KeyboardEvent): void {
     this.keyPressed[key.key.toLowerCase()] = undefined;
     this.keyPressed[key.code.toLowerCase()] = undefined;
   }
   testPress(event: KeyboardEvent, sign: Sign): boolean {
     const isMeta = event.ctrlKey || event.altKey || event.metaKey;
-    const isInput = (<Element>event.target).localName
-      && ((<Element>event.target).localName === 'input' || (<Element>event.target).localName === 'textarea');
+    const isInput =
+      (<Element>event.target).localName &&
+      ((<Element>event.target).localName === 'input' ||
+        (<Element>event.target).localName === 'textarea');
     if (isInput) {
-      return (event.key.toLowerCase() === sign.value.toLowerCase() || event.code.toLowerCase() === sign.value.toLowerCase())
-        && sign.meta === isMeta && sign.skipInput;
+      return (
+        (event.key.toLowerCase() === sign.value.toLowerCase() ||
+          event.code.toLowerCase() === sign.value.toLowerCase()) &&
+        sign.meta === isMeta &&
+        sign.skipInput
+      );
     }
-    return (event.key.toLowerCase() === sign.value.toLowerCase() || event.code.toLowerCase() === sign.value.toLowerCase())
-      && sign.meta === isMeta;
+    return (
+      (event.key.toLowerCase() === sign.value.toLowerCase() ||
+        event.code.toLowerCase() === sign.value.toLowerCase()) &&
+      sign.meta === isMeta
+    );
   }
-  pause(value: string) {
+  pause(value: string): void {
     for (let i = 0; i < this.arraySignatories.length; ++i) {
       if (this.arraySignatories[i].value === value) {
         this.arraySignatories[i].working = false;
       }
     }
   }
-  continue(value: string) {
+  continue(value: string): void {
     for (let i = 0; i < this.arraySignatories.length; ++i) {
       if (this.arraySignatories[i].value === value) {
         this.arraySignatories[i].working = true;

@@ -1,4 +1,8 @@
-import moment, { unitOfTime } from 'moment';
+import moment, {
+  DurationInputArg1,
+  DurationInputArg2,
+  unitOfTime,
+} from 'moment';
 
 import {
   Component,
@@ -10,42 +14,54 @@ import {
   ViewChild,
   HostBinding,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 import { TextinputComponent } from '../textinput/textinput.component';
-import { ShortcutService, ShortcutObservable } from '../shortcut/shortcut.service';
+import {
+  ShortcutService,
+  ShortcutObservable,
+} from '../shortcut/shortcut.service';
 import { DropDownComponent } from '../dropdown/dropdown.component';
 import { OzSettingsService } from '../settings/settings.service';
 
 const noop = () => {
+  return;
 };
 
+interface TimePickerHint {
+  value: number;
+  unit: DurationInputArg2;
+  label: string;
+}
 @Component({
   selector: 'oz-timepicker',
   templateUrl: './timepicker.component.html',
   styleUrls: ['./timepicker.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => TimePickerComponent),
-    multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TimePickerComponent),
+      multi: true,
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class TimePickerComponent
+  implements OnInit, OnDestroy, ControlValueAccessor {
   @Input()
   @HostBinding()
   tabindex = 0;
 
-  @ViewChild('dropdown', {static: true})
+  @ViewChild('dropdown', { static: true })
   dropdown: DropDownComponent;
 
-  @ViewChild('input', {static: true})
+  @ViewChild('input')
   input: TextinputComponent;
 
-  value: string;
-  oldValue: string;
+  value: DurationInputArg1;
+  oldValue: DurationInputArg1;
   emptyLabel = '----';
 
   @Input()
@@ -81,24 +97,24 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   editOpened: boolean;
   popupOpened: boolean;
 
-  helpers: any[];
+  helpers: TimePickerHint[];
 
   d1: number;
   d2: number;
   d3: number;
   d4: number;
 
-  valueInputFormat: string;
+  valueInput: string;
 
-  focusTimeout: any = 0;
-  shortcut: ShortcutObservable<any>;
+  focusTimeout = -1;
+  shortcut: ShortcutObservable;
 
   private onTouchedCallback: () => void = noop;
-  private onChangeCallback: (_: any) => void = noop;
+  private onChangeCallback: (_: DurationInputArg1) => void = noop;
 
-  @HostListener('focus', ['$event'])
-  onFocus(event: any) {
-    this.focusTimeout = setTimeout(() => {
+  @HostListener('focusin', ['$event'])
+  onFocus(): void {
+    this.focusTimeout = window.setTimeout(() => {
       this.openEdit(true);
     }, 50);
   }
@@ -110,43 +126,108 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
   ) {
     this.editOpened = false;
     this.helpers = [
-      { value: 15, unit: 'm', label: moment.localeData().relativeTime(15, true, 'mm', false) },
-      { value: 30, unit: 'm', label: moment.localeData().relativeTime(30, true, 'mm', false) },
-      { value: 45, unit: 'm', label: moment.localeData().relativeTime(45, true, 'mm', false) },
-      { value: 1, unit: 'h', label: moment.localeData().relativeTime(1, true, 'hh', false) },
-      { value: 2, unit: 'h', label: moment.localeData().relativeTime(2, true, 'hh', false) },
-      { value: 3, unit: 'h', label: moment.localeData().relativeTime(3, true, 'hh', false) },
-      { value: 4, unit: 'h', label: moment.localeData().relativeTime(4, true, 'hh', false) },
-      { value: 6, unit: 'h', label: moment.localeData().relativeTime(6, true, 'hh', false) },
-      { value: 8, unit: 'h', label: moment.localeData().relativeTime(8, true, 'hh', false) },
-      { value: 10, unit: 'h', label: moment.localeData().relativeTime(10, true, 'hh', false) },
-      { value: 12, unit: 'h', label: moment.localeData().relativeTime(12, true, 'hh', false) },
-      { value: 16, unit: 'h', label: moment.localeData().relativeTime(16, true, 'hh', false) },
-      { value: 20, unit: 'h', label: moment.localeData().relativeTime(20, true, 'hh', false) },
-      { value: 24, unit: 'h', label: moment.localeData().relativeTime(24, true, 'hh', false) },
-      { value: 32, unit: 'h', label: moment.localeData().relativeTime(32, true, 'hh', false) },
-      { value: 40, unit: 'h', label: moment.localeData().relativeTime(40, true, 'hh', false) },
+      {
+        value: 15,
+        unit: 'm',
+        label: moment.localeData().relativeTime(15, true, 'mm', false),
+      },
+      {
+        value: 30,
+        unit: 'm',
+        label: moment.localeData().relativeTime(30, true, 'mm', false),
+      },
+      {
+        value: 45,
+        unit: 'm',
+        label: moment.localeData().relativeTime(45, true, 'mm', false),
+      },
+      {
+        value: 1,
+        unit: 'h',
+        label: moment.localeData().relativeTime(1, true, 'hh', false),
+      },
+      {
+        value: 2,
+        unit: 'h',
+        label: moment.localeData().relativeTime(2, true, 'hh', false),
+      },
+      {
+        value: 3,
+        unit: 'h',
+        label: moment.localeData().relativeTime(3, true, 'hh', false),
+      },
+      {
+        value: 4,
+        unit: 'h',
+        label: moment.localeData().relativeTime(4, true, 'hh', false),
+      },
+      {
+        value: 6,
+        unit: 'h',
+        label: moment.localeData().relativeTime(6, true, 'hh', false),
+      },
+      {
+        value: 8,
+        unit: 'h',
+        label: moment.localeData().relativeTime(8, true, 'hh', false),
+      },
+      {
+        value: 10,
+        unit: 'h',
+        label: moment.localeData().relativeTime(10, true, 'hh', false),
+      },
+      {
+        value: 12,
+        unit: 'h',
+        label: moment.localeData().relativeTime(12, true, 'hh', false),
+      },
+      {
+        value: 16,
+        unit: 'h',
+        label: moment.localeData().relativeTime(16, true, 'hh', false),
+      },
+      {
+        value: 20,
+        unit: 'h',
+        label: moment.localeData().relativeTime(20, true, 'hh', false),
+      },
+      {
+        value: 24,
+        unit: 'h',
+        label: moment.localeData().relativeTime(24, true, 'hh', false),
+      },
+      {
+        value: 32,
+        unit: 'h',
+        label: moment.localeData().relativeTime(32, true, 'hh', false),
+      },
+      {
+        value: 40,
+        unit: 'h',
+        label: moment.localeData().relativeTime(40, true, 'hh', false),
+      },
     ];
     this.icon = this.settingService.timepickerHelperIcon;
   }
-  writeValue(value: any) {
+  writeValue(value: DurationInputArg1): void {
     this.value = value;
     this.parseValue();
     this.cd.detectChanges();
+    this.updateValue();
   }
 
-  registerOnChange(fn: any) {
+  registerOnChange(fn: (_: DurationInputArg1) => void): void {
     this.onChangeCallback = fn;
   }
 
-  registerOnTouched(fn: any) {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedCallback = fn;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.parseValue();
   }
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.editOpened = false;
     this.dropdown = null;
     this.input = null;
@@ -157,7 +238,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
       this.shortcut.unsubscribe();
     }
   }
-  parseValue() {
+  parseValue(): void {
     if (!this.value) {
       this.valueMoment = moment.duration(0);
       this.valueMomentOriginal = moment.duration(0);
@@ -167,26 +248,32 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     }
     this.parseValueMoment();
   }
-  parseValueMoment() {
-    this.valueInputFormat = '';
+  parseValueMoment(): void {
+    this.valueInput = '';
     const countHours = Math.floor(this.valueMoment.asHours());
     if (countHours > 0) {
-      this.valueInputFormat += ((this.valueInputFormat.length > 0) ? ' ' : '') + countHours + 'h';
+      this.valueInput += `${
+        this.valueInput.length > 0 ? ' ' : ''
+      }${countHours}h`;
     }
     if (this.valueMoment.minutes()) {
-      this.valueInputFormat += ((this.valueInputFormat.length > 0) ? ' ' : '') + this.valueMoment.minutes() + 'm';
+      this.valueInput += `${
+        this.valueInput.length > 0 ? ' ' : ''
+      }${this.valueMoment.minutes()}m`;
     }
     if (this.valueMoment.seconds()) {
-      this.valueInputFormat += ((this.valueInputFormat.length > 0) ? ' ' : '') + this.valueMoment.seconds() + 's';
+      this.valueInput += `${
+        this.valueInput.length > 0 ? ' ' : ''
+      }${this.valueMoment.seconds()}s`;
     }
   }
-  setFromHelper(value: any) {
+  setFromHelper(value: TimePickerHint): void {
     this.valueMoment = moment.duration(value.value, value.unit);
     this.parseValueMoment();
     this.disableSelectMode();
     this.updateValue();
   }
-  openEdit(value: boolean, omitChanges?: boolean) {
+  openEdit(value: boolean, omitChanges?: boolean): void {
     if (this.disabled) {
       return;
     }
@@ -204,16 +291,16 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     } else {
       this.editOpened = true;
       this.oldValue = this.value;
-      setTimeout(() => {
+      window.setTimeout(() => {
         this.input.switchPopup(true);
       });
     }
     this.cd.markForCheck();
   }
-  switchPopup() {
-
+  switchPopup(): void {
+    return;
   }
-  updateValue() {
+  updateValue(): void {
     let ret = this.valueMoment.toJSON();
     if (ret[ret.length - 1] === 'H') {
       ret += '0M0S';
@@ -222,7 +309,7 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     }
     this.onChangeCallback(ret);
   }
-  getLabel() {
+  getLabel(): string {
     if (!this.valueMoment) {
       return this.emptyLabel;
     } else if (this.valueMoment.asMinutes() === 0) {
@@ -230,13 +317,30 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     } else {
       const str: string[] = [];
       if (Math.floor(this.valueMoment.asHours()) > 0) {
-        str.push(moment.localeData().relativeTime(Math.floor(this.valueMoment.asHours()), true, 'hh', false));
+        str.push(
+          moment
+            .localeData()
+            .relativeTime(
+              Math.floor(this.valueMoment.asHours()),
+              true,
+              'hh',
+              false,
+            ),
+        );
       }
       if (this.valueMoment.minutes() > 0) {
-        str.push(moment.localeData().relativeTime(this.valueMoment.minutes(), true, 'mm', false));
+        str.push(
+          moment
+            .localeData()
+            .relativeTime(this.valueMoment.minutes(), true, 'mm', false),
+        );
       }
       if (this.valueMoment.seconds() > 0) {
-        str.push(moment.localeData().relativeTime(this.valueMoment.seconds(), true, 'ss', false));
+        str.push(
+          moment
+            .localeData()
+            .relativeTime(this.valueMoment.seconds(), true, 'ss', false),
+        );
       }
       if (str.length === 0) {
         str.push('0');
@@ -244,7 +348,11 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
       return str.join(' ');
     }
   }
-  add(value: number, unit: unitOfTime.DurationConstructor, flagParseValueMoment = false) {
+  add(
+    value: number,
+    unit: unitOfTime.DurationConstructor,
+    flagParseValueMoment = false,
+  ): void {
     this.valueMoment.add(value, unit);
     if (this.valueMoment.asMilliseconds() < 0) {
       this.valueMoment = moment.duration(0);
@@ -253,42 +361,56 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
       this.parseValueMoment();
     }
   }
-  onKeyDown($event: any) {
-    if (($event.key < '0' || $event.key > '9')
-      && $event.code !== 'KeyW' && $event.code !== 'KeyD' && $event.code !== 'KeyH' && $event.code !== 'KeyM' && $event.code !== 'KeyS'
-      && $event.code !== 'ArrowRight' && $event.code !== 'ArrowLeft' && $event.code !== 'Backspace' && $event.code !== 'Delete'
-      && $event.code !== 'Space' && $event.code !== 'Tab') {
-      $event.preventDefault();
-      return false;
+  onKeyDown(event: KeyboardEvent): void {
+    if (
+      (event.key < '0' || event.key > '9') &&
+      event.code !== 'KeyW' &&
+      event.code !== 'KeyD' &&
+      event.code !== 'KeyH' &&
+      event.code !== 'KeyM' &&
+      event.code !== 'KeyS' &&
+      event.code !== 'ArrowRight' &&
+      event.code !== 'ArrowLeft' &&
+      event.code !== 'Backspace' &&
+      event.code !== 'Delete' &&
+      event.code !== 'Space' &&
+      event.code !== 'Tab'
+    ) {
+      event.preventDefault();
     }
   }
-  parseInput() {
-    if (this.valueInputFormat.length === 0) {
-      return 0;
-    }
+  parseInput(): void {
     this.valueMoment = moment.duration(0);
-    let valueInputFormat = this.valueInputFormat;
+    if (this.valueInput.length === 0) {
+      return;
+    }
+    let valueInput = this.valueInput;
     let str = '';
-    while (valueInputFormat.length > 0) {
-      if (valueInputFormat[0].toLowerCase() === 'w') { // weeks
+    while (valueInput.length > 0) {
+      if (valueInput[0].toLowerCase() === 'w') {
+        // weeks
         this.add(parseInt(str, 10) * this.hoursInDay * 5, 'hours');
         str = '';
-      } else if (valueInputFormat[0].toLowerCase() === 'd') { // days
+      } else if (valueInput[0].toLowerCase() === 'd') {
+        // days
         this.add(parseInt(str, 10) * this.hoursInDay, 'hours');
         str = '';
-      } else if (valueInputFormat[0].toLowerCase() === 'h') { // hours
+      } else if (valueInput[0].toLowerCase() === 'h') {
+        // hours
         this.add(parseInt(str, 10), 'hours');
         str = '';
-      } else if (valueInputFormat[0].toLowerCase() === 'm') { // minutes
+      } else if (valueInput[0].toLowerCase() === 'm') {
+        // minutes
         this.add(parseInt(str, 10), 'minutes');
         str = '';
-      } else if (valueInputFormat[0].toLowerCase() === 's') { // minutes
+      } else if (valueInput[0].toLowerCase() === 's') {
+        // minutes
         this.add(parseInt(str, 10), 'seconds');
         str = '';
       } else {
-        str += valueInputFormat[0];
+        str += valueInput[0];
       }
-      valueInputFormat = valueInputFormat.substr(1);
+      valueInput = valueInput.substr(1);
     }
     if (str.length > 0) {
       this.add(parseInt(str, 10), this.defaultInputUnit);
@@ -302,25 +424,30 @@ export class TimePickerComponent implements OnInit, OnDestroy, ControlValueAcces
     }
     this.parseValueMoment();
   }
-  enableSelectMode(event: MouseEvent) {
+  enableSelectMode(event: MouseEvent): void {
     event.preventDefault();
     event.stopPropagation();
     clearTimeout(this.focusTimeout);
     this.dropdown.show();
-    this.shortcut = this.shortcutService.subscribe('Escape', false, false, () => {
-      this.disableSelectMode();
-    });
+    this.shortcut = this.shortcutService.subscribe(
+      'Escape',
+      false,
+      false,
+      () => {
+        this.disableSelectMode();
+      },
+    );
   }
-  disableSelectMode() {
+  disableSelectMode(): void {
     this.dropdown.hide();
     if (this.shortcut) {
       this.shortcut.unsubscribe();
     }
   }
-  parseTextinput(event: any) {
+  parseTextinput(): void {
     this.openEdit(false);
   }
-  onClear(event: MouseEvent) {
+  onClear(event: MouseEvent): void {
     event.stopImmediatePropagation();
     event.preventDefault();
     this.writeValue('0');

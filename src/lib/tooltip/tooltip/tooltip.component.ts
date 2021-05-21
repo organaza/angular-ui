@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   Input,
   HostBinding,
   ViewChild,
@@ -40,8 +39,9 @@ import {
     ]),
   ],
 })
-export class TooltipComponent implements OnInit {
-  @ViewChild('container', { read: ViewContainerRef, static: true }) target;
+export class TooltipComponent {
+  @ViewChild('container', { read: ViewContainerRef, static: true })
+  target: ViewContainerRef;
 
   @Input()
   text: string;
@@ -51,13 +51,7 @@ export class TooltipComponent implements OnInit {
   hideBack: boolean;
 
   @HostBinding('@state')
-  state: String = 'show';
-
-  @HostBinding('style.left.px')
-  x: Number = 0;
-
-  @HostBinding('style.top.px')
-  y: Number = 0;
+  state = 'show';
 
   @HostBinding('style.white-space')
   whitespace: string;
@@ -70,8 +64,4 @@ export class TooltipComponent implements OnInit {
 
   @HostBinding('style.text-align')
   textAlign = 'center';
-
-  constructor() {}
-
-  ngOnInit() {}
 }

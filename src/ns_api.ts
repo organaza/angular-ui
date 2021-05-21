@@ -15,7 +15,10 @@ export * from './lib/browser/clipboard';
 export { AlertService } from './lib/alert/alert.service';
 export { ModalService } from './lib/modal/modal.service';
 export { OzSettingsService } from './lib/settings/settings.service';
-export { ShortcutService, ShortcutObservable } from './lib/shortcut/shortcut.service';
+export {
+  ShortcutService,
+  ShortcutObservable,
+} from './lib/shortcut/shortcut.service';
 export { SortTableService } from './lib/sorttable/sorttable.service';
 export { SortTableSettingsService } from './lib/sorttable/sorttable.settings.service';
 export { ToastService } from './lib/toast/toast.service';

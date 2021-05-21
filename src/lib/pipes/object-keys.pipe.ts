@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'objectKeys', pure: false })
 export class ObjectKeysPipe implements PipeTransform {
-  transform(value: any, args: any[] = null): any {
+  transform(value: Record<string, unknown>): string[] {
     return Object.keys(value);
   }
 }

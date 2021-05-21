@@ -1,37 +1,34 @@
 import {
-  Component,
-  ElementRef,
-  OnInit,
-  HostListener,
-  forwardRef,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  ViewChild
+  Component,
+  forwardRef,
+  HostListener,
+  ViewChild,
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Color } from '../color/color';
-
 import { DropDownComponent } from '../dropdown/dropdown.component';
-import { JSONUtils } from '../json/json';
 
-const noop = () => {
+const noop = (): void => {
+  return;
 };
 
 @Component({
   selector: 'oz-colorpicker',
   templateUrl: './colorpicker.component.html',
   styleUrls: ['./colorpicker.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => ColorPickerComponent),
-    multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ColorPickerComponent),
+      multi: true,
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-export class ColorPickerComponent implements OnInit, ControlValueAccessor {
-  @ViewChild('dropdown', {static: true})
+export class ColorPickerComponent implements ControlValueAccessor {
+  @ViewChild('dropdown', { static: true })
   dropdown: DropDownComponent;
 
   value: string;
@@ -44,16 +41,14 @@ export class ColorPickerComponent implements OnInit, ControlValueAccessor {
   popupPositionLeft: string;
 
   private onTouchedCallback: () => void = noop;
-  private onChangeCallback: (_: any) => void = noop;
+  private onChangeCallback: (_: string) => void = noop;
 
   @HostListener('keydown')
-  onKeyDown() {
+  onKeyDown(): void {
     this.switchPopup(false);
   }
 
-  constructor(
-    private cd: ChangeDetectorRef,
-  ) {
+  constructor(private cd: ChangeDetectorRef) {
     this.opened = false;
     this.color = new Color('#000000');
 
@@ -87,7 +82,11 @@ export class ColorPickerComponent implements OnInit, ControlValueAccessor {
     const lightnessStep = (lightnessMax - lightnessMin) / lightnessCount;
     const saturation = 0.9;
 
-    for (let l = lightnessMin; l <= lightnessMax - lightnessStep; l += lightnessStep) {
+    for (
+      let l = lightnessMin;
+      l <= lightnessMax - lightnessStep;
+      l += lightnessStep
+    ) {
       const line: Color[] = [];
       for (let h = 0; h <= 1 - hueStep; h += hueStep) {
         const c = new Color('');
@@ -108,11 +107,11 @@ export class ColorPickerComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  writeValue(value: any) {
+  writeValue(value: string): void {
     if (value === undefined) {
       value = null;
     }
-    this.value = JSONUtils.jsonClone(value);
+    this.value = value;
     if (!this.value) {
       this.value = '#000000';
     }
@@ -121,23 +120,20 @@ export class ColorPickerComponent implements OnInit, ControlValueAccessor {
     this.cd.markForCheck();
   }
 
-  registerOnChange(fn: any) {
+  registerOnChange(fn: (_: string) => void): void {
     this.onChangeCallback = fn;
   }
 
-  registerOnTouched(fn: any) {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedCallback = fn;
   }
 
-  selectColor(color: Color) {
+  selectColor(color: Color): void {
     this.color = color;
     this.switchPopup(false);
   }
 
-  ngOnInit() {
-
-  }
-  switchPopup(value: boolean) {
+  switchPopup(value: boolean): void {
     if (!value) {
       this.opened = value;
       this.dropdown.hide();
@@ -151,7 +147,7 @@ export class ColorPickerComponent implements OnInit, ControlValueAccessor {
     this.cd.markForCheck();
   }
 
-  parseColor(value: string) {
+  parseColor(value: string): void {
     this.color = new Color(value);
     this.value = this.color.getHex();
     this.cd.markForCheck();

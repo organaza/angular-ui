@@ -1,26 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { ToastService } from './toast.service';
+import { Component } from '@angular/core';
+import { ToastInstance, ToastService } from './toast.service';
 
 @Component({
   selector: 'oz-toast',
   templateUrl: './toast.component.html',
-  styleUrls: ['./toast.component.scss']
+  styleUrls: ['./toast.component.scss'],
 })
+export class ToastComponent {
+  constructor(public toastService: ToastService) {}
 
-export class ToastComponent implements OnInit {
-  constructor(
-    public toastService: ToastService) {
-  }
-
-  ngOnInit() {
-  }
-  clickToast(toast: any) {
+  clickToast(toast: ToastInstance): void {
     if (toast.object.onClick) {
       toast.object.onClick();
     }
     this.toastService.close(toast);
   }
-  closeToast(toast: any, eventMouser: MouseEvent) {
+  closeToast(toast: ToastInstance, eventMouser: MouseEvent): void {
     eventMouser.stopImmediatePropagation();
     this.toastService.close(toast);
   }

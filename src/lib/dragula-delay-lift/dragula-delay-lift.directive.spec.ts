@@ -1,11 +1,12 @@
 import { DragulaDelayLiftDirective } from './dragula-delay-lift.directive';
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 describe('DragulaDelayLiftDirective', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ DragulaDelayLiftDirective ],
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      return TestBed.configureTestingModule({
+        declarations: [DragulaDelayLiftDirective],
+      }).compileComponents();
+    }),
+  );
 });

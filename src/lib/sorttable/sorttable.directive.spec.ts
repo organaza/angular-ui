@@ -1,11 +1,12 @@
 import { SortTableDirective } from './sorttable.directive';
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 describe('SortTableDirective', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SortTableDirective ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      return TestBed.configureTestingModule({
+        declarations: [SortTableDirective],
+      }).compileComponents();
+    }),
+  );
 });

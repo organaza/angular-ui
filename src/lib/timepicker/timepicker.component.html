@@ -1,55 +1,71 @@
-<div class="component-container"
+<div
+  class="component-container"
   [class.component-container-active]="editOpened"
-  #valueElement>
-  <div class="value" *ngIf="!editOpened"
+  #valueElement
+>
+  <div
+    class="value"
+    *ngIf="!editOpened"
     (click)="openEdit(true)"
     [style.opacity]="opacity"
     [class.value-empty]="getLabel() == emptyLabel"
-    [class.value-disabled]="disabled">
-    {{getLabel()}}
+    [class.value-disabled]="disabled"
+  >
+    {{ getLabel() }}
   </div>
   <oz-icon
-    tabindex="-1"
+    [tabindex]="-1"
     *ngIf="!disabled && !editOpened"
     class="popup-icon button"
-    icon="{{icon}}"
+    icon="{{ icon }}"
     size="normal"
-    (mousedown)="enableSelectMode($event)">
+    (mousedown)="enableSelectMode($event)"
+  >
   </oz-icon>
-  <div class="input-container"
+  <div
+    class="input-container"
     [class.container-active]="editOpened"
-    *ngIf="editOpened">
+    *ngIf="editOpened"
+  >
     <oz-textinput
       #input
       [borderless]="true"
       [prompt]="'ex. 1h 20m'"
-      [(ngModel)]="valueInputFormat"
+      [(ngModel)]="valueInput"
       (keydown)="onKeyDown($event)"
-      (ngModelChange)="parseTextinput($event)">
+      (ngModelChange)="parseTextinput()"
+    >
     </oz-textinput>
   </div>
   <oz-icon
-    *ngIf="showClear && (valueMoment.asSeconds() > 0)"
-    tabindex="-1"
+    *ngIf="showClear && valueMoment.asSeconds() > 0"
+    [tabindex]="-1"
     class="icon-close clear"
     icon="clear"
     size="normal"
-    (mousedown)="onClear($event)">
+    (mousedown)="onClear($event)"
+  >
   </oz-icon>
 </div>
-<oz-dropdown #dropdown
+<oz-dropdown
+  #dropdown
   class="oz-select-dropdown dropdown"
   [bindElement]="valueElement"
   [displayBackground]="true"
   positionHorizontal="right-inside"
   positionVertical="down"
   [useBindWidth]="false"
-  [bindInside]="false">
+  [bindInside]="false"
+>
   <ng-template #dropdownContent>
     <div class="popup-helpers">
-      <div class="popup-helpers-item"
+      <div
+        class="popup-helpers-item"
         *ngFor="let helper of helpers"
-        (click)="setFromHelper(helper)">{{helper.value}}{{helper.unit}}</div>
+        (click)="setFromHelper(helper)"
+      >
+        {{ helper.value }}{{ helper.unit }}
+      </div>
     </div>
   </ng-template>
 </oz-dropdown>

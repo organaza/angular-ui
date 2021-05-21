@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
 import { PreventParentScrollDirective } from '../prevent-parent-scroll/prevent-parent-scroll.directive';
@@ -9,18 +9,19 @@ describe('TextinputComponent', () => {
   let component: TextinputComponent;
   let fixture: ComponentFixture<TextinputComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [FormsModule],
-      declarations: [
-        PreventParentScrollDirective,
-        ButtonComponent,
-        TextinputComponent,
-        IconComponent,
-      ],
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      return TestBed.configureTestingModule({
+        imports: [FormsModule],
+        declarations: [
+          PreventParentScrollDirective,
+          ButtonComponent,
+          TextinputComponent,
+          IconComponent,
+        ],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TextinputComponent);

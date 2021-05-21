@@ -10,13 +10,15 @@
 }
 .item {
   background-color: $white;
-  border-radius: $oz-control-border-radius;
+  border-radius: $oz-control-border-radius * 2;
   position: relative;
   overflow: hidden;
   transition: all 0.1s ease-out;
   transform: translate3d(0, 0, 0);
   line-height: 1;
-  padding: 10px 15px;
+  padding: 15px 15px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+  margin-bottom: 10px;
 
   &-hide {
     padding: 0 10px;

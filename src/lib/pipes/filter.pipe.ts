@@ -1,16 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'filter'
+  name: 'filter',
 })
 export class FilterPipe implements PipeTransform {
-
-  transform(value: any, search: string, fields: string[]): any {
+  static t<T>(value: Array<T>, search: string, fields: string[]): Array<T> {
     if (Array.isArray(value)) {
-      return value.filter(v => {
+      return value.filter((v) => {
         if (fields) {
           for (const f of fields) {
             try {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
               return v[f].toLowerCase().indexOf(search.toLowerCase()) > -1;
             } catch (e) {
               return false;
@@ -18,14 +18,20 @@ export class FilterPipe implements PipeTransform {
           }
         } else {
           try {
-            return v.toLowerCase().indexOf(search.toLowerCase()) > -1;
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+            return (
+              v.toString().toLowerCase().indexOf(search.toLowerCase()) > -1
+            );
           } catch (e) {
             return false;
           }
         }
+        return false;
       });
     }
     return [];
   }
-
+  transform<T>(value: Array<T>, search: string, fields: string[]): Array<T> {
+    return FilterPipe.t(value, search, fields);
+  }
 }

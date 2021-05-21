@@ -1,12 +1,19 @@
-import { OnDestroy, Directive, Input, ElementRef, HostListener, Type} from '@angular/core';
+import {
+  OnDestroy,
+  Directive,
+  Input,
+  ElementRef,
+  HostListener,
+  Type,
+} from '@angular/core';
 import { TooltipService, Tooltip } from './tooltip.service';
+import { createPopper, Placement } from '@popperjs/core';
 
 @Directive({
   selector: '[ozTooltip]',
 })
-
 export class TooltipDirective implements OnDestroy {
-  showTimeout: any = -1;
+  showTimeout = -1;
 
   @Input()
   set ozTooltip(value: string) {
@@ -40,16 +47,16 @@ export class TooltipDirective implements OnDestroy {
   _tooltipDisabled = false;
 
   @Input()
-  tooltipDirection = 'top';
+  tooltipDirection: Placement = 'top';
 
   @Input()
-  tooltipType: Type<{}>;
+  tooltipType: Type<unknown>;
 
   @Input()
   tooltipHideBack = false;
 
   @Input()
-  tooltipData: any;
+  tooltipData: unknown;
 
   @Input()
   tooltipTimeout = 500;
@@ -66,18 +73,14 @@ export class TooltipDirective implements OnDestroy {
   tooltip: Tooltip;
 
   @Input()
-  tooltipPadding = 7;
+  tooltipOffset: [number, number] = [0, 0];
 
   @Input()
   tooltipDataField = 'data';
 
+  constructor(private tooltipService: TooltipService, private el: ElementRef) {}
 
-  constructor(
-    private tooltipService: TooltipService,
-    private el: ElementRef
-  ) {}
-
-  @HostListener('mouseenter') onMouseEnter() {
+  @HostListener('mouseenter') onMouseEnter(): void {
     if (!this.tooltipType && (!this.ozTooltip || !this.ozTooltip.trim())) {
       return;
     }
@@ -85,12 +88,16 @@ export class TooltipDirective implements OnDestroy {
     if (this.tooltip) {
       this.tooltipService.remove(this.tooltip);
     }
-    this.showTimeout = setTimeout(() => {
+    this.showTimeout = window.setTimeout(() => {
       if (this.tooltipDisabled) {
         return;
       }
       if (!this.tooltipType) {
-        this.tooltip = this.tooltipService.add(this.ozTooltip, this.tooltipWidth, this.tooltipMaxWidth);
+        this.tooltip = this.tooltipService.add(
+          this.ozTooltip,
+          this.tooltipWidth,
+          this.tooltipMaxWidth,
+        );
       } else {
         this.tooltip = this.tooltipService.addWithType(
           this.tooltipType,
@@ -98,67 +105,55 @@ export class TooltipDirective implements OnDestroy {
           this.tooltipDataField,
           this.tooltipWidth,
           this.tooltipMaxWidth,
-          this.tooltipHideBack
+          this.tooltipHideBack,
         );
       }
-      setTimeout(() => {
-        this.place();
-      });
+      this.tooltip.componentRef.changeDetectorRef.detectChanges();
+      this.place();
     }, this.tooltipTimeout);
   }
 
-  @HostListener('mouseleave') onMouseLeave() {
+  @HostListener('mouseleave') onMouseLeave(): void {
     clearTimeout(this.showTimeout);
     if (this.tooltip) {
       this.tooltipService.remove(this.tooltip);
     }
   }
-  @HostListener('mousedown') onMouseDown() {
-    clearTimeout(this.showTimeout);
-    if (this.tooltip) {
-      this.tooltipService.remove(this.tooltip);
-    }
-  }
-
-  ngOnDestroy() {
+  @HostListener('mousedown') onMouseDown(): void {
     clearTimeout(this.showTimeout);
     if (this.tooltip) {
       this.tooltipService.remove(this.tooltip);
     }
   }
 
-  place() {
-    const anchorBounds: ClientRect = this.el.nativeElement.getBoundingClientRect();
-    const tooltipBounds: ClientRect = this.tooltip.componentRef.location.nativeElement.getBoundingClientRect();
+  ngOnDestroy(): void {
+    clearTimeout(this.showTimeout);
+    if (this.tooltip) {
+      this.tooltipService.remove(this.tooltip);
+    }
+  }
 
-    const anchorCenterX = anchorBounds.left + anchorBounds.width / 2;
-    const anchorCenterY = anchorBounds.top + anchorBounds.height / 2;
-
-    switch (this.tooltipDirection) {
-      case 'top':
-        this.tooltip.componentRef.instance['x'] = anchorCenterX - tooltipBounds.width / 2;
-        this.tooltip.componentRef.instance['y'] = anchorBounds.top - tooltipBounds.height - this.tooltipPadding;
-      break;
-      case 'bottom':
-        this.tooltip.componentRef.instance['x'] = anchorCenterX - tooltipBounds.width / 2;
-        this.tooltip.componentRef.instance['y'] = anchorBounds.bottom + this.tooltipPadding;
-      break;
-      case 'left':
-        this.tooltip.componentRef.instance['x'] = anchorBounds.left - tooltipBounds.width - this.tooltipPadding;
-        this.tooltip.componentRef.instance['y'] = anchorCenterY - tooltipBounds.height / 2;
-        this.tooltip.componentRef.instance['textAlign'] = 'right';
-      break;
-      case 'right':
-        this.tooltip.componentRef.instance['x'] = anchorBounds.right + this.tooltipPadding;
-        this.tooltip.componentRef.instance['y'] = anchorCenterY - tooltipBounds.height / 2;
-        this.tooltip.componentRef.instance['textAlign'] = 'left';
-      break;
-    }
-    if (this.textAlign) {
-      this.tooltip.componentRef.instance['textAlign'] = this.textAlign;
-    }
-    if ((this.tooltipDirection === 'top' || this.tooltipDirection === 'bottom') && this.tooltip.componentRef.instance['x'] < 0) {
-      this.tooltip.componentRef.instance['x'] = 5;
-    }
+  place(): void {
+    createPopper(
+      this.el.nativeElement as HTMLElement,
+      this.tooltip.componentRef.location.nativeElement as HTMLElement,
+      {
+        placement: this.tooltipDirection,
+        modifiers: [
+          {
+            name: 'offset',
+            options: {
+              offset: this.tooltipOffset,
+            },
+          },
+          {
+            name: 'computeStyles',
+            options: {
+              gpuAcceleration: false, // true by default
+            },
+          },
+        ],
+      },
+    );
   }
 }

@@ -1,11 +1,25 @@
 <div class="wrapper" [class.checked]="value">
-	<input id="checkboxInput" type="checkbox" [(ngModel)]="valueInside">
-	<label for="checkboxInput" [style.width.px]="width * 2">
-		<div class="switch" [style.width.px]="width" [class.checked]="value">
-			<span *ngIf="!value">{{labelUnchecked}}</span>
-			<span *ngIf="value">{{labelChecked}}</span>
-		</div>
-		<div #idUnchecked [style.width.px]="width" class="item" [class.active]="!value">{{labelUnchecked}}</div>
-		<div #idChecked [style.width.px]="width" class="item" [class.active]="value">{{labelChecked}}</div>
-	</label>
+  <input id="checkboxInput" type="checkbox" [(ngModel)]="valueInside" />
+  <label for="checkboxInput" [style.width.px]="width * 2">
+    <div class="switch" [style.width.px]="width" [class.checked]="value">
+      <span *ngIf="!value">{{ labelUnchecked }}</span>
+      <span *ngIf="value">{{ labelChecked }}</span>
+    </div>
+    <div
+      #idUnchecked
+      [style.width.px]="width"
+      class="item"
+      [class.active]="!value"
+    >
+      {{ labelUnchecked }}
+    </div>
+    <div
+      #idChecked
+      [style.width.px]="width"
+      class="item"
+      [class.active]="value"
+    >
+      {{ labelChecked }}
+    </div>
+  </label>
 </div>

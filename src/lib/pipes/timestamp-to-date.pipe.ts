@@ -3,8 +3,12 @@ import moment from 'moment';
 
 @Pipe({ name: 'timestampToDate' })
 export class TimeStampToDatePipe implements PipeTransform {
-
-  static t(value: any, format: string, local: boolean = true, unix: boolean = false) {
+  static t(
+    value: moment.MomentInput,
+    format?: string,
+    local: boolean = true,
+    unix: boolean = false,
+  ): string {
     if (value === null) {
       return null;
     }
@@ -13,7 +17,7 @@ export class TimeStampToDatePipe implements PipeTransform {
       format = 'LLL';
     }
     if (format === 'fromNow') {
-      if (unix) {
+      if (unix && typeof value === 'number') {
         return moment.unix(value).fromNow();
       } else if (local) {
         return moment(value).fromNow();
@@ -22,7 +26,7 @@ export class TimeStampToDatePipe implements PipeTransform {
       }
     }
     let result = 'Invalid date';
-    if (unix) {
+    if (unix && typeof value === 'number') {
       result = moment.unix(value).format(format);
     } else if (local) {
       result = moment(value).format(format);
@@ -36,7 +40,12 @@ export class TimeStampToDatePipe implements PipeTransform {
     }
   }
 
-  transform(value: any, format: string, local: boolean = true, unix: boolean = false) {
+  transform(
+    value: moment.MomentInput,
+    format?: string,
+    local: boolean = true,
+    unix: boolean = false,
+  ): string {
     return TimeStampToDatePipe.t(value, format, local, unix);
   }
 }

@@ -1,21 +1,31 @@
-<div class="button button-{{typeButton}} button-icon-{{iconSize}}"
+<div
+  class="button button-{{ typeButton }} button-icon-{{ iconSize }}"
   [style.padding]="padding"
   [style.background-color]="backgroundColor"
-  [style.border-color]="(backgroundColor && !borderColor)?backgroundColor:borderColor"
+  [style.border-color]="
+    backgroundColor && !borderColor ? backgroundColor : borderColor
+  "
   [style.color]="color"
   [class.disabled]="disabled"
-  [class.double]="clickCount>0"
+  [class.double]="clickCount > 0"
   [class.button-tab-selected]="selected"
   [class.button-icon]="typeButton == 'icon'"
   [class.attention]="isAttention"
-  (click)="onClickButton()">
+  (click)="onClickButton()"
+>
   <oz-icon
     [class.in-progress]="inProgress"
     [size]="iconSize"
     [icon]="iconClass"
   ></oz-icon>
-  <span [class.in-progress]="inProgress" *ngIf="iconClass && textelement.textContent.length>0">&nbsp;</span>
-  <span [class.in-progress]="inProgress" #textelement><ng-content></ng-content>{{text}}</span>
+  <span
+    [class.in-progress]="inProgress"
+    *ngIf="iconClass && textelement.textContent.length > 0"
+    >&nbsp;</span
+  >
+  <span [class.in-progress]="inProgress" #textelement
+    ><ng-content></ng-content>{{ text }}</span
+  >
   <div *ngIf="inProgress" class="spinner">
     <div class="bounce1"></div>
     <div class="bounce2"></div>

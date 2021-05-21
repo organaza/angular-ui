@@ -75,17 +75,12 @@ import { ParseBooleanPipe } from './pipes/parse-boolean.pipe';
 import { OzSettingsService } from './settings/settings.service';
 import { SelectComponent } from './select/select.component';
 import { FilterPipe } from './pipes/filter.pipe';
+import { OzMentionsModule } from 'oz-mentions';
+// import { TextareaComponent } from './textarea/textarea.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-  ],
+  imports: [CommonModule, FormsModule, OzMentionsModule.forRoot()],
   providers: [],
-  entryComponents: [
-    CalendarComponent,
-    TooltipComponent,
-  ],
   declarations: [
     AlertComponent,
     ButtonComponent,
@@ -105,6 +100,7 @@ import { FilterPipe } from './pipes/filter.pipe';
     TooltipContainerComponent,
     TooltipDirective,
     TextWithTooltipComponent,
+    // TextareaComponent,
     ToastComponent,
     ModalComponent,
     ModalContainerDirective,
@@ -154,6 +150,7 @@ import { FilterPipe } from './pipes/filter.pipe';
     TextWithTooltipComponent,
     ToastComponent,
     ModalComponent,
+    // TextareaComponent,
     ModalContainerDirective,
     ModalHeaderDirective,
     ModalSubHeaderDirective,
@@ -182,7 +179,7 @@ import { FilterPipe } from './pipes/filter.pipe';
   ],
 })
 export class OzModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<OzModule> {
     return {
       ngModule: OzModule,
       providers: [
@@ -194,7 +191,7 @@ export class OzModule {
         TooltipService,
         ShortcutService,
         OzSettingsService,
-      ]
+      ],
     };
   }
 }

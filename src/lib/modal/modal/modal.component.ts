@@ -6,17 +6,20 @@ import {
   OnInit,
   OnDestroy,
   ElementRef,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ModalService } from '../modal.service';
-import { ShortcutService, ShortcutObservable } from '../../shortcut/shortcut.service';
+import {
+  ShortcutService,
+  ShortcutObservable,
+} from '../../shortcut/shortcut.service';
 
 import {
   trigger,
   state,
   style,
   animate,
-  transition
+  transition,
 } from '@angular/animations';
 
 @Component({
@@ -25,61 +28,84 @@ import {
   styleUrls: ['./modal.component.scss'],
   animations: [
     trigger('state', [
-      state('void', style({
-        opacity: 0,
-        transform: 'translateY(0) scale(0.95)',
-      })),
-      state('create', style({
-        opacity: 0,
-        transform: 'translateY(0) scale(0.95)',
-      })),
-      state('show', style({
-        opacity: 1,
-        transform: 'translateY(0) scale(1)',
-      })),
-      state('close', style({
-        opacity: 0,
-        transform: 'translateY(0) scale(0.95)',
-      })),
+      state(
+        'void',
+        style({
+          opacity: 0,
+          transform: 'translateY(0) scale(0.95)',
+        }),
+      ),
+      state(
+        'create',
+        style({
+          opacity: 0,
+          transform: 'translateY(0) scale(0.95)',
+        }),
+      ),
+      state(
+        'show',
+        style({
+          opacity: 1,
+          transform: 'translateY(0) scale(1)',
+        }),
+      ),
+      state(
+        'close',
+        style({
+          opacity: 0,
+          transform: 'translateY(0) scale(0.95)',
+        }),
+      ),
       transition('void => create', animate('0ms')),
       transition('void => show', animate('150ms 75ms ease-out')),
       transition('create => show', animate('150ms 75ms ease-out')),
       transition('show => close', animate('150ms ease-out')),
     ]),
     trigger('backgroundState', [
-      state('void', style({
-        opacity: 0,
-      })),
-      state('create', style({
-        opacity: 1,
-      })),
-      state('show', style({
-        opacity: 1,
-      })),
-      state('close', style({
-        opacity: 0,
-      })),
+      state(
+        'void',
+        style({
+          opacity: 0,
+        }),
+      ),
+      state(
+        'create',
+        style({
+          opacity: 1,
+        }),
+      ),
+      state(
+        'show',
+        style({
+          opacity: 1,
+        }),
+      ),
+      state(
+        'close',
+        style({
+          opacity: 0,
+        }),
+      ),
       transition('void => create', animate('150ms ease-out')),
       transition('void => show', animate('150ms ease-out')),
       transition('create => show', animate('0ms')),
       transition('show => close', animate('150ms 75ms ease-out')),
-    ])
-  ]
+    ]),
+  ],
 })
-
 export class ModalComponent implements OnInit, OnDestroy {
   set state(value: string) {
     this.__state = value;
     this.cd.detectChanges();
   }
-  get state() {
+  get state(): string {
     return this.__state;
   }
   __state = 'create';
-  shortcut: ShortcutObservable<any>;
+  shortcut: ShortcutObservable;
 
   @Output()
-  closed: EventEmitter<{}> = new EventEmitter();
+  closed = new EventEmitter<boolean>();
 
   constructor(
     public modalService: ModalService,
@@ -87,84 +113,61 @@ export class ModalComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     private el: ElementRef,
   ) {
-    this.shortcut = this.shortcutService.subscribe('Escape', false, true, () => {
-      this.close();
-    });
+    this.shortcut = this.shortcutService.subscribe(
+      'Escape',
+      false,
+      true,
+      () => {
+        this.close();
+      },
+    );
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.modalService.registerModal(this);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.shortcut.unsubscribe();
     this.closed.complete();
   }
 
-  close() {
+  close(): void {
     this.modalService.close(this);
     this.state = 'close';
     this.cd.detectChanges();
-    setTimeout(() => {
+    window.setTimeout(() => {
       this.closed.next(true);
     }, 200);
-
-  }
-
-  onButtonClick(button: any) {
   }
 }
 
 @Directive({
-  selector: '[ozModalHeader]'
+  selector: '[ozModalHeader]',
 })
-
-export class ModalHeaderDirective {
-  constructor() {
-  }
-}
+export class ModalHeaderDirective {}
 
 @Directive({
-  selector: '[ozModalSubHeader]'
+  selector: '[ozModalSubHeader]',
 })
-
-export class ModalSubHeaderDirective {
-  constructor() {
-  }
-}
+export class ModalSubHeaderDirective {}
 
 @Directive({
-  selector: '[ozModalHeaderButtons]'
+  selector: '[ozModalHeaderButtons]',
 })
-
-export class ModalHeaderButtonsDirective {
-  constructor() {
-  }
-}
+export class ModalHeaderButtonsDirective {}
 
 @Directive({
-  selector: '[ozModalClose]'
+  selector: '[ozModalClose]',
 })
-
-export class ModalCloseDirective {
-  constructor() {
-  }
-}
+export class ModalCloseDirective {}
 
 @Directive({
-  selector: '[ozModalBody]'
+  selector: '[ozModalBody]',
 })
-
-export class ModalBodyDirective {
-  constructor() {
-  }
-}
+export class ModalBodyDirective {}
 
 @Directive({
-  selector: '[ozModalFooter]'
+  selector: '[ozModalFooter]',
 })
-
-export class ModalFooterDirective {
-  constructor() {
-  }
-}
+export class ModalFooterDirective {}

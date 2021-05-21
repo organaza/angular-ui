@@ -5,14 +5,14 @@ import { SortTableSettingsService } from './sorttable.settings.service';
 describe('SortTableService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        SortTableSettingsService,
-        SortTableService,
-      ]
+      providers: [SortTableSettingsService, SortTableService],
     });
   });
 
-  it('should be created', inject([SortTableService], (service: SortTableService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [SortTableService],
+    (service: SortTableService) => {
+      expect(service).toBeTruthy();
+    },
+  ));
 });

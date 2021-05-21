@@ -1,11 +1,13 @@
 <div class="list">
-  <div class="item item-{{toast.level}}"
+  <div
+    class="item item-{{ toast.level }}"
     *ngFor="let toast of toastService.toasts"
     [class.item-hide]="toast.hide"
     [class.pointer]="toast.object.onClick"
-    (click)="clickToast(toast)">
-    <div class="item-text" >
-      {{toast.text}}
+    (click)="clickToast(toast)"
+  >
+    <div class="item-text">
+      {{ toast.text }}
       <!-- <issue-href
         *ngIf="toast && toast.object && toast.objectType && toast.objectType=='issue'"
         [linkButton]="true"
@@ -16,6 +18,12 @@
         [title]="toast.object.title">
       </issue-href> -->
     </div>
-    <div class="item-close" *ngIf="toast.persistant" (click)="closeToast(toast, $event)">&#215;</div>
+    <div
+      class="item-close"
+      *ngIf="toast.persistant"
+      (click)="closeToast(toast, $event)"
+    >
+      &#215;
+    </div>
   </div>
 </div>

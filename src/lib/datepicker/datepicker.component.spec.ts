@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DatePickerComponent } from './datepicker.component';
 import { ButtonComponent } from '../button/button.component';
@@ -13,25 +13,22 @@ describe('DatePickerComponent', () => {
   let component: DatePickerComponent;
   let fixture: ComponentFixture<DatePickerComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        DatePickerComponent,
-        DropDownComponent,
-        ButtonComponent,
-        IconComponent,
-        CalendarComponent,
-      ],
-      imports: [
-        FormsModule,
-      ],
-      providers: [
-        OzSettingsService,
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      return TestBed.configureTestingModule({
+        declarations: [
+          DatePickerComponent,
+          DropDownComponent,
+          ButtonComponent,
+          IconComponent,
+          CalendarComponent,
+        ],
+        imports: [FormsModule],
+        providers: [OzSettingsService],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatePickerComponent);

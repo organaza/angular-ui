@@ -8,7 +8,8 @@
 }
 
 .container {
-  z-index: $oz-control-popup-z-index+1;
+  overflow: hidden;
+  z-index: $oz-control-popup-z-index + 1;
   background-color: $white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border-radius: $oz-control-border-radius;

@@ -1,27 +1,30 @@
-import { Component,
-  OnInit,
-  Input,
+import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  Component,
   forwardRef,
-  OnDestroy} from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+  Input,
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-const noop = () => {
+const noop = (): void => {
+  return;
 };
 
 @Component({
   selector: 'oz-pager',
   templateUrl: './pager.component.html',
   styleUrls: ['./pager.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => PagerComponent),
-    multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PagerComponent),
+      multi: true,
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class PagerComponent implements ControlValueAccessor {
   private _rowsNumber = 0;
   private _pageSize = 20;
 
@@ -29,7 +32,7 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
     this._currentPage = Number(value);
     this.onChangeCallback(value - 1);
   }
-  get currentPage() {
+  get currentPage(): number {
     return this._currentPage;
   }
   _currentPage = 1;
@@ -61,27 +64,19 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
   }
 
   private onTouchedCallback: () => void = noop;
-  private onChangeCallback: (_: any) => void = noop;
+  private onChangeCallback: (_: number) => void = noop;
 
-  constructor(
-    private cd: ChangeDetectorRef,
-  ) { }
+  constructor(private cd: ChangeDetectorRef) {}
 
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-  }
-
-  registerOnChange(fn: any) {
+  registerOnChange(fn: (_: number) => void): void {
     this.onChangeCallback = fn;
   }
 
-  registerOnTouched(fn: any) {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedCallback = fn;
   }
 
-  writeValue(value: any) {
+  writeValue(value: number): void {
     if (value) {
       this.currentPage = Number(value) + 1;
     } else {
@@ -90,7 +85,7 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
     this.cd.markForCheck();
   }
 
-  private updatePageCount() {
+  private updatePageCount(): void {
     this.pageCount = Math.ceil(this.rowsCount / this.pageSize);
     this.cd.markForCheck();
   }
@@ -118,7 +113,7 @@ export class PagerComponent implements OnInit, OnDestroy, ControlValueAccessor {
   }
 
   public onClickNext(): void {
-    if (this.currentPage < this.pageCount ) {
+    if (this.currentPage < this.pageCount) {
       this.currentPage = this.currentPage + 1;
       this.currentPageChanged();
     }

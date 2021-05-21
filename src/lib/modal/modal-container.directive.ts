@@ -1,13 +1,11 @@
 import {
   ContentChild,
-  ViewContainerRef,
+  Directive,
   HostBinding,
-  AfterContentInit,
   Input,
   OnInit,
+  ViewContainerRef,
 } from '@angular/core';
-import { Directive } from '@angular/core';
-
 import { ModalService } from './modal.service';
 
 @Directive({
@@ -15,7 +13,7 @@ import { ModalService } from './modal.service';
 })
 export class ModalContainerDirective implements OnInit {
   @ContentChild('modalContainer', { read: ViewContainerRef, static: true })
-  target;
+  target: ViewContainerRef;
 
   @HostBinding('class.active')
   active: boolean;
@@ -34,7 +32,7 @@ export class ModalContainerDirective implements OnInit {
     );
   }
 
-  close() {
+  close(): void {
     this.modalService.close();
   }
 }

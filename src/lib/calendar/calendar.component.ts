@@ -1,17 +1,14 @@
 import {
-  Component,
-  Input,
-  Output,
-  ElementRef,
-  EventEmitter,
-  OnInit,
-  OnChanges,
-  SimpleChange,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  HostBinding
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChange,
 } from '@angular/core';
-
 import moment from 'moment';
 
 export interface CalendarDay {
@@ -34,24 +31,23 @@ export interface CalendarDay {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarComponent implements OnInit, OnChanges {
-
   @Input()
   hideOverflow: boolean;
 
   @Input()
-  selectionStart: any;
+  selectionStart: moment.Moment | string;
 
   @Input()
-  selectionEnd: any;
+  selectionEnd: moment.Moment | string;
 
   @Input()
-  holidays: any;
+  holidays: Array<moment.Moment>;
 
   @Input()
   hideMonthYearSelection: boolean;
 
   @Output()
-  change: EventEmitter<{}> = new EventEmitter();
+  changed = new EventEmitter<moment.Moment>();
 
   @Input()
   currentYear: number = moment().year();
@@ -78,20 +74,22 @@ export class CalendarComponent implements OnInit, OnChanges {
   years: number[];
   currentEra: string;
 
-  constructor(
-    private cd: ChangeDetectorRef,
-  ) {
-
-  }
-  render() {
+  constructor(private cd: ChangeDetectorRef) {}
+  render(): void {
     if (this.currentMonth === null || this.currentMonth === undefined) {
       this.currentMonth = moment().month();
     }
     if (this.currentYear === null || this.currentYear === undefined) {
       this.currentYear = moment().year();
     }
-    const monthStart = moment().year(this.currentYear).month(this.currentMonth).startOf('month');
-    const monthEnd = moment().year(this.currentYear).month(this.currentMonth).endOf('month');
+    const monthStart = moment()
+      .year(this.currentYear)
+      .month(this.currentMonth)
+      .startOf('month');
+    const monthEnd = moment()
+      .year(this.currentYear)
+      .month(this.currentMonth)
+      .endOf('month');
 
     if (monthStart.isoWeekday() !== 1) {
       monthStart.subtract(monthStart.isoWeekday() - 1, 'days');
@@ -114,15 +112,20 @@ export class CalendarComponent implements OnInit, OnChanges {
         selectedStart: false,
         selectedEnd: false,
         holiday: false,
-        period: false
+        period: false,
       };
       const hideDay = this.hideOverflow && day.overflow;
       if (hideDay) {
         day.label = '';
       }
 
-      if (this.holidays && this.holidays.some(holiday => day.date.format('DDMMYYYY') === holiday.format('DDMMYYYY'))) {
-        if (!day.overflow || day.overflow && !this.hideOverflow) {
+      if (
+        this.holidays &&
+        this.holidays.some((holiday) => {
+          return day.date.format('DDMMYYYY') === holiday.format('DDMMYYYY');
+        })
+      ) {
+        if (!day.overflow || (day.overflow && !this.hideOverflow)) {
           day.holiday = true;
         }
       }
@@ -138,11 +141,11 @@ export class CalendarComponent implements OnInit, OnChanges {
       this.dateCells.slice(14, 21),
       this.dateCells.slice(21, 28),
       this.dateCells.slice(28, 35),
-      this.dateCells.slice(35, 42)
+      this.dateCells.slice(35, 42),
     ];
     this.setSelection();
   }
-  setSelection() {
+  setSelection(): void {
     if (this.selectionStart && this.selectionEnd) {
       if (moment.isMoment(this.selectionStart)) {
         this.selectionStartMoment = this.selectionStart.clone();
@@ -158,33 +161,36 @@ export class CalendarComponent implements OnInit, OnChanges {
       return;
     }
 
-    const period = Math.abs(this.selectionStartMoment.diff(this.selectionEndMoment, 'm')) >= 1;
-    for (const i in this.dateCells) {
-      if (this.dateCells.hasOwnProperty(i)) {
-        this.dateCells[i].selectedStart = false;
-        this.dateCells[i].selectedEnd = false;
-        const selected = this.dateCells[i].date.isSameOrAfter(this.selectionStartMoment, 'day') &&
-          this.dateCells[i].date.isSameOrBefore(this.selectionEndMoment, 'day');
-        this.dateCells[i].selected = !period && selected;
-        this.dateCells[i].period = period && selected;
-        if (this.dateCells[i].date.isSame(this.selectionStartMoment, 'day') && period) {
-          this.dateCells[i].selectedStart = true;
+    const period =
+      Math.abs(this.selectionStartMoment.diff(this.selectionEndMoment, 'm')) >=
+      1;
+    if (this.dateCells) {
+      for (const dateCell of this.dateCells) {
+        dateCell.selectedStart = false;
+        dateCell.selectedEnd = false;
+        const selected =
+          dateCell.date.isSameOrAfter(this.selectionStartMoment, 'day') &&
+          dateCell.date.isSameOrBefore(this.selectionEndMoment, 'day');
+        dateCell.selected = !period && selected;
+        dateCell.period = period && selected;
+        if (dateCell.date.isSame(this.selectionStartMoment, 'day') && period) {
+          dateCell.selectedStart = true;
         }
-        if (this.dateCells[i].date.isSame(this.selectionEndMoment, 'day') && period) {
-          this.dateCells[i].selectedEnd = true;
+        if (dateCell.date.isSame(this.selectionEndMoment, 'day') && period) {
+          dateCell.selectedEnd = true;
         }
       }
     }
     this.cd.markForCheck();
   }
-  onClick($event: any, day: CalendarDay) {
-    this.change.next(day.date);
+  onClick(day: CalendarDay): void {
+    this.changed.next(day.date);
   }
-  setState(state: string) {
+  setState(state: string): void {
     this.currentState = state;
     this.cd.markForCheck();
   }
-  prevMonth() {
+  prevMonth(): void {
     this.currentMonth = this.currentMonth - 1;
     if (this.currentMonth < 0) {
       this.currentYear = this.currentYear - 1;
@@ -192,7 +198,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     }
     this.render();
   }
-  nextMonth() {
+  nextMonth(): void {
     this.currentMonth = this.currentMonth + 1;
     if (this.currentMonth > 11) {
       this.currentYear = this.currentYear + 1;
@@ -200,22 +206,22 @@ export class CalendarComponent implements OnInit, OnChanges {
     }
     this.render();
   }
-  setMonth(value: number) {
+  setMonth(value: number): void {
     this.currentMonth = value;
     this.setState('month');
     this.render();
   }
-  getMonths() {
+  getMonths(): Array<string> {
     if (!this.months) {
       this.months = moment.months();
     }
     return this.months;
   }
-  setYear(value: number) {
+  setYear(value: number): void {
     this.currentYear = value;
     this.setState('months');
   }
-  getYears() {
+  getYears(): Array<number> {
     if (!this.years) {
       this.years = [];
       for (let y = this.currentYear - 12; y < this.currentYear + 13; y++) {
@@ -225,17 +231,17 @@ export class CalendarComponent implements OnInit, OnChanges {
 
     return this.years;
   }
-  getCurrentMonthName() {
+  getCurrentMonthName(): string {
     if (this.currentMonth !== undefined) {
       return moment.months(this.currentMonth);
     } else {
       return '';
     }
   }
-  updateDisplayPeriod() {
+  updateDisplayPeriod(): void {
     this.cd.markForCheck();
   }
-  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+  ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
     if (changes['currentYear'] || changes['currentMonth']) {
       this.render();
     }
@@ -268,15 +274,15 @@ export class CalendarComponent implements OnInit, OnChanges {
     }
     this.cd.markForCheck();
   }
-  ngOnInit() {
+  ngOnInit(): void {
     this.weekdays = moment.weekdaysMin();
     this.weekdays.push(this.weekdays.shift());
     this.render();
   }
 
-  isDateDisabled(date) {
+  isDateDisabled(date: CalendarDay): boolean {
     if (this.minDate && date.date.toDate() < this.minDate) {
-        return true;
+      return true;
     }
 
     if (this.maxDate && date.date.toDate() > this.maxDate) {

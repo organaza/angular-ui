@@ -1,11 +1,12 @@
 import { SortTableColumnHeadDirective } from './sorttable-column-head.directive';
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 describe('SortTableColumnHeadDirective', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SortTableColumnHeadDirective ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      return TestBed.configureTestingModule({
+        declarations: [SortTableColumnHeadDirective],
+      }).compileComponents();
+    }),
+  );
 });

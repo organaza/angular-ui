@@ -1,36 +1,36 @@
-import { Directive, Input, Output, ElementRef, EventEmitter, HostListener } from '@angular/core';
-import { SortTableService } from './sorttable.service';
-import { SortTableDirective } from './sorttable.directive';
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 import { SortTableRowDirective } from './sorttable-row.directive';
+import { SortTableDirective } from './sorttable.directive';
+import { SortTableService } from './sorttable.service';
 
 @Directive({
-  selector: '[ozSortTableRowHandler]'
+  selector: '[ozSortTableRowHandler]',
 })
 export class SortTableRowHandlerDirective {
-  @Input('ozSortTableRowHandler') sortTableRowHandler: number;  // tslint:disable-line no-input-rename
+  @Input('ozSortTableRowHandler') sortTableRowHandler: number; // eslint-disable-line  @angular-eslint/no-input-rename
 
   @Input()
   canSort = true;
 
-  @Output()
-  sorted: EventEmitter<{}> = new EventEmitter();
-
-  private el: HTMLElement;
-
   constructor(
-    el: ElementRef,
+    private el: ElementRef,
     private sortTableService: SortTableService,
     private sortTableRow: SortTableRowDirective,
-    private sortTable: SortTableDirective) {
-    this.el = el.nativeElement;
-  }
-  @HostListener('mousedown', ['$event.which']) onMouseDown(which: any) {
+    private sortTable: SortTableDirective,
+  ) {}
+  @HostListener('mousedown', ['$event.which']) onMouseDown(
+    which: number,
+  ): void {
     if (!this.canSort) {
       return;
     }
-    if (which === 3) { // disable right click drag
-      return false;
+    if (which === 3) {
+      // disable right click drag
+      return;
     }
-    this.sortTableService.startDrag(this.sortTable.sortTable, this.sortTableRow.index);
+    this.sortTableService.startDrag(
+      this.sortTable.sortTable,
+      this.sortTableRow.index,
+    );
   }
 }

@@ -1,20 +1,26 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import moment from 'moment';
+import moment, { DurationInputArg1 } from 'moment';
 
+type DurationFormat =
+  | 'days'
+  | 'hours'
+  | 'minutes'
+  | 'hh:mm:ss'
+  | 'hh:mm'
+  | 'hoursNumber'
+  | 'minutesNumber';
 @Pipe({ name: 'durationToString' })
 export class DurationToStringPipe implements PipeTransform {
-  static t(value: any, format: any) {
+  static t(value: DurationInputArg1, format?: DurationFormat): string {
     if (value === null) {
       return '-';
     }
-    const numberValue = Number.parseInt(value, 10);
+    const numberValue = Number.parseInt(value as string, 10);
     if (isNaN(numberValue)) {
       value = moment.duration(value);
     } else {
       value = moment.duration(numberValue, 's');
     }
-
-
 
     if (!format) {
       const str: string[] = [];
@@ -25,14 +31,30 @@ export class DurationToStringPipe implements PipeTransform {
         }
         str.push(moment.localeData().relativeTime(hours, true, 'hh', false));
       } else if (Math.floor(value.asHours()) > 0) {
-        str.push(moment.localeData().relativeTime(Math.floor(value.asHours()), true, 'hh', false));
+        str.push(
+          moment
+            .localeData()
+            .relativeTime(Math.floor(value.asHours()), true, 'hh', false),
+        );
         if (value.minutes() > 0) {
-          str.push(moment.localeData().relativeTime(value.minutes(), true, 'mm', false));
+          str.push(
+            moment
+              .localeData()
+              .relativeTime(value.minutes(), true, 'mm', false),
+          );
         }
       } else if (Math.floor(value.asMinutes()) > 0) {
-        str.push(moment.localeData().relativeTime(Math.floor(value.asMinutes()), true, 'mm', false));
+        str.push(
+          moment
+            .localeData()
+            .relativeTime(Math.floor(value.asMinutes()), true, 'mm', false),
+        );
       } else if (Math.floor(value.asSeconds()) > 0) {
-        str.push(moment.localeData().relativeTime(Math.floor(value.asSeconds()), true, 's', false));
+        str.push(
+          moment
+            .localeData()
+            .relativeTime(Math.floor(value.asSeconds()), true, 's', false),
+        );
       }
 
       if (str.length === 0) {
@@ -41,37 +63,47 @@ export class DurationToStringPipe implements PipeTransform {
       return str.join(' ');
     } else {
       if (format === 'days') {
-        return moment.localeData().relativeTime(Math.floor(value.asDays()), true, 'dd', false);
+        return moment
+          .localeData()
+          .relativeTime(Math.floor(value.asDays()), true, 'dd', false);
       }
       if (format === 'hours') {
-        return moment.localeData().relativeTime(Math.floor(value.asHours()), true, 'hh', false);
+        return moment
+          .localeData()
+          .relativeTime(Math.floor(value.asHours()), true, 'hh', false);
       }
-      if (format === 'hoursOnlyNumber') {
-        return Math.floor(value.asHours());
+      if (format === 'hoursNumber') {
+        return Math.floor(value.asHours()).toString();
       }
       if (format === 'hh:mm:ss') {
-        return Math.floor(value.asHours()).toString().padStart(2, '0') +
-        ':' +
-        Math.floor(value.minutes()).toString().padStart(2, '0') +
-        ':' +
-        Math.floor(value.seconds()).toString().padStart(2, '0');
+        return (
+          Math.floor(value.asHours()).toString().padStart(2, '0') +
+          ':' +
+          Math.floor(value.minutes()).toString().padStart(2, '0') +
+          ':' +
+          Math.floor(value.seconds()).toString().padStart(2, '0')
+        );
       }
       if (format === 'hh:mm') {
-        return Math.floor(value.asHours()).toString().padStart(2, '0') +
-        ':' +
-        Math.floor(value.minutes()).toString().padStart(2, '0');
+        return (
+          Math.floor(value.asHours()).toString().padStart(2, '0') +
+          ':' +
+          Math.floor(value.minutes()).toString().padStart(2, '0')
+        );
       }
       if (format === 'minutes') {
-        return moment.localeData().relativeTime(Math.floor(value.asMinutes()), true, 'mm', false);
+        return moment
+          .localeData()
+          .relativeTime(Math.floor(value.asMinutes()), true, 'mm', false);
       }
-      if (format === 'number') {
-        return value.asMinutes();
+      if (format === 'minutesNumber') {
+        return value.asMinutes().toString();
       }
     }
+    return '';
   }
 
-  transform(value: any, format: any) {
+  transform(value: DurationInputArg1, format?: DurationFormat): string {
     return DurationToStringPipe.t(value, format);
   }
-
 }

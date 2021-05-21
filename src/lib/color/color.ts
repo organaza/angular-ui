@@ -9,22 +9,22 @@ export class Color {
   lightness: number;
   gradientType: number;
 
-  static getColorFromCSS(pixelValue: string) {
+  static getColorFromCSS(pixelValue: string): number {
     if (!pixelValue) {
-      return;
+      return null;
     }
     const c = new Color(pixelValue);
     return c.getHex8();
   }
-  static getAlphaFromCSS(pixelValue: string) {
+  static getAlphaFromCSS(pixelValue: string): number {
     if (!pixelValue) {
-      return;
+      return null;
     }
     const c = new Color(pixelValue);
     return c.alpha;
   }
 
-  constructor(color: string, opts?: any) {
+  constructor(color: string, opts?: { gradientType: number }) {
     if (color) {
       if (color.toLowerCase().startsWith('rgba')) {
         this.parseRGBA(color);
@@ -40,8 +40,10 @@ export class Color {
       }
     }
   }
-  parseRGBA(color: string) {
-    const aRGBA = color.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+.*\d*)\s*\)$/i);
+  parseRGBA(color: string): void {
+    const aRGBA = /^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+.*\d*)\s*\)$/i.exec(
+      color,
+    );
     if (aRGBA) {
       this.red = parseInt(aRGBA[1], 10);
       this.green = parseInt(aRGBA[2], 10);
@@ -49,8 +51,8 @@ export class Color {
       this.alpha = parseInt(aRGBA[4], 10);
     }
   }
-  parseRGB(color: string) {
-    const aRGB = color.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+  parseRGB(color: string): void {
+    const aRGB = /^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i.exec(color);
     if (aRGB) {
       this.red = parseInt(aRGB[1], 10);
       this.green = parseInt(aRGB[2], 10);
@@ -58,11 +60,14 @@ export class Color {
       this.alpha = 1;
     }
   }
-  parseHex(color: string) {
+  parseHex(color: string): void {
     const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    color = color.replace(shorthandRegex, function(m, r, g, b) {
-      return r + r + g + g + b + b;
-    });
+    color = color.replace(
+      shorthandRegex,
+      function (_, r: string, g: string, b: string) {
+        return r + r + g + g + b + b;
+      },
+    );
 
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
     if (result) {
@@ -72,25 +77,30 @@ export class Color {
       this.alpha = 1;
     }
   }
-  rgbToHsv() {
+  rgbToHsv(): void {
     const r = this.bound01(this.red, 255);
     const g = this.bound01(this.green, 255);
     const b = this.bound01(this.blue, 255);
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
     let h: number;
-    let s: number;
     const v = max;
     const d = max - min;
-    s = max === 0 ? 0 : d / max;
+    const s = max === 0 ? 0 : d / max;
 
     if (max === min) {
       h = 0; // achromatic
     } else {
       switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+        case g:
+          h = (b - r) / d + 2;
+          break;
+        case b:
+          h = (r - g) / d + 4;
+          break;
       }
       h /= 6;
     }
@@ -98,7 +108,7 @@ export class Color {
     this.saturation = s;
     this.brightness = v;
   }
-  rgbToHsl() {
+  rgbToHsl(): void {
     const r = this.bound01(this.red, 255);
     const g = this.bound01(this.green, 255);
     const b = this.bound01(this.blue, 255);
@@ -138,14 +148,16 @@ export class Color {
     this.lightness = l;
   }
 
-  hslToRgb() {
+  hslToRgb(): void {
     const h = this.hue;
     const s = this.saturation;
     const l = this.lightness;
 
-    let r, g, b = 0;
+    let r,
+      g,
+      b = 0;
 
-    const hue2rgb = function(p: number, q: number, t: number) {
+    const hue2rgb = function (p: number, q: number, t: number) {
       if (t < 0) {
         t += 1;
       }
@@ -177,57 +189,59 @@ export class Color {
     this.green = g * 255;
     this.blue = b * 255;
   }
-  getHex() {
-    // tslint:disable-next-line:no-bitwise
+  getHex(): string {
+    // eslint-disable-next-line no-bitwise
     const hex = this.blue | (this.green << 8) | (this.red << 16);
-    return '#' + (0x1000000 + hex).toString(16).slice(1);
+    return `#${(0x1000000 + hex).toString(16).slice(1)}`;
   }
-  getRGB() {
-    return (this.alpha !== 1) ?
-      `rgba(${this.red},${this.green},${this.blue},${this.alpha})` :
-      `rgb(${this.red},${this.green},${this.blue})`;
+  getRGB(): string {
+    return this.alpha !== 1
+      ? `rgba(${this.red},${this.green},${this.blue},${this.alpha})`
+      : `rgb(${this.red},${this.green},${this.blue})`;
   }
-  getPercentageRgb() {
+  getPercentageRgb(): string {
     const _roundA = Math.round(100 * this.alpha) / 100;
     const r = Math.round(this.bound01(this.red, 255) * 100);
     const g = Math.round(this.bound01(this.green, 255) * 100);
     const b = Math.round(this.bound01(this.blue, 255) * 100);
-    return (this.alpha === 1) ? `rgb(${r}%, ${g}%, ${b}%)` : `rgb(${r}%, ${g}%, ${b}%, ${_roundA})`;
+    return this.alpha === 1
+      ? `rgb(${r}%, ${g}%, ${b}%)`
+      : `rgb(${r}%, ${g}%, ${b}%, ${_roundA})`;
   }
-  getHex8() {
+  getHex8(): number {
     let hex = this.red;
-    // tslint:disable-next-line:no-bitwise
+    // eslint-disable-next-line no-bitwise
     hex = (hex << 8) + this.green;
-    // tslint:disable-next-line:no-bitwise
+    // eslint-disable-next-line no-bitwise
     hex = (hex << 8) + this.blue;
     return hex;
   }
-  getHsv() {
+  getHsv(): string {
     // return `hsv(${this.hue * 36},${this.saturation},${this.brightness},${this.alpha})`;
     this.rgbToHsv();
     const h = Math.round(this.hue * 360);
     const s = Math.round(this.saturation * 100);
     const v = Math.round(this.brightness * 100);
     const _roundA = Math.round(100 * this.alpha) / 100;
-    return (this.alpha === 1) ?
-      'hsv(' + h + ', ' + s + '%, ' + v + '%)' :
-      'hsva(' + h + ', ' + s + '%, ' + v + '%, ' + _roundA + ')';
+    return this.alpha === 1
+      ? `hsv(${h}, ${s}%, ${v}%)`
+      : `hsva(${h}, ${s}%, ${v}%, ${_roundA})`;
   }
-  getHsl() {
+  getHsl(): string {
     this.rgbToHsl();
     const h = Math.round(this.hue * 360);
     const s = Math.round(this.saturation * 100);
     const l = Math.round(this.lightness * 100);
     const _roundA = Math.round(100 * this.alpha) / 100;
-    return (this.alpha === 1) ?
-      'hsl(' + h + ', ' + s + '%, ' + l + '%)' :
-      'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + _roundA + ')';
+    return this.alpha === 1
+      ? `hsl(${h}, ${s}%, ${l}%)`
+      : `hsla(${h}, ${s}%, ${l}%, ${_roundA})`;
   }
-  getBrightness() {
+  getBrightness(): number {
     // http://www.w3.org/TR/AERT#color-contrast
     return (this.red * 299 + this.green * 587 + this.blue * 114) / 1000;
   }
-  getLuminance() {
+  getLuminance(): number {
     // http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
     const RsRGB = this.red / 255;
     const GsRGB = this.green / 255;
@@ -236,38 +250,54 @@ export class Color {
     let G: number;
     let B: number;
 
-    if (RsRGB <= 0.03928) { R = RsRGB / 12.92; } else { R = Math.pow(((RsRGB + 0.055) / 1.055), 2.4); }
-    if (GsRGB <= 0.03928) { G = GsRGB / 12.92; } else { G = Math.pow(((GsRGB + 0.055) / 1.055), 2.4); }
-    if (BsRGB <= 0.03928) { B = BsRGB / 12.92; } else { B = Math.pow(((BsRGB + 0.055) / 1.055), 2.4); }
-    return (0.2126 * R) + (0.7152 * G) + (0.0722 * B);
+    if (RsRGB <= 0.03928) {
+      R = RsRGB / 12.92;
+    } else {
+      R = Math.pow((RsRGB + 0.055) / 1.055, 2.4);
+    }
+    if (GsRGB <= 0.03928) {
+      G = GsRGB / 12.92;
+    } else {
+      G = Math.pow((GsRGB + 0.055) / 1.055, 2.4);
+    }
+    if (BsRGB <= 0.03928) {
+      B = BsRGB / 12.92;
+    } else {
+      B = Math.pow((BsRGB + 0.055) / 1.055, 2.4);
+    }
+    return 0.2126 * R + 0.7152 * G + 0.0722 * B;
   }
-  isOnePointZero(n: any) {
-    return typeof n === 'string' && n.indexOf('.') !== -1 && parseFloat(n) === 1;
+  isOnePointZero(n: string): boolean {
+    return (
+      typeof n === 'string' && n.indexOf('.') !== -1 && parseFloat(n) === 1
+    );
   }
-  isPercentage(n: any) {
+  isPercentage(n: string): boolean {
     return typeof n === 'string' && n.indexOf('%') !== -1;
   }
   // Take input from [0, n] and return it as [0, 1]
-  bound01(n: any, max: number) {
-    if (this.isOnePointZero(n)) { n = '100%'; }
+  bound01(n: string | number, max: number): number {
+    if (this.isOnePointZero(n as string)) {
+      n = '100%';
+    }
 
-    const processPercent = this.isPercentage(n);
-    n = Math.min(max, Math.max(0, parseFloat(n)));
+    const processPercent = this.isPercentage(n as string);
+    n = Math.min(max, Math.max(0, parseFloat(n as string)));
 
     // Automatically convert percentage into number
     if (processPercent) {
-      n = n * max / 100;
+      n = (n * max) / 100;
     }
 
     // Handle floating point rounding errors
-    if ((Math.abs(n - max) < 0.000001)) {
+    if (Math.abs(n - max) < 0.000001) {
       return 1;
     }
 
     // Convert into [0, 1] range if it isn't already
     return (n % max) / parseFloat(max.toString());
   }
-  toFilter(secondColor: string) {
+  toFilter(secondColor: string): string {
     const hex8String = '#' + this.rgbaToArgbHex();
     let secondHex8String = hex8String;
     const gradientType = this.gradientType ? 'GradientType = 1, ' : '';
@@ -281,35 +311,35 @@ export class Color {
   }
   // Converts an RGBA color to an ARGB Hex8 string
   // Rarely used, but required for 'toFilter()'
-  rgbaToArgbHex() {
+  rgbaToArgbHex(): string {
     const hex = [
       this.pad2(this.convertDecimalToHex(this.alpha)),
       this.pad2(Math.round(this.red).toString(16)),
       this.pad2(Math.round(this.green).toString(16)),
-      this.pad2(Math.round(this.blue).toString(16))
+      this.pad2(Math.round(this.blue).toString(16)),
     ];
     return hex.join('');
   }
   // Converts a decimal to a hex value
-  convertDecimalToHex(d: number) {
+  convertDecimalToHex(d: number): string {
     return Math.round(parseFloat(d.toString()) * 255).toString(16);
   }
   // Force a hex value to have 2 characters
-  pad2(c: string) {
+  pad2(c: string): string {
     return c.length === 1 ? '0' + c : '' + c;
   }
-  clone() {
+  clone(): Color {
     return new Color(this.getRGB());
   }
-  blend(color: Color) {
+  blend(color: Color): Color {
     const rgb = this.clone();
-    rgb.red = (rgb.red * (1 - this.alpha)) + (color.red * this.alpha);
-    rgb.green = (rgb.green * (1 - this.alpha)) + (color.green * this.alpha);
-    rgb.blue = (rgb.blue * (1 - this.alpha)) + (color.blue * this.alpha);
-    rgb.alpha = (rgb.alpha * (1 - this.alpha)) + (color.alpha * this.alpha);
+    rgb.red = rgb.red * (1 - this.alpha) + color.red * this.alpha;
+    rgb.green = rgb.green * (1 - this.alpha) + color.green * this.alpha;
+    rgb.blue = rgb.blue * (1 - this.alpha) + color.blue * this.alpha;
+    rgb.alpha = rgb.alpha * (1 - this.alpha) + color.alpha * this.alpha;
     return rgb;
   }
-  schemeFromDegrees(degrees: any) {
+  schemeFromDegrees(degrees: Array<number>): Color[] {
     const newColors: Color[] = [];
     for (let i = 0; i < degrees.length; i++) {
       const col = this.clone();
@@ -318,58 +348,58 @@ export class Color {
     }
     return newColors;
   }
-  complementaryScheme() {
+  complementaryScheme(): Color[] {
     return this.schemeFromDegrees([0, 180]);
   }
-  splitComplementaryScheme() {
+  splitComplementaryScheme(): Color[] {
     return this.schemeFromDegrees([0, 150, 320]);
   }
-  splitComplementaryCWScheme() {
+  splitComplementaryCWScheme(): Color[] {
     return this.schemeFromDegrees([0, 150, 300]);
   }
-  splitComplementaryCCWScheme() {
+  splitComplementaryCCWScheme(): Color[] {
     return this.schemeFromDegrees([0, 60, 210]);
   }
-  triadicScheme() {
+  triadicScheme(): Color[] {
     return this.schemeFromDegrees([0, 120, 240]);
   }
-  clashScheme() {
+  clashScheme(): Color[] {
     return this.schemeFromDegrees([0, 90, 270]);
   }
-  tetradicScheme() {
+  tetradicScheme(): Color[] {
     return this.schemeFromDegrees([0, 90, 180, 270]);
   }
-  fourToneCWScheme() {
+  fourToneCWScheme(): Color[] {
     return this.schemeFromDegrees([0, 60, 180, 240]);
   }
-  fourToneCCWScheme() {
+  fourToneCCWScheme(): Color[] {
     return this.schemeFromDegrees([0, 120, 180, 300]);
   }
-  fiveToneAScheme() {
+  fiveToneAScheme(): Color[] {
     return this.schemeFromDegrees([0, 115, 155, 205, 245]);
   }
-  fiveToneBScheme() {
+  fiveToneBScheme(): Color[] {
     return this.schemeFromDegrees([0, 40, 90, 130, 245]);
   }
-  fiveToneCScheme() {
+  fiveToneCScheme(): Color[] {
     return this.schemeFromDegrees([0, 50, 90, 205, 320]);
   }
-  fiveToneDScheme() {
+  fiveToneDScheme(): Color[] {
     return this.schemeFromDegrees([0, 40, 155, 270, 310]);
   }
-  fiveToneEScheme() {
+  fiveToneEScheme(): Color[] {
     return this.schemeFromDegrees([0, 115, 230, 270, 320]);
   }
-  sixToneCWScheme() {
+  sixToneCWScheme(): Color[] {
     return this.schemeFromDegrees([0, 30, 120, 150, 240, 270]);
   }
-  sixToneCCWScheme() {
+  sixToneCCWScheme(): Color[] {
     return this.schemeFromDegrees([0, 90, 120, 210, 240, 330]);
   }
-  neutralScheme() {
+  neutralScheme(): Color[] {
     return this.schemeFromDegrees([0, 15, 30, 45, 60, 75]);
   }
-  analogousScheme() {
+  analogousScheme(): Color[] {
     return this.schemeFromDegrees([0, 30, 60, 90, 120, 150]);
   }
 }

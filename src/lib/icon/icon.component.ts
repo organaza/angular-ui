@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
+  OnChanges,
 } from '@angular/core';
 
 @Component({
@@ -10,7 +11,7 @@ import {
   styleUrls: ['./icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IconComponent {
+export class IconComponent implements OnChanges {
   @Input()
   icon: string;
 
@@ -22,10 +23,18 @@ export class IconComponent {
   cursor = 'inherit';
 
   @Input()
-  states: any;
+  states: Record<string | number, string>;
 
   @Input()
-  set state (state: any) {
-    this.icon = this.states[state];
+  state: string | number;
+  @Input()
+  boolState: boolean;
+
+  ngOnChanges(): void {
+    let key = this.state;
+    if (this.boolState !== undefined) {
+      key = this.boolState ? 'true' : 'false';
+    }
+    this.icon = this.states?.[key] || this.icon;
   }
 }

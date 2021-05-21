@@ -26,9 +26,6 @@ import { OzSettingsService } from './settings/settings.service';
     FormsModule,
   ],
   providers: [],
-  entryComponents: [
-
-  ],
   declarations: [
     DurationValidatorDirective,
     WithOutSpacesValidatorDirective,
@@ -55,7 +52,7 @@ import { OzSettingsService } from './settings/settings.service';
   ],
 })
 export class OzModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<OzModule> {
     return {
       ngModule: OzModule,
       providers: [

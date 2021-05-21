@@ -1,30 +1,40 @@
 import { Directive, ElementRef, OnInit, OnDestroy, Input } from '@angular/core';
 
 @Directive({
-  selector: '[ozPreventParentScroll]'
+  selector: '[ozPreventParentScroll]',
 })
 export class PreventParentScrollDirective implements OnInit, OnDestroy {
-
   @Input()
   scrollDisabled = false;
 
-  private mouseWheelEventHandler = (event: any) => this.onMouseWheel(event);
+  private mouseWheelEventHandler = (event: WheelEvent) =>
+    this.onMouseWheel(event);
 
-  constructor(private element: ElementRef) { }
+  constructor(private element: ElementRef) {}
 
-  ngOnInit() {
-    const element: Element = this.element.nativeElement;
-    element.addEventListener('mousewheel', this.mouseWheelEventHandler);
-    element.addEventListener('DOMMouseScroll', this.mouseWheelEventHandler);
+  ngOnInit(): void {
+    (this.element.nativeElement as HTMLElement).addEventListener(
+      'mousewheel',
+      this.mouseWheelEventHandler,
+    );
+    (this.element.nativeElement as HTMLElement).addEventListener(
+      'DOMMouseScroll',
+      this.mouseWheelEventHandler,
+    );
   }
 
-  ngOnDestroy() {
-    const element: Element = this.element.nativeElement;
-    element.removeEventListener('mousewheel', this.mouseWheelEventHandler);
-    element.removeEventListener('DOMMouseScroll', this.mouseWheelEventHandler);
+  ngOnDestroy(): void {
+    (this.element.nativeElement as HTMLElement).removeEventListener(
+      'mousewheel',
+      this.mouseWheelEventHandler,
+    );
+    (this.element.nativeElement as HTMLElement).removeEventListener(
+      'DOMMouseScroll',
+      this.mouseWheelEventHandler,
+    );
   }
 
-  private onMouseWheel(event: any) {
+  private onMouseWheel(event: WheelEvent) {
     if (this.scrollDisabled) {
       return;
     }
@@ -39,7 +49,7 @@ export class PreventParentScrollDirective implements OnInit, OnDestroy {
   //     delta = (event.type === 'DOMMouseScroll' ? event.detail * -40 : event.wheelDelta),
   //     up = delta > 0;
 
-  //   const prevent = function() {
+  //   const prevent = function():void {
   //     event.stopPropagation();
   //     event.preventDefault();
   //     event.returnValue = false;

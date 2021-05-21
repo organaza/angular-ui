@@ -10,7 +10,7 @@ import {
   HostBinding,
   ViewChild,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
@@ -19,22 +19,25 @@ import { DropDownComponent } from '../dropdown/dropdown.component';
 import { OzSettingsService } from '../settings/settings.service';
 import { DateUtils } from '../dates/dates';
 
-const noop = () => {
+const noop = (): void => {
+  return;
 };
 
 @Component({
   selector: 'oz-datepicker',
   templateUrl: './datepicker.component.html',
   styleUrls: ['./datepicker.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => DatePickerComponent),
-    multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DatePickerComponent),
+      multi: true,
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatePickerComponent implements OnInit, ControlValueAccessor {
-  @ViewChild('dropdown', {static: true})
+  @ViewChild('dropdown', { static: true })
   dropdown: DropDownComponent;
 
   @Input()
@@ -56,7 +59,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   disabled: boolean;
 
   @Output()
-  changed: EventEmitter<{}> = new EventEmitter();
+  changed = new EventEmitter<DatePickerValue>();
 
   @Input()
   showTime: boolean;
@@ -79,30 +82,30 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   @Input()
   minDate: Date;
 
-  selectionStart: any;
-  selectionStartOld: any;
+  selectionStart: string;
+  selectionStartOld: string;
   selectionStartMoment: moment.Moment;
 
-  selectionEnd: any;
-  selectionEndOld: any;
+  selectionEnd: string;
+  selectionEndOld: string;
   selectionEndMoment: moment.Moment;
 
-  value: any;
+  value: DatePickerValue;
 
-  valueMoment: any;
+  valueMoment: moment.Moment;
 
   opened: boolean;
 
   label: string;
 
   private onTouchedCallback: () => void = noop;
-  private onChangeCallback: (_: any) => void = noop;
+  private onChangeCallback: (_: DatePickerValue) => void = noop;
 
   @HostBinding()
   tabindex = 0;
 
   @HostListener('keydown', ['$event'])
-  onKeydown(event: KeyboardEvent) {
+  onKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       this.openDateSelector();
     } else if (event.key === 'Escape') {
@@ -133,8 +136,11 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.onChange();
   }
 
-  get labelStart() {
-    const relative = DateUtils.parseRelative(this.selectionStart, 'from').isValid();
+  get labelStart(): string {
+    const relative = DateUtils.parseRelative(
+      this.selectionStart,
+      'from',
+    ).isValid();
     if (relative) {
       return this.selectionStart;
     }
@@ -158,8 +164,11 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     }
     this.onChange();
   }
-  get labelEnd() {
-    const relative = DateUtils.parseRelative(this.selectionStart, 'to').isValid();
+  get labelEnd(): string {
+    const relative = DateUtils.parseRelative(
+      this.selectionStart,
+      'to',
+    ).isValid();
     if (relative) {
       return this.selectionEnd;
     }
@@ -178,7 +187,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.opened = false;
   }
 
-  writeValue(value: string | string[]) {
+  writeValue(value: DatePickerValue): void {
     this.value = value;
     if (Array.isArray(value) && value.length === 2) {
       this.valueMoment = this.parseValue(value[0], '');
@@ -187,26 +196,31 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
       this.selectionStartMoment = this.parseValue(value[0], 'from');
       this.selectionEndMoment = this.parseValue(value[1], 'to');
     } else {
-      this.selectionStart = this.selectionEnd = this.selectionStartOld = this.selectionEndOld = this.value;
-      this.valueMoment = this.selectionStartMoment = this.selectionEndMoment = this.parseValue(this.value, '');
+      this.selectionStart = this.selectionEnd = this.selectionStartOld = this.selectionEndOld = value;
+      this.valueMoment = this.selectionStartMoment = this.selectionEndMoment = this.parseValue(
+        value,
+        '',
+      );
     }
     this.setLabel();
     this.cd.detectChanges();
   }
 
-  registerOnChange(fn: any) {
+  registerOnChange(fn: (_: DatePickerValue) => void): void {
     this.onChangeCallback = fn;
   }
 
-  registerOnTouched(fn: any) {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedCallback = fn;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.emptyLabel = this.emptyLabel || 'Select date';
-    this.displayFormat = this.showTime ? this.settings.dateTimeShowFormat : this.settings.dateShowFormat;
+    this.displayFormat = this.showTime
+      ? this.settings.dateTimeShowFormat
+      : this.settings.dateShowFormat;
   }
-  parseValue(value, type: 'from' | 'to' | '') {
+  parseValue(value: string, type: 'from' | 'to' | ''): moment.Moment {
     if (!value) {
       return null;
     } else {
@@ -225,7 +239,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
       return moment();
     }
   }
-  openDateSelector() {
+  openDateSelector(): void {
     if (this.disabled) {
       return;
     }
@@ -233,15 +247,15 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.dropdown.show();
   }
 
-  onClearDate() {
+  onClearDate(): void {
     this.changed.next(null);
     this.writeValue(null);
     this.onChangeCallback(null);
     this.opened = !this.opened;
     this.dropdown.hide();
-    this.el.nativeElement.focus();
+    (this.el.nativeElement as HTMLElement).focus();
   }
-  setLabel() {
+  setLabel(): void {
     if (!this.range) {
       if (this.valueMoment) {
         this.label = this.valueMoment.format(this.displayFormat);
@@ -250,7 +264,10 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
       }
     } else {
       if (this.selectionStartMoment && this.selectionEndMoment) {
-        this.label = this.selectionStartMoment.format(this.displayFormat) + ' - ' + this.selectionEndMoment.format(this.displayFormat);
+        this.label =
+          this.selectionStartMoment.format(this.displayFormat) +
+          ' - ' +
+          this.selectionEndMoment.format(this.displayFormat);
         this.cd.markForCheck();
         return;
       }
@@ -258,15 +275,15 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.label = this.emptyLabel;
     this.cd.markForCheck();
   }
-  onCalendarChangeStart(event: moment.Moment) {
+  onCalendarChangeStart(event: moment.Moment): void {
     this.labelStart = event.format(this.outFormat);
     this.onChange();
   }
-  onCalendarChangeEnd(event: moment.Moment) {
+  onCalendarChangeEnd(event: moment.Moment): void {
     this.labelEnd = event.format(this.outFormat);
     this.onChange();
   }
-  onChange() {
+  onChange(): void {
     if (this.live || !this.confirmRequired) {
       this.updateValue();
     }
@@ -274,11 +291,11 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
       this.close();
     }
   }
-  onApply() {
+  onApply(): void {
     this.updateValue();
     this.close();
   }
-  updateValue() {
+  updateValue(): void {
     if (this.range) {
       this.writeValue([this.selectionStart, this.selectionEnd]);
     } else {
@@ -288,7 +305,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     this.onChangeCallback(this.value);
     this.setLabel();
   }
-  close() {
+  close(): void {
     if (this.range) {
       this.writeValue([this.selectionStartOld, this.selectionEndOld]);
     } else {
@@ -296,11 +313,12 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     }
     this.opened = false;
     this.dropdown.hide();
-    this.el.nativeElement.focus();
+    (this.el.nativeElement as HTMLElement).focus();
   }
-  setRelative(from, to: string) {
+  setRelative(from: string, to: string): void {
     this.labelStart = from;
     this.labelEnd = to;
     this.onChange();
   }
 }
+export type DatePickerValue = string | [string, string];

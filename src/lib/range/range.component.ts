@@ -1,47 +1,49 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
-  Output,
-  Input,
   ElementRef,
   EventEmitter,
-  OnInit,
   forwardRef,
+  Input,
+  OnInit,
+  Output,
   Renderer2,
   ViewChild,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { JSONUtils } from '../json/json';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-const noop = () => {
+const noop = (): void => {
+  return;
 };
 
 @Component({
   selector: 'oz-range',
   templateUrl: './range.component.html',
   styleUrls: ['./range.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => RangeComponent),
-    multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => RangeComponent),
+      multi: true,
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RangeComponent implements OnInit, ControlValueAccessor {
   onTouchedCallback: () => void = noop;
-  onChangeCallback: (_: any) => void = noop;
+  onChangeCallback: (_: number) => void = noop;
 
   @Output()
-  change: EventEmitter<{}> = new EventEmitter();
+  changed = new EventEmitter<number>();
   @Output()
-  enter: EventEmitter<{}> = new EventEmitter();
+  enter = new EventEmitter<void>();
   @Output()
-  changeEnd: EventEmitter<{}> = new EventEmitter();
+  changeEnd = new EventEmitter<void>();
 
-  onModelChanged: Subject<any> = new Subject<any>();
+  onModelChanged: Subject<number> = new Subject<number>();
 
   @Input()
   disabled = false;
@@ -69,8 +71,8 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
 
   drag = false;
   prevScreenX = 0;
-  moveGlobal: any;
-  upGlobal: any;
+  moveGlobal: () => void;
+  upGlobal: () => void;
   newValue: number;
   deltaX: number;
   sliderLeft: number;
@@ -79,23 +81,22 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
   widthSliderProcent: number;
   widthParentElement: number;
 
-  @ViewChild('elementSlider', {static: true}) elementSlider: ElementRef;
+  @ViewChild('elementSlider', { static: true }) elementSlider: ElementRef;
 
-  writeValue(value: any) {
+  writeValue(value: number): void {
     if (value === undefined || value === null) {
       value = 0;
     }
-    this.value = JSONUtils.jsonClone(value);
     this.value = this.testAndChangeValue(this.value);
     this.calcParams();
     this.cd.detectChanges();
   }
 
-  registerOnChange(fn: any) {
+  registerOnChange(fn: (_: number) => void): void {
     this.onChangeCallback = fn;
   }
 
-  registerOnTouched(fn: any) {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedCallback = fn;
   }
 
@@ -103,32 +104,37 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
     private el: ElementRef,
     private renderer: Renderer2,
     private cd: ChangeDetectorRef,
-  ) {
-  }
+  ) {}
 
-  ngOnInit() {
-    this.onModelChanged.pipe(
-      debounceTime(this.liveDebounce), // wait 300ms after the last event before emitting last event
-      distinctUntilChanged(), // only emit if value is different from previous value
-    ).subscribe((value: any) => {
-        this.change.next(value);
+  ngOnInit(): void {
+    this.onModelChanged
+      .pipe(
+        debounceTime(this.liveDebounce), // wait 300ms after the last event before emitting last event
+        distinctUntilChanged(), // only emit if value is different from previous value
+      )
+      .subscribe((value: number) => {
+        this.changed.next(value);
         this.onChangeCallback(value);
-        this.changeEnd.next(value);
       });
   }
-  testAndUpdateValue() {
-    setTimeout(() => {
+  testAndUpdateValue(): void {
+    window.setTimeout(() => {
       this.value = this.testAndChangeValue(this.value);
-      this.change.next(this.value);
+      this.changed.next(this.value);
       this.onChangeCallback(this.value);
       this.changeEnd.next();
     });
   }
-  onKeyDown($event: any) {
-    if (($event.key < '0' || $event.key > '9')
-      && $event.keyCode !== 39 && $event.keyCode !== 37 && $event.keyCode !== 8 && $event.keyCode !== 46) {
-      $event.preventDefault();
-      return false;
+  onKeyDown(event: KeyboardEvent): void {
+    if (
+      (event.key < '0' || event.key > '9') &&
+      event.key !== 'ArrowLeft' &&
+      event.key !== 'ArrowRight' &&
+      event.key !== 'Backspace' &&
+      event.key !== 'Delete'
+    ) {
+      event.preventDefault();
+      return;
     }
   }
   testAndChangeValue(value: number): number {
@@ -140,46 +146,50 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
     }
     return value;
   }
-  changeSliderPosition(value: number) {
+  changeSliderPosition(value: number): void {
     this.value = value;
     if (this.live) {
       if (this.liveDebounce > 0) {
         this.onModelChanged.next(this.value);
       } else {
         this.onChangeCallback(this.value);
-        this.change.next(this.value);
+        this.changed.next(this.value);
       }
     }
   }
   koef(): number {
     return 100 / (this.max - this.min);
   }
-  onClickProgress(event: MouseEvent) {
+  onClickProgress(event: MouseEvent): void {
     if (this.dragSlider || this.disabled) {
       return;
     }
-    const percent: number = event.offsetX * 100 / this.el.nativeElement.getBoundingClientRect().width / this.koef();
-    this.value = this.testAndChangeValue(this.min + Math.round(percent / this.step) * this.step);
+    const percent: number =
+      (event.offsetX * 100) /
+      (this.el.nativeElement as HTMLElement).getBoundingClientRect().width /
+      this.koef();
+    this.value = this.testAndChangeValue(
+      this.min + Math.round(percent / this.step) * this.step,
+    );
     this.sliderLeft = this.calcPercent();
     this.cd.markForCheck();
-    this.change.next(this.value);
+    this.changed.next(this.value);
     this.onChangeCallback(this.value);
-    this.changeEnd.next(this.value);
   }
-  saveChange() {
-    this.change.next(this.value);
+  saveChange(): void {
+    this.changed.next(this.value);
     this.onChangeCallback(this.value);
-    this.changeEnd.next(this.value);
-    setTimeout(() => {
+    window.setTimeout(() => {
       this.dragSlider = false;
     });
   }
-  onMouseDown(event: MouseEvent) {
+  onMouseDown(event: MouseEvent): void {
     if (this.disabled) {
       return;
     }
-    if (event.button === 3) { // disable right click drag
-      return false;
+    if (event.button === 3) {
+      // disable right click drag
+      return;
     }
     if (this.filled) {
       this.sliderOpacity = 1;
@@ -189,20 +199,26 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
     this.calcParams();
     this.newValue = this.value;
     this.deltaX = 0;
-    this.moveGlobal = this.renderer.listen('window', 'mousemove', (moveEvent: MouseEvent) => {
-      this.deltaX += -(this.prevScreenX - moveEvent.screenX);
-      this.prevScreenX = moveEvent.screenX;
-      const percent: number = this.deltaX * 100 / this.widthParentElement / this.koef();
-      if (percent >= this.step || percent <= -this.step) {
-        const step = parseInt((percent / this.step) + ' ', 10) * this.step;
-        this.newValue += step;
-        this.deltaX = (percent - step) * this.widthParentElement / 100 * this.koef();
-        this.value = this.testMinMaxValue(this.newValue);
-        this.sliderLeft = this.calcPercent();
-        this.cd.markForCheck();
-        this.changeSliderPosition(Math.round(this.value));
-      }
-    });
+    this.moveGlobal = this.renderer.listen(
+      'window',
+      'mousemove',
+      (moveEvent: MouseEvent) => {
+        this.deltaX += -(this.prevScreenX - moveEvent.screenX);
+        this.prevScreenX = moveEvent.screenX;
+        const percent: number =
+          (this.deltaX * 100) / this.widthParentElement / this.koef();
+        if (percent >= this.step || percent <= -this.step) {
+          const step = Math.round(percent / this.step);
+          this.newValue += step;
+          this.deltaX =
+            (((percent - step) * this.widthParentElement) / 100) * this.koef();
+          this.value = this.testMinMaxValue(this.newValue);
+          this.sliderLeft = this.calcPercent();
+          this.cd.markForCheck();
+          this.changeSliderPosition(Math.round(this.value));
+        }
+      },
+    );
     this.upGlobal = this.renderer.listen('window', 'mouseup', () => {
       if (this.filled) {
         this.sliderOpacity = 1;
@@ -212,14 +228,19 @@ export class RangeComponent implements OnInit, ControlValueAccessor {
       this.upGlobal();
     });
     event.preventDefault();
-    return false;
+    return;
   }
-  calcParams() {
+  calcParams(): void {
     if (!this.elementSlider) {
       return;
     }
-    this.widthParentElement = this.el.nativeElement.getBoundingClientRect().width;
-    this.widthSliderProcent = this.elementSlider.nativeElement.getBoundingClientRect().width * 100 / this.widthParentElement;
+    this.widthParentElement = (this.el
+      .nativeElement as HTMLElement).getBoundingClientRect().width;
+    this.widthSliderProcent =
+      ((this.elementSlider.nativeElement as HTMLElement).getBoundingClientRect()
+        .width *
+        100) /
+      this.widthParentElement;
     this.sliderLeft = this.calcPercent();
     this.cd.markForCheck();
   }

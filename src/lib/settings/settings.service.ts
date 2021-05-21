@@ -12,10 +12,4 @@ export class OzSettingsService {
   timepickerHelperIcon = 'timelapse';
   selectIconUp = 'keyboard_arrow_up';
   selectIconDown = 'keyboard_arrow_down';
-
-  constructor(
-
-  ) {
-
-  }
 }

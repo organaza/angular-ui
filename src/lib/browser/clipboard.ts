@@ -1,5 +1,5 @@
 export class Clipboard {
-  static copyToClipboard(value: any): boolean {
+  static copyToClipboard(value: string): boolean {
     const textArea = document.createElement('textarea');
     textArea.value = value;
     document.body.appendChild(textArea);

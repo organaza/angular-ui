@@ -1,13 +1,12 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  EventEmitter,
+  HostBinding,
+  HostListener,
   Input,
   Output,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  HostBinding,
-  ChangeDetectorRef
 } from '@angular/core';
 
 @Component({
@@ -24,7 +23,7 @@ export class ButtonComponent {
   tabindex = 0;
 
   @Output()
-  clicked: EventEmitter<{}> = new EventEmitter();
+  clicked = new EventEmitter<void>();
 
   @Input()
   text: string;
@@ -69,33 +68,30 @@ export class ButtonComponent {
   isAttention: boolean;
 
   @HostListener('keydown', ['$event'])
-  onKeyDownListener(event: any) {
+  onKeyDownListener(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       event.preventDefault();
       if (!this.disabled) {
         this.onClick();
       }
-      return false;
     }
   }
 
   @HostListener('mouseleave', ['$event'])
-  onmouseleave(event: any) {
+  onmouseleave(): void {
     this.clickCount = 0;
   }
 
-  constructor(
-    private cd: ChangeDetectorRef,
-  ) { }
+  constructor(private cd: ChangeDetectorRef) {}
 
-  onClickButton() {
+  onClickButton(): void {
     if (!this.disabled && !this.inProgress) {
       this.onClick();
     }
   }
-  onClick() {
+  onClick(): void {
     if (this.double) {
-      this.clickCount ++;
+      this.clickCount++;
       this.cd.markForCheck();
       if (this.clickCount === 2) {
         this.clicked.next();
@@ -104,7 +100,7 @@ export class ButtonComponent {
       if (this.timeout === 0) {
         this.clicked.next();
       } else {
-        setTimeout(() => {
+        window.setTimeout(() => {
           this.clicked.next();
         }, this.timeout);
       }

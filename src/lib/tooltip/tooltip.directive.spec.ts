@@ -1,11 +1,12 @@
 import { TooltipDirective } from './tooltip.directive';
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 describe('TooltipDirective', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TooltipDirective ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      return TestBed.configureTestingModule({
+        declarations: [TooltipDirective],
+      }).compileComponents();
+    }),
+  );
 });

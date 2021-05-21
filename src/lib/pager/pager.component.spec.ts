@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PagerComponent } from './pager.component';
 import { FormsModule } from '@angular/forms';
@@ -9,19 +9,15 @@ describe('PagerComponent', () => {
   let component: PagerComponent;
   let fixture: ComponentFixture<PagerComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FormsModule
-      ],
-      declarations: [
-        PagerComponent,
-        TextinputComponent
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ],
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      return TestBed.configureTestingModule({
+        imports: [FormsModule],
+        declarations: [PagerComponent, TextinputComponent],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PagerComponent);

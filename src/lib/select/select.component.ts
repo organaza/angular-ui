@@ -1,28 +1,29 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  TemplateRef,
-  ContentChild,
   Component,
-  Input,
-  Output,
+  ContentChild,
   ElementRef,
   EventEmitter,
-  OnInit,
-  OnDestroy,
-  HostListener,
   forwardRef,
   HostBinding,
+  HostListener,
+  Input,
+  OnDestroy,
+  Output,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { DropDownComponent } from '../dropdown/dropdown.component';
-import { ISelectModel } from './select.model';
-import { OzSettingsService } from '../settings/settings.service';
-import { takeUntil } from 'rxjs/operators';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { DropDownComponent } from '../dropdown/dropdown.component';
+import { OzSettingsService } from '../settings/settings.service';
+import { ISelectItem, ISelectModel, SelectData } from './select.model';
 
-const noop = () => {};
+const noop = (): void => {
+  return;
+};
 
 @Component({
   selector: 'oz-select',
@@ -37,10 +38,9 @@ const noop = () => {};
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent
-  implements OnInit, OnDestroy, ControlValueAccessor {
-  onTouchedCallback: () => void = noop;
-  onChangeCallback: (_: any) => void = noop;
+export class SelectComponent implements OnDestroy, ControlValueAccessor {
+  private onTouchedCallback: () => void = noop;
+  private onChangeCallback: (_: SelectData) => void = noop;
 
   loading: boolean;
   thisContext: { select: SelectComponent };
@@ -55,7 +55,7 @@ export class SelectComponent
     this._model = value;
     this.model.selected
       .pipe(takeUntil(this.modelChanged))
-      .subscribe(() => this.applyChanges());
+      .subscribe(() => void this.applyChanges());
   }
   get model(): ISelectModel {
     return this._model;
@@ -82,14 +82,14 @@ export class SelectComponent
   @HostBinding('class.oz-select-active')
   opened: boolean;
 
-  @Output()
-  close = new EventEmitter();
+  // @Output()
+  // close = new EventEmitter();
 
   @Output()
   changed = new EventEmitter();
 
   @Output()
-  itemChange = new EventEmitter<any>();
+  itemChange = new EventEmitter<ISelectItem[]>();
 
   @Input()
   set openByClick(value: boolean) {
@@ -117,34 +117,34 @@ export class SelectComponent
   dropdownHorizontalPosition = 'right-inside';
 
   @ContentChild('selectedItemTemplateDefault', { static: true })
-  selectedItemTemplateDefault: TemplateRef<any>;
+  selectedItemTemplateDefault: TemplateRef<unknown>;
 
   @ContentChild('selectedItemActionsDefault', { static: true })
-  selectedItemActionsDefault: TemplateRef<any>;
+  selectedItemActionsDefault: TemplateRef<unknown>;
 
   @ContentChild('selectedItemActions', { static: true })
-  selectedItemActions: TemplateRef<any>;
+  selectedItemActions: TemplateRef<unknown>;
 
   @ContentChild('selectedItemTemplate', { static: true })
-  selectedItemTemplate: TemplateRef<any>;
+  selectedItemTemplate: TemplateRef<unknown>;
 
   @ContentChild('lastItemTemplate', { static: true })
-  lastItemTemplate: TemplateRef<any>;
+  lastItemTemplate: TemplateRef<unknown>;
 
   @ContentChild('firstItemTemplate', { static: true })
-  firstItemTemplate: TemplateRef<any>;
+  firstItemTemplate: TemplateRef<unknown>;
 
   @HostListener('keydown', ['$event'])
-  onKeyDown(event: any) {
+  onKeyDown(event: KeyboardEvent): void {
     if (!this.opened) {
-      if (event.keyCode === 32 || event.keyCode === 13) {
+      if (event.key === 'Space' || event.key === 'Enter') {
         this.switchPopup(true);
       }
       return;
     }
-    if (event.keyCode === 34 || event.keyCode === 33) {
+    if (event.key === 'PageUp' || event.key === 'PageDown') {
       event.preventDefault();
-      return false;
+      return;
     }
   }
 
@@ -158,34 +158,32 @@ export class SelectComponent
     this.iconOpened = this.settingService.selectIconUp;
   }
 
-  writeValue(value: any) {
+  writeValue(value: SelectData): void {
     this.model.setData(value);
   }
 
-  registerOnChange(fn: any) {
+  registerOnChange(fn: (_: SelectData) => void): void {
     this.onChangeCallback = fn;
   }
 
-  registerOnTouched(fn: any) {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedCallback = fn;
   }
 
-  applyChanges() {
+  async applyChanges(): Promise<void> {
     this.onChangeCallback(this.model.getData());
-    this.itemChange.next(this.model.selected.getValue());
+    this.itemChange.next(await this.model.selected.toPromise());
     this.changed.next(this.model.getData());
   }
 
-  ngOnInit() {}
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.dropdown = null;
-    this.close.complete();
-    this.close = null;
+    // this.close.complete();
+    // this.close = null;
     this.cd.markForCheck();
   }
 
-  switchPopup(value?: boolean) {
+  switchPopup(value?: boolean): void {
     if (this.disabled) {
       return;
     }
@@ -198,7 +196,7 @@ export class SelectComponent
     if (!value) {
       this.opened = value;
       this.dropdown.hide();
-      this.applyChanges();
+      void this.applyChanges();
       this.returnFocus();
     } else {
       this.model.show();
@@ -208,19 +206,22 @@ export class SelectComponent
     }
     this.cd.markForCheck();
   }
-  setIndex(value: number) {
+  setIndex(value: number): void {
     this.selectedIndex = value;
   }
-  onSearchKeyDown(event: KeyboardEvent) {
-    const optionsList = this.dropdown.el.nativeElement.getElementsByClassName(
+  async onSearchKeyDown(event: KeyboardEvent): Promise<void> {
+    const optionsList = (this.dropdown.el
+      .nativeElement as HTMLElement).getElementsByClassName(
       'options',
-    )[0];
-    const activeOption = this.dropdown.el.nativeElement.getElementsByClassName(
+    )[0] as HTMLElement;
+    const activeOption = (this.dropdown.el
+      .nativeElement as HTMLElement).getElementsByClassName(
       'option cursor',
-    )[0];
-    const searchElement = this.dropdown.el.nativeElement.getElementsByClassName(
+    )[0] as HTMLElement;
+    const searchElement = (this.dropdown.el
+      .nativeElement as HTMLElement).getElementsByClassName(
       'search',
-    )[0];
+    )[0] as HTMLElement;
 
     if (event.key === 'Enter') {
       this.model.select(this.selectedIndex);
@@ -228,12 +229,12 @@ export class SelectComponent
       if (this.closeOnSelect) {
         this.switchPopup(false);
       }
-      return false;
+      return;
     }
     if (event.key === 'Escape') {
       event.preventDefault();
       this.switchPopup(false);
-      return false;
+      return;
     }
     if (event.key === 'ArrowUp') {
       if (this.tags) {
@@ -246,7 +247,7 @@ export class SelectComponent
     if (event.key === 'ArrowDown') {
       this.selectedIndex = Math.min(
         this.selectedIndex + 1,
-        this.model.list.getValue().length - 1,
+        (await this.model.list.toPromise()).length - 1,
       );
       event.preventDefault();
     }
@@ -261,35 +262,34 @@ export class SelectComponent
         optionsList.scrollTop;
     }
   }
-  onEnter() {}
-  onPopupScroll(event: any) {
+  onPopupScroll(event: Event): void {
     event.stopImmediatePropagation();
   }
-  onRemoveItem(event: MouseEvent, index: number) {
+  onRemoveItem(event: MouseEvent, index: number): void {
     this.model.unselect(index);
     event.stopImmediatePropagation();
     event.preventDefault();
   }
-  onSelect(index: number) {
+  onSelect(index: number): void {
     this.model.select(index);
     if (this.closeOnSelect) {
       this.switchPopup(false);
     }
   }
-  dropdownDisplayed() {
+  dropdownDisplayed(): void {
     this.focusOnInput();
   }
-  focusOnInput() {
+  focusOnInput(): void {
     window.setTimeout(() => {
       if (this.input) {
-        this.input.nativeElement.focus();
+        (this.input.nativeElement as HTMLElement).focus();
       }
     }, 100);
   }
-  returnFocus() {
-    this.el.nativeElement.focus();
+  returnFocus(): void {
+    (this.el.nativeElement as HTMLElement).focus();
   }
-  onLoadMore() {
+  onLoadMore(): void {
     this.model.currentPage++;
     this.model.loadPage(this.model.currentPage).subscribe();
   }

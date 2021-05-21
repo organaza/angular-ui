@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ColorPickerComponent } from './colorpicker.component';
 import { DropDownComponent } from '../dropdown/dropdown.component';
@@ -10,13 +10,19 @@ describe('ColorpickerComponent', () => {
   let component: ColorPickerComponent;
   let fixture: ComponentFixture<ColorPickerComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [ FormsModule ],
-      declarations: [ ColorPickerComponent, DropDownComponent, TextinputComponent, IconComponent ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      return TestBed.configureTestingModule({
+        imports: [FormsModule],
+        declarations: [
+          ColorPickerComponent,
+          DropDownComponent,
+          TextinputComponent,
+          IconComponent,
+        ],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ColorPickerComponent);

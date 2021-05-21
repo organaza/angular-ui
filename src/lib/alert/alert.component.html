@@ -1,18 +1,34 @@
-<div class="alert-background" [@backgroundState]="alert.state" (click)="closeAlertByClick()"></div>
-<div class="alert-container" [@state]="alert.state" [class.attention]="alert.isAttention"
-  [style.maxWidth.px]="alert.width">
+<div
+  class="alert-background"
+  [@backgroundState]="alert.state"
+  (click)="closeAlertByClick()"
+></div>
+<div
+  class="alert-container"
+  [@state]="alert.state"
+  [class.attention]="alert.isAttention"
+  [style.maxWidth.px]="alert.width"
+>
   <div class="alert-container-title" [innerHTML]="alert.title"></div>
   <div class="alert-container-text" [innerHTML]="alert.text"></div>
-  <div class="alert-container-value" *ngIf="alert.type=='prompt'">
-    <oz-textinput [(ngModel)]="alert.defaultValue" name="value" prompt="Input here"></oz-textinput>
+  <div class="alert-container-value" *ngIf="alert.type == 'prompt'">
+    <oz-textinput
+      [(ngModel)]="alert.defaultValue"
+      name="value"
+      prompt="Input here"
+    ></oz-textinput>
   </div>
-  <div class="alert-container-buttons" >
-    <div *ngFor="let button of alert.buttons" class="alert-container-buttons-item">
+  <div class="alert-container-buttons">
+    <div
+      *ngFor="let button of alert.buttons"
+      class="alert-container-buttons-item"
+    >
       <!-- <a class="{{button.class}}" (click)="onCliclNotificationButton(button)">{{button.label}}</a> -->
       <oz-button
         [timeout]="0"
         [isAttention]="button.isAttention"
-        (clicked)="onClickAlertButton(button)">{{button.label}}
+        (clicked)="onClickAlertButton(button)"
+        >{{ button.label }}
       </oz-button>
     </div>
   </div>

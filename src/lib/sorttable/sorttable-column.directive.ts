@@ -3,11 +3,10 @@ import { SortTableService } from './sorttable.service';
 import { SortTableDirective } from './sorttable.directive';
 
 @Directive({
-  selector: '[ozSortTableColumn]'
+  selector: '[ozSortTableColumn]',
 })
 export class SortTableColumnDirective implements OnInit, OnDestroy {
-
-  @Input('ozSortTableColumn') sortTableColumn: string; // tslint:disable-line no-input-rename
+  @Input('ozSortTableColumn') sortTableColumn: string; // eslint-disable-line  @angular-eslint/no-input-rename
 
   @Input() depth: number;
 
@@ -15,25 +14,30 @@ export class SortTableColumnDirective implements OnInit, OnDestroy {
     return this.sortTable.sortTable + ':' + this.sortTableColumn;
   }
 
-  private el: HTMLElement;
   index: number;
 
-  constructor(el: ElementRef, private sortTableService: SortTableService, private sortTable: SortTableDirective) {
-    this.el = el.nativeElement;
-  }
+  constructor(
+    private el: ElementRef,
+    private sortTableService: SortTableService,
+    private sortTable: SortTableDirective,
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sortTableService.registerColumn(this.columnId, this);
   }
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sortTableService.unregisterColumn(this.columnId, this.index);
   }
   // Set flex basis from service
-  setFlexBasis(flexBasis: number) {
+  setFlexBasis(flexBasis: number): void {
     if (this.depth) {
-      this.el.style.flexBasis = `calc(${flexBasis}% - ${this.depth * 10}em)`;
+      (this.el
+        .nativeElement as HTMLElement).style.flexBasis = `calc(${flexBasis}% - ${
+        this.depth * 10
+      }em)`;
     } else {
-      this.el.style.flexBasis = flexBasis + '%';
+      (this.el.nativeElement as HTMLElement).style.flexBasis =
+        flexBasis.toString() + '%';
     }
   }
 }

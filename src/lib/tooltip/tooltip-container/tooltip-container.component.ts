@@ -12,7 +12,8 @@ import { TooltipService } from '../tooltip.service';
   styleUrls: ['./tooltip-container.component.scss'],
 })
 export class TooltipContainerComponent {
-  @ViewChild('container', { read: ViewContainerRef, static: true }) target;
+  @ViewChild('container', { read: ViewContainerRef, static: true })
+  target: ViewContainerRef;
 
   @HostBinding('class.active')
   active: boolean;

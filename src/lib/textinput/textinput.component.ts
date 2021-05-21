@@ -1,38 +1,43 @@
 import {
-  Component,
-  Input,
-  Output,
-  ElementRef,
-  EventEmitter,
-  OnInit,
-  OnDestroy,
-  HostListener,
-  HostBinding,
-  forwardRef,
-  ViewChild,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Renderer2 } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  HostBinding,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MentionsConfig } from 'oz-mentions';
 import { Subject } from 'rxjs';
-import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 const noop = () => {
+  return;
 };
 
 @Component({
   selector: 'oz-textinput',
   templateUrl: './textinput.component.html',
   styleUrls: ['./textinput.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => TextinputComponent),
-  multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TextinputComponent),
+      multi: true,
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class TextinputComponent
+  implements OnInit, OnDestroy, ControlValueAccessor {
   destroy: Subject<boolean> = new Subject<boolean>();
 
   @HostBinding('class.focus')
@@ -43,18 +48,18 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
   tabindex = 0;
 
   @Output()
-  enter: EventEmitter<{}> = new EventEmitter();
+  enter = new EventEmitter<void>();
 
   @Output()
-  focus: EventEmitter<{}> = new EventEmitter();
+  focused = new EventEmitter<void>();
 
   @Output()
-  blur: EventEmitter<{}> = new EventEmitter();
+  blured = new EventEmitter<void>();
 
   @Output()
-  clear: EventEmitter<{}> = new EventEmitter();
+  clear = new EventEmitter<void>();
 
-  onModelChanged: Subject<any> = new Subject<any>();
+  onModelChanged = new Subject<string | number>();
 
   @Input()
   opacity: number;
@@ -69,7 +74,7 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
   prompt: string;
 
   @Input()
-  type = 'string';
+  type: 'string' | 'number' | 'float' = 'string';
 
   @Input()
   min = 0;
@@ -78,7 +83,7 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
   max = Number.MAX_VALUE;
 
   @Input()
-  maxlength: any;
+  maxlength: number;
 
   @Input()
   @HostBinding('class.disabled')
@@ -119,7 +124,7 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
   keepFocus: boolean;
 
   @Input()
-  filterFunction: any;
+  filterFunction: (value: string | number) => string;
 
   @Input()
   multiline: boolean;
@@ -127,58 +132,61 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
   @Input()
   uppercase: boolean;
 
-  focusOutTimeout: number;
-  documentClickListener: Function;
-  textareaClickListener: Function;
+  @Input()
+  mentionsConfig: MentionsConfig;
 
-  oldValue: any;
-  set value(value: any) {
-    if (this.uppercase && value) {
+  focusOutTimeout: number;
+  documentClickListener: () => void;
+  textareaClickListener: () => void;
+
+  oldValue: string | number;
+  set value(value: string | number) {
+    if (this.uppercase && value && typeof value === 'string') {
       this._value = value.toUpperCase();
     } else {
       this._value = value;
     }
   }
-  get value(): any {
-    if (this.uppercase && this._value) {
+  get value(): string | number {
+    if (this.uppercase && this._value && typeof this._value === 'string') {
       return this._value.toUpperCase();
     } else {
       return this._value;
     }
   }
-  _value: any;
+  _value: string | number;
 
-  @ViewChild('container', {static: true})
+  @ViewChild('container', { read: ElementRef })
   container: ElementRef;
 
   private onTouchedCallback: () => void = noop;
-  private onChangeCallback: (_: any) => void = noop;
+  private onChangeCallback: (_: string | number) => void = noop;
 
   @HostListener('keydown', ['$event'])
-  onKeyDownListener(event: any) {
+  onKeyDownListener(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       this.switchPopup(false, false, this.keepFocus);
       this.enter.next();
       if (event.key === 'Enter') {
-        this.container.nativeElement.blur();
+        (this.container.nativeElement as HTMLElement).blur();
         event.preventDefault();
-        return false;
+        return;
       }
     }
     if (event.key === 'Escape') {
       event.preventDefault();
       this.switchPopup(false, true);
-      this.container.nativeElement.blur();
-      return false;
+      (this.container.nativeElement as HTMLElement).blur();
+      return;
     }
     if (event.key === 'PageUp' || event.key === 'PageDown') {
       event.preventDefault();
-      return false;
+      return;
     }
   }
 
-  @HostListener('focus', ['$event'])
-  onFocus(event: any) {
+  @HostListener('focusin', ['$event'])
+  onFocus(): void {
     this.switchPopup(true);
   }
 
@@ -186,41 +194,45 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
     private el: ElementRef,
     private renderer: Renderer2,
     private cd: ChangeDetectorRef,
-  ) { }
+  ) {}
 
-  writeValue(value: any) {
+  writeValue(value: string): void {
     this.value = value;
-    this.checkNumber();
+    this.parseValue();
     if (this.onModelChanged) {
       this.cd.detectChanges();
     }
   }
 
-  registerOnChange(fn: any) {
+  registerOnChange(fn: (_: string) => void): void {
     this.onChangeCallback = fn;
   }
 
-  registerOnTouched(fn: any) {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedCallback = fn;
   }
 
-  ngOnInit() {
-    this.textareaClickListener = this.renderer.listen(this.el.nativeElement, 'click', (moveEvent: MouseEvent) => {
-      moveEvent.stopPropagation();
-    });
+  ngOnInit(): void {
+    this.textareaClickListener = this.renderer.listen(
+      this.el.nativeElement,
+      'click',
+      (moveEvent: MouseEvent) => {
+        moveEvent.stopPropagation();
+      },
+    );
 
-    this.onModelChanged.pipe(
-      takeUntil(this.destroy),
-      debounceTime(this.liveDebounce),
-      distinctUntilChanged(),
-    )
-    .subscribe((value: any) => {
-      this.onChangeCallback(value);
-    });
-
+    this.onModelChanged
+      .pipe(
+        debounceTime(this.liveDebounce),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+      )
+      .subscribe((value: string) => {
+        this.onChangeCallback(value);
+      });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.documentClickListener) {
       this.documentClickListener();
     }
@@ -228,15 +240,19 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
       this.textareaClickListener();
     }
     this.enter.complete();
-    this.focus.complete();
-    this.blur.complete();
+    this.focused.complete();
+    this.blured.complete();
     this.destroy.next(true);
     this.onModelChanged.complete();
     this.onModelChanged = null;
     this.container = null;
   }
 
-  switchPopup(value: boolean, omitChanges?: boolean, keepFocus?: boolean) {
+  switchPopup(
+    value: boolean,
+    omitChanges?: boolean,
+    keepFocus?: boolean,
+  ): void {
     if (this.disabled) {
       return;
     }
@@ -246,7 +262,7 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
     if (!value) {
       this.opened = false;
       if (!omitChanges) {
-        this.checkNumber();
+        this.parseValue();
         if (this.filterFunction) {
           this.value = this.filterFunction(this.value);
         }
@@ -276,25 +292,30 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
       this.focusOnInput();
 
       const event = new MouseEvent('click', {
-        'view': window,
-        'bubbles': true,
-        'cancelable': true
+        view: window,
+        bubbles: true,
+        cancelable: true,
       });
       window.dispatchEvent(event);
 
       if (this.documentClickListener) {
         this.documentClickListener();
       }
-      this.documentClickListener = this.renderer.listen('window', 'click', (moveEvent: MouseEvent) => {
-        this.onFocusOut();
-      });
+      this.documentClickListener = this.renderer.listen(
+        'window',
+        'click',
+        () => {
+          this.onFocusOut();
+        },
+      );
     }
+    this.cd.markForCheck();
   }
 
-  onKeyDown(event: KeyboardEvent) {
+  onKeyDown(): void {
     if (this.live) {
-      setTimeout(() => {
-        this.checkNumber();
+      window.setTimeout(() => {
+        this.parseValue();
         if (this.filterFunction) {
           this.value = this.filterFunction(this.value);
         }
@@ -305,42 +326,42 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
         }
       });
     } else {
-      setTimeout(() => {
-        this.checkNumber();
+      window.setTimeout(() => {
+        this.parseValue();
       });
     }
   }
 
-  onFocusOut() {
+  onFocusOut(): void {
     this.switchPopup(false);
   }
-  onFocusIn() {
+  onFocusIn(): void {
     clearTimeout(this.focusOutTimeout);
   }
 
-  focusOnInput() {
-    setTimeout(() => {
-      this.container.nativeElement.focus();
+  focusOnInput(): void {
+    window.setTimeout(() => {
+      (this.container.nativeElement as HTMLElement).focus();
     });
   }
   getDisplayValue(): string {
-    if (this.password && this.value) {
+    if (this.password && this.value && typeof this.value === 'string') {
       return this.value.replace(/./g, '•');
     } else {
-      return this.value;
+      return (this.value || '').toString();
     }
   }
-  onClear(event: MouseEvent) {
+  onClear(event: MouseEvent): void {
     event.stopImmediatePropagation();
     event.preventDefault();
     this.value = '';
     this.onChangeCallback(this.value);
-    this.clear.next(event);
+    this.clear.next();
   }
-  onPaste(event: any) {
+  onPaste(): void {
     if (this.live) {
-      setTimeout(() => {
-        this.checkNumber();
+      window.setTimeout(() => {
+        this.parseValue();
         if (this.filterFunction) {
           this.value = this.filterFunction(this.value);
         }
@@ -351,34 +372,41 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
         }
       });
     } else {
-      setTimeout(() => {
-        this.checkNumber();
+      window.setTimeout(() => {
+        this.parseValue();
       });
     }
   }
-  setFocus() {
-    setTimeout(() => {
+  setFocus(): void {
+    window.setTimeout(() => {
       if (this.container) {
-        this.container.nativeElement.focus();
+        (this.container.nativeElement as HTMLElement).focus();
       }
     });
   }
-  checkNumber() {
-    if (this.type !== 'number' && this.type !== '*number') {
+  parseValue(): void {
+    if (this.type !== 'number' && this.type !== 'float') {
       return;
     }
+    this.value = this.value || '';
     this.checkAtMinMax();
     this.checkIsNaN();
     this.cd.markForCheck();
   }
-  checkAtMinMax() {
-    if (this.value && this.type === '*number' && (this.value[this.value.length - 1] === '.' || this.value[this.value.length - 1] === ',')) {
+  checkAtMinMax(): void {
+    if (
+      this.value &&
+      this.type === 'float' &&
+      typeof this.value === 'string' &&
+      (this.value[this.value.length - 1] === '.' ||
+        this.value[this.value.length - 1] === ',')
+    ) {
       return;
     }
     if (this.type === 'number') {
-      this.value = parseInt(this.value, 10);
+      this.value = parseInt(this.value.toString(), 10);
     } else {
-      this.value = parseFloat(this.value);
+      this.value = parseFloat(this.value.toString());
     }
     if (this.value > this.max) {
       this.value = this.max;
@@ -387,19 +415,19 @@ export class TextinputComponent implements OnInit, OnDestroy, ControlValueAccess
       this.value = this.min;
     }
   }
-  checkIsNaN() {
+  checkIsNaN(): void {
     if (this.type === 'number') {
-      if (isNaN(this.value)) {
+      if (isNaN(Number(this.value))) {
         this.value = 0;
       }
-    } else if (this.type === '*number') {
-      if (isNaN(this.value)) {
+    } else if (this.type === 'float') {
+      if (isNaN(Number(this.value))) {
         this.value = null;
       }
     }
   }
-  onBlur() {
+  onBlur(): void {
     this.switchPopup(false);
-    this.blur.next();
+    this.blured.next();
   }
 }

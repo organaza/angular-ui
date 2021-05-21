@@ -1,13 +1,13 @@
 import {
-  Input,
-  Component,
-  ViewChild,
-  OnInit,
-  ElementRef,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
   HostListener,
-  ChangeDetectorRef
- } from '@angular/core';
+  Input,
+  ViewChild,
+} from '@angular/core';
+import { Placement } from '@popperjs/core';
 
 @Component({
   selector: 'oz-text-with-tooltip',
@@ -15,8 +15,7 @@ import {
   styleUrls: ['./text-with-tooltip.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-export class TextWithTooltipComponent implements OnInit {
+export class TextWithTooltipComponent {
   @Input()
   label: string;
 
@@ -24,25 +23,22 @@ export class TextWithTooltipComponent implements OnInit {
   tooltipWidth: string;
 
   @Input()
-  tooltipDirection = 'top';
+  tooltipDirection: Placement = 'auto';
 
   @Input()
   textAlign: string;
 
   displayTooltip: boolean;
 
-  @ViewChild('wrapper', {static: true}) wrapper: ElementRef;
+  @ViewChild('wrapper', { static: true }) wrapper: ElementRef;
 
-  @HostListener('mouseenter') onMouseEnter() {
-    this.displayTooltip = !(this.wrapper.nativeElement.scrollWidth > this.wrapper.nativeElement.offsetWidth);
+  @HostListener('mouseenter') onMouseEnter(): void {
+    this.displayTooltip = !(
+      (this.wrapper.nativeElement as HTMLElement).scrollWidth >
+      (this.wrapper.nativeElement as HTMLElement).offsetWidth
+    );
     this.cd.detectChanges();
   }
 
-  constructor(
-    private cd: ChangeDetectorRef
-  ) {
-  }
-
-  ngOnInit() {
-  }
+  constructor(private cd: ChangeDetectorRef) {}
 }

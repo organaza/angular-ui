@@ -21,13 +21,14 @@
   display: flex;
   flex-direction: column;
   border: 1px solid $gray-lightest;
-  border-radius: 5px;
+  border-radius: 7px;
   box-shadow: $modal-wrapper-box-shadow;
   max-width: 90%;
   max-height: 90%;
   width: auto;
   height: auto;
   background-color: $oz-modal-background;
+  overflow: hidden;
 }
 
 .title {
@@ -69,12 +70,12 @@
   flex: 1 1 100%;
 }
 
-::ng-deep div[ozmodalclose]  {
+::ng-deep div[ozmodalclose] {
   display: flex;
   flex: 0 0 auto;
 }
 
-::ng-deep div[ozmodalfooter]  {
+::ng-deep div[ozmodalfooter] {
   flex: 0 0 auto;
   padding: 0.5em;
   border-top: 1px solid $gray-light;
@@ -84,12 +85,12 @@
   align-items: center;
 }
 
-::ng-deep div[ozmodalsubheader]  {
+::ng-deep div[ozmodalsubheader] {
   flex: 0 0 auto;
   display: flex;
 }
 
-::ng-deep div[ozmodalfooter]>* {
+::ng-deep div[ozmodalfooter] > * {
   margin-left: 0.5em;
 }
 
@@ -97,7 +98,7 @@
   display: none;
 }
 
-::ng-deep div[ozmodalbody]  {
+::ng-deep div[ozmodalbody] {
   padding: 0;
   flex: 1 1 auto;
   display: flex;

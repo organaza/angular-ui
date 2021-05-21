@@ -1,20 +1,29 @@
-<div class="oz-textinput"
+<div
+  class="oz-textinput"
   [class.showClear]="showClear"
-  [style.opacity]="opacity">
-  <div class="oz-textinput-container resize-text"
-    tabindex="-1"
+  [style.opacity]="opacity"
+>
+  <div
+    class="oz-textinput-container resize-text"
+    [tabindex]="-1"
     [class.container-nopadding]="nopadding"
     *ngIf="multiline"
-    (click)="switchPopup(true)">{{getDisplayValue()}}<span *ngIf="percentage">%</span>&nbsp;</div>
-  <div *ngIf="value===undefined || value===null || value===''"
-    tabindex="-1"
+    (click)="switchPopup(true)"
+  >
+    {{ getDisplayValue() }}<span *ngIf="percentage">%</span>&nbsp;
+  </div>
+  <div
+    *ngIf="value === undefined || value === null || value === ''"
+    [tabindex]="-1"
     class="oz-textinput-prompt"
     [class.oz-textinput-prompt-nopadding]="nopadding"
-    [class.oz-textinput-prompt-active]="opened">
-    {{prompt}}
+    [class.oz-textinput-prompt-active]="opened"
+  >
+    {{ prompt }}
   </div>
-  <input *ngIf="!multiline"
-    tabindex="-1"
+  <input
+    *ngIf="!multiline"
+    [tabindex]="-1"
     class="oz-textinput-container"
     [class.oz-textinput-container-nopadding]="nopadding"
     [class.oz-textinput-container-active]="opened"
@@ -23,15 +32,19 @@
     [(ngModel)]="value"
     [maxlength]="maxlength"
     [disabled]="disabled"
-    (keydown)="onKeyDown($event)"
+    (keydown)="onKeyDown()"
     (focusin)="onFocusIn()"
-    (focus)="focus.next()"
-    (blur)="blur.next()"
-    (paste)="onPaste($event)"
+    (focus)="focused.next()"
+    (click)="switchPopup(true)"
+    (blur)="blured.next()"
+    (paste)="onPaste()"
+    [oz-mentions]="mentionsConfig"
     autocomplete="new-password"
-    #container>
-  <textarea *ngIf="multiline"
-    tabindex="-1"
+    #container
+  />
+  <textarea
+    *ngIf="multiline"
+    [tabindex]="-1"
     class="oz-textinput-container multiline-textarea"
     [class.oz-textinput-container-nopadding]="nopadding"
     [class.oz-textinput-container-active]="opened"
@@ -39,19 +52,22 @@
     [(ngModel)]="value"
     [maxlength]="maxlength"
     [disabled]="disabled"
-    (keydown)="onKeyDown($event)"
+    (keydown)="onKeyDown()"
     (focusin)="onFocusIn()"
-    (focus)="focus.next()"
-    (blur)="blur.next()"
-    (paste)="onPaste($event)"
-    #container></textarea>
+    (focus)="focused.next()"
+    (blur)="blured.next()"
+    (paste)="onPaste()"
+    [oz-mentions]="mentionsConfig"
+    #container
+  ></textarea>
 
   <oz-icon
-    *ngIf="showClear && (value !== undefined && value !== '')"
-    tabindex="-1"
+    *ngIf="showClear && value !== undefined && value !== ''"
+    [tabindex]="-1"
     class="icon-close oz-textinput-clear"
     icon="clear"
     size="normal"
-    (mousedown)="onClear($event)">
+    (mousedown)="onClear($event)"
+  >
   </oz-icon>
 </div>

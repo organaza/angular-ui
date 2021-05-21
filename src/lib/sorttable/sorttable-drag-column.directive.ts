@@ -1,13 +1,24 @@
-import { Directive, Input, Output, ElementRef, EventEmitter, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  Renderer2,
+} from '@angular/core';
+import {
+  SortCompletedEvent,
+  SortMoveEvent,
+  SortStartEvent,
+  SortTableDirective,
+} from './sorttable.directive';
 import { SortTableService } from './sorttable.service';
-import { SortCompletedEvent, SortStartEvent, SortMoveEvent, SortTableDirective } from './sorttable.directive';
 
 @Directive({
-  selector: '[ozSortTableDragColumn]'
+  selector: '[ozSortTableDragColumn]',
 })
-export class SortTableDragColumnDirective implements OnInit, OnDestroy {
-  @Output()
-  sorted: EventEmitter<{}> = new EventEmitter();
+export class SortTableDragColumnDirective implements OnDestroy {
   @Output()
   sortMove: EventEmitter<SortMoveEvent> = new EventEmitter<SortMoveEvent>();
   @Output()
@@ -16,84 +27,118 @@ export class SortTableDragColumnDirective implements OnInit, OnDestroy {
   sortCompleted: EventEmitter<SortCompletedEvent> = new EventEmitter<SortCompletedEvent>();
 
   drag: boolean;
+  offsetHeight: number;
+  offsetTop: number;
   offsetWidth: number;
   offsetLeft: number;
   newIndex: number;
   _index: number;
-  moveHandlerSort: any;
-  moveHandlerDrag: any;
+  moveHandlerSort: () => void;
+  moveHandlerDrag: () => void;
 
-  constructor(private el: ElementRef,
+  constructor(
+    private el: ElementRef,
     private sortTableService: SortTableService,
     private sortTable: SortTableDirective,
-    private renderer: Renderer2) {
-  }
+    private renderer: Renderer2,
+  ) {}
 
   @Input('ozSortTableDragColumn')
   set index(value: number) {
     if (this._index) {
-      this.sortTableService.unregisterDragColumn(this.sortTable.sortTable, this.index);
+      this.sortTableService.unregisterDragColumn(
+        this.sortTable.sortTable,
+        this.index,
+      );
     }
     this._index = value;
     this.newIndex = value;
     if (value !== undefined) {
-      setTimeout(() => {
-        this.sortTableService.registerDragColumn(this.sortTable.sortTable, this.index, this);
+      window.setTimeout(() => {
+        this.sortTableService.registerDragColumn(
+          this.sortTable.sortTable,
+          this.index,
+          this,
+        );
       });
     }
   }
   get index(): number {
     return this._index;
   }
-  ngOnInit() {
+  ngOnDestroy(): void {
+    this.sortTableService.unregisterDragColumn(
+      this.sortTable.sortTable,
+      this.index,
+    );
   }
-  ngOnDestroy() {
-    this.sortTableService.unregisterDragColumn(this.sortTable.sortTable, this.index);
+  startSorting(): void {
+    (this.el.nativeElement as HTMLElement).classList.add(
+      'sorttable-column-move',
+    );
+    this.moveHandlerSort = this.renderer.listen(
+      this.el.nativeElement as HTMLElement,
+      'mousemove',
+      (event: MouseEvent) => {
+        const bounds: ClientRect = (this.el
+          .nativeElement as HTMLElement).getBoundingClientRect();
+        if (event.x > bounds.left && event.x < bounds.right) {
+          this.sortTableService.moveOther(
+            this.sortTable.sortTable,
+            this.index,
+            event.x - bounds.left,
+            true,
+          );
+        }
+      },
+    );
   }
-  startSorting() {
-    this.el.nativeElement.classList.add('sorttable-column-move');
-    this.moveHandlerSort = this.renderer.listen(this.el.nativeElement, 'mousemove', (event: MouseEvent) => {
-      const bounds: ClientRect = this.el.nativeElement.getBoundingClientRect();
-      if (event.x > bounds.left && event.x < bounds.right) {
-        this.sortTableService.moveOther(this.sortTable.sortTable, this.index, event.x - bounds.left, true);
-      }
-    });
-  }
-  stopSorting() {
-    this.el.nativeElement.classList.remove('sorttable-column-move');
-    this.el.nativeElement.style.transform = 'translate3d(0px, 0px, 0px)';
+  stopSorting(): void {
+    (this.el.nativeElement as HTMLElement).classList.remove(
+      'sorttable-column-move',
+    );
+    (this.el.nativeElement as HTMLElement).style.transform =
+      'translate3d(0px, 0px, 0px)';
     this.moveHandlerSort();
   }
-  startDrag() {
+  startDrag(): void {
     this.drag = true;
-    this.offsetWidth = this.el.nativeElement.offsetWidth;
-    this.offsetLeft = this.el.nativeElement.getBoundingClientRect().left;
+    this.offsetWidth = (this.el.nativeElement as HTMLElement).offsetWidth;
+    this.offsetLeft = (this.el
+      .nativeElement as HTMLElement).getBoundingClientRect().left;
     this.newIndex = this.index;
-    this.el.nativeElement.classList.add('sorttable-column-drag');
+    (this.el.nativeElement as HTMLElement).classList.add(
+      'sorttable-column-drag',
+    );
     if (this.moveHandlerSort) {
       this.moveHandlerSort();
     }
     this.sortStart.next(new SortStartEvent(this.index, this));
   }
   // Used to move another objects in collection
-  offsetDrag(offset: number) {
+  offsetDrag(offset: number): void {
     if (this.drag) {
       return;
     }
-    this.el.nativeElement.style.transform = 'translate3d(' + (offset) + 'px, 0px, 0px)';
+    (this.el
+      .nativeElement as HTMLElement).style.transform = `translate3d(${offset}px, 0px, 0px)`;
   }
   // Used to move current drag object
-  moveDrag(offsetX: number, offsetY: number) {
-    this.sortMove.next(new SortMoveEvent(offsetX, offsetY, this.newIndex, this));
-    this.el.nativeElement.style.transform = 'translate3d(' + (offsetX) + 'px, 0px, 0px)';
+  moveDrag(offsetX: number, offsetY: number): void {
+    this.sortMove.next(
+      new SortMoveEvent(offsetX, offsetY, this.newIndex, this),
+    );
+    (this.el
+      .nativeElement as HTMLElement).style.transform = `translate3d(${offsetX}px, 0px, 0px)`;
   }
-  stopDrag() {
+  stopDrag(): void {
     this.drag = false;
-    this.el.nativeElement.classList.remove('sorttable-column-drag');
+    (this.el.nativeElement as HTMLElement).classList.remove(
+      'sorttable-column-drag',
+    );
     this.sortCompleted.next(new SortCompletedEvent(this.index, this.newIndex));
   }
-  // getHeight не нашел где используется
-  // getWidth(): number {
-  //   return this.el.nativeElement.offsetWidth;
-  // }
+  getWidth(): number {
+    return (this.el.nativeElement as HTMLElement).offsetWidth;
+  }
 }

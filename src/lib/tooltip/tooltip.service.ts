@@ -1,11 +1,16 @@
-import { Injectable, ComponentFactoryResolver, ComponentRef, Type } from '@angular/core';
+import {
+  Injectable,
+  ComponentFactoryResolver,
+  ComponentRef,
+  Type,
+} from '@angular/core';
 import { TooltipContainerComponent } from './tooltip-container/tooltip-container.component';
 import { TooltipComponent } from './tooltip/tooltip.component';
 
 export class Tooltip {
-  componentRef: ComponentRef<{}>;
+  componentRef: ComponentRef<TooltipComponent>;
 
-  constructor(componentRef) {
+  constructor(componentRef: ComponentRef<TooltipComponent>) {
     this.componentRef = componentRef;
   }
 }
@@ -17,17 +22,24 @@ export class TooltipService {
   tooltips: Tooltip[];
   container: TooltipContainerComponent;
 
-  constructor(
-    private componentFactoryResolver: ComponentFactoryResolver
-  ) {
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {
     this.tooltips = [];
   }
-  registerContainer(container: TooltipContainerComponent) {
+  registerContainer(container: TooltipContainerComponent): void {
     this.container = container;
   }
-  add(text: string = '', width: string = 'auto', maxWidth: string = '', hideBack: boolean = false): Tooltip {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(TooltipComponent);
-    const componentRef: ComponentRef<{}> = this.container.target.createComponent(componentFactory);
+  add(
+    text: string = '',
+    width: string = 'auto',
+    maxWidth: string = '',
+    hideBack: boolean = false,
+  ): Tooltip {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory<TooltipComponent>(
+      TooltipComponent,
+    );
+    const componentRef = this.container.target.createComponent(
+      componentFactory,
+    );
 
     const tooltip = new Tooltip(componentRef);
 
@@ -50,23 +62,27 @@ export class TooltipService {
     return tooltip;
   }
   addWithType(
-    contentType: Type<{}>,
-    data: any,
+    contentType: Type<unknown>,
+    data: unknown,
     dataField: string,
     width: string = 'auto',
     maxWidth: string = '',
-    hideBack: boolean
+    hideBack: boolean,
   ): Tooltip {
     const tooltip = this.add('', width, maxWidth, hideBack);
 
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(contentType);
-    const componentRef: ComponentRef<{}> = (<TooltipComponent>tooltip.componentRef.instance).target.createComponent(componentFactory);
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(
+      contentType,
+    );
+    const componentRef = tooltip.componentRef.instance.target.createComponent(
+      componentFactory,
+    );
 
     componentRef.instance[dataField] = data;
 
     return tooltip;
   }
-  remove(tooltip: Tooltip): any {
+  remove(tooltip: Tooltip): void {
     const index = this.tooltips.indexOf(tooltip);
     if (index > -1) {
       this.tooltips.splice(index, 1);

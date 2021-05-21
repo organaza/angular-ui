@@ -5,11 +5,14 @@ import { TooltipService } from './tooltip.service';
 describe('TooltipService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TooltipService]
+      providers: [TooltipService],
     });
   });
 
-  it('should be created', inject([TooltipService], (service: TooltipService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [TooltipService],
+    (service: TooltipService) => {
+      expect(service).toBeTruthy();
+    },
+  ));
 });

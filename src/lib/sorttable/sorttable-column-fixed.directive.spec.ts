@@ -1,11 +1,12 @@
 import { SortTableColumnFixedDirective } from './sorttable-column-fixed.directive';
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 describe('SortTableColumnFixedDirective', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SortTableColumnFixedDirective ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      return TestBed.configureTestingModule({
+        declarations: [SortTableColumnFixedDirective],
+      }).compileComponents();
+    }),
+  );
 });

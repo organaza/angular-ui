@@ -67,7 +67,7 @@ import { JSONUtils } from '../json/json';
 })
 export class DropDownComponent implements OnDestroy {
   @ContentChild('dropdownContent', { static: true })
-  dropdownContent: TemplateRef<any>;
+  dropdownContent: TemplateRef<unknown>;
 
   @HostBinding('style.left.px')
   left: number;
@@ -128,7 +128,7 @@ export class DropDownComponent implements OnDestroy {
   mouseover = false;
 
   @Input()
-  set position(value: any) {
+  set position(value: DropDownPosition) {
     if (!value) {
       return;
     }
@@ -138,10 +138,10 @@ export class DropDownComponent implements OnDestroy {
     this.__position = value;
     this.calculateBounds();
   }
-  get position(): any {
+  get position(): DropDownPosition {
     return this.__position;
   }
-  __position: any;
+  __position: DropDownPosition;
 
   @Input()
   closeByClickActiveElement: boolean;
@@ -153,25 +153,25 @@ export class DropDownComponent implements OnDestroy {
   closeByClickElement = true;
 
   @Output()
-  displayed: EventEmitter<{}> = new EventEmitter();
+  displayed = new EventEmitter<void>();
 
   @Output()
-  closed: EventEmitter<{}> = new EventEmitter();
+  closed = new EventEmitter<boolean>();
 
   state = 'in-down';
   dropDownNgIf = false;
 
-  openHandler: any;
+  openHandler: () => void;
 
-  calculateTimeout: any;
-  appendTimeout: any;
-  dropDownTimeout: any;
+  calculateTimeout: number;
+  appendTimeout: number;
+  dropDownTimeout: number;
 
-  leaveDropdownHandler: Function;
-  enterDropdownHandler: Function;
-  leaveActiveHandler: Function;
-  clickDropdownHandler: Function;
-  leaveActiveHandlerByClickActiveElement: Function;
+  leaveDropdownHandler: () => void;
+  enterDropdownHandler: () => void;
+  leaveActiveHandler: () => void;
+  clickDropdownHandler: () => void;
+  leaveActiveHandlerByClickActiveElement: () => void;
 
   parent: HTMLElement;
 
@@ -181,7 +181,7 @@ export class DropDownComponent implements OnDestroy {
     private cd: ChangeDetectorRef,
   ) {}
 
-  setListeners() {
+  setListeners(): void {
     if (this.openHandler) {
       this.openHandler();
     }
@@ -191,7 +191,7 @@ export class DropDownComponent implements OnDestroy {
         this.openHandler = this.renderer.listen(
           this.activeElement,
           'mouseover',
-          (moveEvent: MouseEvent) => {
+          () => {
             this.openDropdownByClick();
           },
         );
@@ -214,18 +214,18 @@ export class DropDownComponent implements OnDestroy {
     this.cd.markForCheck();
   }
 
-  openDropdownByClick() {
+  openDropdownByClick(): void {
     this.dropDownNgIf = true;
     this.calculateBounds();
-    // setTimeout(() => {
-    if (!this.displayBackground) {
-      this.addLeaveDropdownHandler();
-    }
-    this.addEnterDropDownHandler();
-    // }, 150);
-    if (!this.displayBackground) {
-      this.addLeaveActiveHandler();
-    }
+    window.setTimeout(() => {
+      if (!this.displayBackground) {
+        this.addLeaveDropdownHandler();
+      }
+      this.addEnterDropDownHandler();
+      if (!this.displayBackground) {
+        this.addLeaveActiveHandler();
+      }
+    }, 100);
     if (this.closeByClickElement) {
       this.addClickDropdownHandler();
     }
@@ -235,7 +235,7 @@ export class DropDownComponent implements OnDestroy {
     this.cd.markForCheck();
   }
 
-  openDropdown() {
+  openDropdown(): void {
     if (!this.dropDownNgIf) {
       this.dropDownNgIf = true;
       this.calculateBounds();
@@ -243,7 +243,7 @@ export class DropDownComponent implements OnDestroy {
     }
   }
 
-  closeDropdown() {
+  closeDropdown(): void {
     if (this.state === 'void') {
       return;
     }
@@ -264,7 +264,7 @@ export class DropDownComponent implements OnDestroy {
     if (this.leaveActiveHandlerByClickActiveElement) {
       this.leaveActiveHandlerByClickActiveElement();
     }
-    setTimeout(() => {
+    window.setTimeout(() => {
       if (this.absolute) {
         this.parent.appendChild(this.el.nativeElement);
       }
@@ -277,21 +277,21 @@ export class DropDownComponent implements OnDestroy {
     }, 150);
   }
 
-  addLeaveDropdownHandler() {
+  addLeaveDropdownHandler(): void {
     this.leaveDropdownHandler = this.renderer.listen(
       this.el.nativeElement,
       'mouseleave',
-      (moveEvent: MouseEvent) => {
+      () => {
         this.closeDropdown();
       },
     );
   }
 
-  addEnterDropDownHandler() {
+  addEnterDropDownHandler(): void {
     this.enterDropdownHandler = this.renderer.listen(
       this.el.nativeElement,
       'mouseenter',
-      (moveEvent: MouseEvent) => {
+      () => {
         this.dropDownNgIf = true;
         clearTimeout(this.dropDownTimeout);
         this.enterDropdownHandler();
@@ -300,13 +300,13 @@ export class DropDownComponent implements OnDestroy {
     );
   }
 
-  addLeaveActiveHandler() {
+  addLeaveActiveHandler(): void {
     this.leaveActiveHandler = this.renderer.listen(
       this.activeElement,
       'mouseleave',
-      (moveEvent: MouseEvent) => {
+      () => {
         this.leaveActiveHandler();
-        this.dropDownTimeout = setTimeout(() => {
+        this.dropDownTimeout = window.setTimeout(() => {
           this.closeDropdown();
           this.enterDropdownHandler();
         }, 100);
@@ -314,21 +314,21 @@ export class DropDownComponent implements OnDestroy {
     );
   }
 
-  addClickDropdownHandler() {
+  addClickDropdownHandler(): void {
     this.clickDropdownHandler = this.renderer.listen(
       this.el.nativeElement,
       'mouseup',
-      (moveEvent: MouseEvent) => {
+      () => {
         this.closeDropdown();
       },
     );
   }
 
-  addLeaveActiveHandlerByClickActiveElement() {
+  addLeaveActiveHandlerByClickActiveElement(): void {
     this.leaveActiveHandlerByClickActiveElement = this.renderer.listen(
       this.activeElement,
       'mouseup',
-      (moveEvent: MouseEvent) => {
+      () => {
         this.closeDropdown();
         this.enterDropdownHandler();
         if (this.leaveActiveHandler) {
@@ -338,12 +338,12 @@ export class DropDownComponent implements OnDestroy {
     );
   }
 
-  setState(newState: string) {
+  setState(newState: string): void {
     this.state = newState;
     this.cd.markForCheck();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.parent) {
       this.parent.appendChild(this.el.nativeElement);
     }
@@ -377,13 +377,13 @@ export class DropDownComponent implements OnDestroy {
     this.closed.complete();
   }
 
-  calculateBounds() {
+  calculateBounds(): void {
     if (!this.bindElement) {
       return;
     }
-    const parent = this.el.nativeElement.parentElement;
+    const parent = (this.el.nativeElement as HTMLElement).parentElement;
     if (parent.tagName !== 'BODY') {
-      this.parent = this.el.nativeElement.parentElement;
+      this.parent = (this.el.nativeElement as HTMLElement).parentElement;
     }
 
     this.setState('void');
@@ -407,13 +407,15 @@ export class DropDownComponent implements OnDestroy {
       this.minWidth = bindWidth;
     }
 
-    this.calculateTimeout = setTimeout(() => {
+    this.calculateTimeout = window.setTimeout(() => {
       if (this.absolute) {
         window.document.body.appendChild(this.el.nativeElement);
       }
 
-      const dropWidth: number = this.el.nativeElement.offsetWidth;
-      const dropHeight: number = this.el.nativeElement.offsetHeight;
+      const dropWidth: number = (this.el.nativeElement as HTMLElement)
+        .offsetWidth;
+      const dropHeight: number = (this.el.nativeElement as HTMLElement)
+        .offsetHeight;
       const maxRight: number = window.innerWidth;
       const maxBottom: number = window.innerHeight;
 
@@ -504,16 +506,24 @@ export class DropDownComponent implements OnDestroy {
         this.left = maxRight - dropWidth - 10;
       }
 
-      this.appendTimeout = setTimeout(() => {
+      this.appendTimeout = window.setTimeout(() => {
         this.setState('show');
         this.displayed.next();
       }, 0);
     }, 0);
   }
-  public show() {
+  public show(): void {
     this.openDropdown();
   }
-  public hide() {
+  public hide(): void {
     this.closeDropdown();
   }
+}
+export interface DropDownPosition {
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+  height?: number;
+  width?: number;
 }

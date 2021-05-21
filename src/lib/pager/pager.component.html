@@ -1,31 +1,36 @@
 <oz-button
   class="margin"
-  [disabled]="currentPage==1 || rowsCount==-1"
+  [disabled]="currentPage == 1 || rowsCount == -1"
   (click)="onClickFirst()"
-  text="&lt;&lt;"></oz-button>
+  text="&lt;&lt;"
+></oz-button>
 <oz-button
   class="margin"
-  [disabled]="currentPage==1 || rowsCount==-1"
+  [disabled]="currentPage == 1 || rowsCount == -1"
   (click)="onClickPrev()"
-  text="&lt;"></oz-button>
-<ng-container *ngIf="rowsCount>=0">
+  text="&lt;"
+></oz-button>
+<ng-container *ngIf="rowsCount >= 0">
   <oz-textinput
     [(ngModel)]="currentPage"
-    class="margin"
     type="number"
-    placeholder="Current page"></oz-textinput>
-  <div class="margin" i18n>from</div>
+    class="margin"
+    placeholder="Current page"
+  ></oz-textinput>
+  <div class="margin"><span i18n>from</span></div>
   <div class="margin">{{ pageCount }}</div>
 </ng-container>
-<ng-container *ngIf="rowsCount==-1">
-  <div class="margin" i18n>Loading ...</div>
+<ng-container *ngIf="rowsCount == -1">
+  <div class="margin"><span i18n>Loading ...</span></div>
 </ng-container>
 <oz-button
   class="margin"
-  [disabled]="currentPage==pageCount || rowsCount==-1"
+  [disabled]="currentPage == pageCount || rowsCount == -1"
   (click)="onClickNext()"
-  text="&gt;"></oz-button>
+  text="&gt;"
+></oz-button>
 <oz-button
-  [disabled]="currentPage==pageCount || rowsCount==-1"
+  [disabled]="currentPage == pageCount || rowsCount == -1"
   (click)="onClickLast()"
-  text="&gt;&gt;"></oz-button>
+  text="&gt;&gt;"
+></oz-button>

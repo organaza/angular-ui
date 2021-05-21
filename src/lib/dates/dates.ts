@@ -1,13 +1,16 @@
 import moment from 'moment';
 
 export class DateUtils {
-  static parseRelative(value: string, type: 'from' | 'to' | '' = ''): moment.Moment {
+  static parseRelative(
+    value: string,
+    type: 'from' | 'to' | '' = '',
+  ): moment.Moment {
     const relativeTimeRe = /(([-+]\d*)\s*(m|M|y|h|d|w)|now)\/?(m|M|y|h|d|W)?/;
     const parsed = relativeTimeRe.exec(value);
     if (!parsed) {
       return moment('Invalid date', 'YYYY MM DD', true);
     }
-    let date;
+    let date: moment.Moment;
     if (parsed[1] === 'now') {
       date = moment();
     }
